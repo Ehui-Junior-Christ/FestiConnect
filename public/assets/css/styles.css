@@ -457,6 +457,30 @@ h3 {
   transform: translateY(0);
 }
 
+.notice {
+  border: 1px solid var(--line);
+  border-radius: 18px;
+  padding: 12px 14px;
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.notice.error {
+  border-color: rgba(251, 113, 133, 0.55);
+  background: rgba(251, 113, 133, 0.12);
+}
+
+.notice.success {
+  border-color: rgba(74, 222, 128, 0.48);
+  background: rgba(74, 222, 128, 0.12);
+}
+
+.btn[disabled] {
+  cursor: wait;
+  opacity: 0.62;
+  transform: none;
+}
+
 .footer {
   border-top: 1px solid var(--line);
   padding: 34px 0;
