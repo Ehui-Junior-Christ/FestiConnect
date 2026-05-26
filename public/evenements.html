@@ -1,0 +1,43 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Événements - FestiConnect</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/assets/css/styles.css">
+</head>
+<body>
+  <nav class="nav" data-nav></nav>
+  <main class="section">
+    <div class="container">
+      <span class="eyebrow">Recherche & filtres</span>
+      <h1>Découvrir les événements</h1>
+      <form id="filters" class="glass form-grid mt-8 p-4 rounded-[28px]">
+        <input class="input" name="q" placeholder="Nom, lieu, ambiance">
+        <select class="select" name="category">
+          <option value="">Toutes catégories</option>
+          <option>Concert</option>
+          <option>Tradition</option>
+          <option>Mode</option>
+        </select>
+        <select class="select" name="city">
+          <option value="">Toutes les villes</option>
+          <option>Abidjan</option>
+          <option>Grand-Bassam</option>
+          <option>Bouake</option>
+          <option>Yamoussoukro</option>
+        </select>
+        <button class="btn btn-primary"><i data-lucide="sliders-horizontal"></i>Filtrer</button>
+      </form>
+      <div id="events-list" class="grid grid-3 mt-8"></div>
+    </div>
+  </main>
+  <footer class="footer" data-footer></footer>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="/assets/js/api.js"></script>
+  <script src="/assets/js/ui.js"></script>
+  <script src="/assets/js/events.js"></script>
+</body>
+</html>
+

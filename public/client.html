@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Espace client - FestiConnect</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/assets/css/styles.css">
+</head>
+<body>
+  <nav class="nav" data-nav></nav>
+  <main class="container dashboard">
+    <aside class="sidebar glass">
+      <a class="side-link active" href="#dashboard"><i data-lucide="layout-dashboard"></i>Dashboard</a>
+      <a class="side-link" href="#tickets"><i data-lucide="ticket"></i>Mes billets</a>
+      <a class="side-link" href="#profil"><i data-lucide="settings"></i>Profil</a>
+    </aside>
+    <section class="grid">
+      <div class="section-head">
+        <div><span class="eyebrow">Espace client</span><h1>Bonjour <span id="client-name"></span></h1></div>
+        <a class="btn btn-primary" href="/evenements.html"><i data-lucide="search"></i>Réserver</a>
+      </div>
+      <div id="client-metrics" class="metric-strip"></div>
+      <section id="tickets" class="panel glass">
+        <h2>Mes billets</h2>
+        <div id="tickets-list" class="grid mt-6"></div>
+      </section>
+      <section id="profil" class="panel glass">
+        <h2>Profil & paramètres</h2>
+        <p class="lead text-base">Les informations de profil sont synchronisées avec ton compte. Les paiements restent confirmés par Wave, Orange Money ou Moov Money.</p>
+      </section>
+    </section>
+  </main>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="/assets/js/api.js"></script>
+  <script src="/assets/js/ui.js"></script>
+  <script src="/assets/js/client.js"></script>
+</body>
+</html>
+

@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Panier et paiement - FestiConnect</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/assets/css/styles.css">
+</head>
+<body>
+  <nav class="nav" data-nav></nav>
+  <main class="section">
+    <div class="container grid grid-2">
+      <section>
+        <span class="eyebrow">Tunnel d'achat</span>
+        <h1>Panier</h1>
+        <div id="cart-items" class="grid mt-8"></div>
+      </section>
+      <aside class="panel glass">
+        <h2>Checkout</h2>
+        <p class="lead text-base">Total: <strong id="cart-total">0 FCFA</strong></p>
+        <form id="checkout-form" class="grid mt-6">
+          <label class="label">Moyen de paiement
+            <select class="select" name="payment_method"><option>Wave</option><option>Orange Money</option><option>Moov Money</option></select>
+          </label>
+          <label class="label">Ville de livraison<input class="input" name="delivery_city" placeholder="Abidjan"></label>
+          <label class="label">Adresse<textarea class="textarea" name="delivery_address" placeholder="Commune, quartier, repère"></textarea></label>
+          <button class="btn btn-primary" type="submit"><i data-lucide="credit-card"></i>Payer et suivre</button>
+        </form>
+      </aside>
+    </div>
+  </main>
+  <footer class="footer" data-footer></footer>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="/assets/js/api.js"></script>
+  <script src="/assets/js/ui.js"></script>
+  <script src="/assets/js/cart.js"></script>
+</body>
+</html>
+

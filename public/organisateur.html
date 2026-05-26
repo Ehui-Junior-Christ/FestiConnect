@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Espace organisateur - FestiConnect</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/assets/css/styles.css">
+</head>
+<body>
+  <nav class="nav" data-nav></nav>
+  <main class="container dashboard">
+    <aside class="sidebar glass">
+      <a class="side-link active" href="#analytics"><i data-lucide="chart-no-axes-combined"></i>Analytics</a>
+      <a class="side-link" href="#creation"><i data-lucide="plus-circle"></i>Créer</a>
+      <a class="side-link" href="#billets"><i data-lucide="tickets"></i>Billets</a>
+      <a class="side-link" href="#scanner"><i data-lucide="scan-line"></i>Scanner QR</a>
+      <a class="side-link" href="#revenus"><i data-lucide="wallet"></i>Revenus</a>
+    </aside>
+    <section class="grid">
+      <div class="section-head">
+        <div><span class="eyebrow">Espace organisateur</span><h1>Studio de <span id="organizer-name"></span></h1></div>
+      </div>
+      <div id="organizer-metrics" class="metric-strip"></div>
+      <section id="creation" class="panel glass">
+        <h2>Création d'événement</h2>
+        <form id="event-create-form" class="grid grid-2 mt-6">
+          <label class="label">Titre<input class="input" name="title" required></label>
+          <label class="label">Catégorie<input class="input" name="category" placeholder="Concert" required></label>
+          <label class="label">Ville<input class="input" name="city" required></label>
+          <label class="label">Lieu<input class="input" name="location"></label>
+          <label class="label">Date de début<input class="input" type="datetime-local" name="starts_at" required></label>
+          <label class="label">Date de fin<input class="input" type="datetime-local" name="ends_at"></label>
+          <label class="label">Prix XOF<input class="input" type="number" name="price_xof" min="0"></label>
+          <label class="label">Capacité<input class="input" type="number" name="capacity" min="1"></label>
+          <label class="label md:col-span-2">Description<textarea class="textarea" name="description"></textarea></label>
+          <button class="btn btn-primary" type="submit"><i data-lucide="send"></i>Soumettre à validation</button>
+        </form>
+      </section>
+      <section id="analytics" class="panel glass">
+        <h2>Dashboard analytics</h2>
+        <div class="table-wrap mt-5"><table class="table"><thead><tr><th>Événement</th><th>Ville</th><th>Date</th><th>Prix</th><th>Statut</th></tr></thead><tbody id="organizer-events"></tbody></table></div>
+      </section>
+      <section id="billets" class="panel glass">
+        <h2>Gestion billets</h2>
+        <div class="table-wrap mt-5"><table class="table"><thead><tr><th>Client</th><th>Événement</th><th>Code</th><th>Montant</th><th>Statut</th></tr></thead><tbody id="organizer-tickets"></tbody></table></div>
+      </section>
+      <section id="scanner" class="panel glass grid grid-2">
+        <div><h2>Scanner QR Code</h2><p class="lead text-base">Outil terrain de validation. Dans cette version web, le scan est simulé par vérification visuelle du code billet.</p></div>
+        <div class="qr justify-self-end">SCAN</div>
+      </section>
+      <section id="revenus" class="panel glass">
+        <h2>Revenus & retraits</h2>
+        <p class="lead text-base">Les revenus de billets sont consolidés dans l'analytics. Les retraits peuvent être raccordés à un workflow Mobile Money.</p>
+      </section>
+    </section>
+  </main>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="/assets/js/api.js"></script>
+  <script src="/assets/js/ui.js"></script>
+  <script src="/assets/js/organizer.js"></script>
+</body>
+</html>
+

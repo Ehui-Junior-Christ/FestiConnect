@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Inscription - FestiConnect</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/assets/css/styles.css">
+</head>
+<body>
+  <nav class="nav" data-nav></nav>
+  <main class="section">
+    <div class="container grid grid-2">
+      <div>
+        <span class="eyebrow">Créer un compte</span>
+        <h1>Rejoindre FestiConnect</h1>
+        <p class="lead">Choisis ton rôle: client pour réserver, organisateur pour vendre et piloter tes événements.</p>
+      </div>
+      <form id="register-form" class="panel glass grid">
+        <label class="label">Nom complet<input class="input" name="name" required></label>
+        <label class="label">Email<input class="input" type="email" name="email" required></label>
+        <label class="label">Téléphone<input class="input" name="phone"></label>
+        <label class="label">Ville<input class="input" name="city" placeholder="Abidjan"></label>
+        <label class="label">Rôle<select class="select" name="role"><option value="client">Client</option><option value="organisateur">Organisateur</option></select></label>
+        <label class="label">Mot de passe<input class="input" type="password" name="password" required></label>
+        <button class="btn btn-primary" type="submit"><i data-lucide="user-plus"></i>Créer mon compte</button>
+      </form>
+    </div>
+  </main>
+  <footer class="footer" data-footer></footer>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="/assets/js/api.js"></script>
+  <script src="/assets/js/ui.js"></script>
+  <script src="/assets/js/auth.js"></script>
+</body>
+</html>
+

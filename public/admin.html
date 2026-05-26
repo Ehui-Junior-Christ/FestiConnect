@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Administration - FestiConnect</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/assets/css/styles.css">
+</head>
+<body>
+  <nav class="nav" data-nav></nav>
+  <main class="container dashboard">
+    <aside class="sidebar glass">
+      <a class="side-link active" href="#master"><i data-lucide="shield-check"></i>Dashboard master</a>
+      <a class="side-link" href="#validation"><i data-lucide="badge-check"></i>Validation</a>
+    </aside>
+    <section class="grid">
+      <div><span class="eyebrow">Administration</span><h1>Contrôle plateforme</h1></div>
+      <div id="admin-metrics" class="metric-strip"></div>
+      <section id="validation" class="panel glass">
+        <h2>Validation événements</h2>
+        <div class="table-wrap mt-5"><table class="table"><thead><tr><th>Événement</th><th>Ville</th><th>Date</th><th>Statut</th><th>Actions</th></tr></thead><tbody id="admin-events"></tbody></table></div>
+      </section>
+    </section>
+  </main>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="/assets/js/api.js"></script>
+  <script src="/assets/js/ui.js"></script>
+  <script src="/assets/js/admin.js"></script>
+</body>
+</html>
+

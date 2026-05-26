@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>FestiConnect - Culture, billets et experiences</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/assets/css/styles.css">
+</head>
+<body>
+  <nav class="nav" data-nav></nav>
+  <main>
+    <section class="hero">
+      <div class="container hero-grid">
+        <div>
+          <span class="eyebrow">Modern Sahel Ethos - Côte d'Ivoire</span>
+          <h1>FestiConnect</h1>
+          <p class="lead">La plateforme qui connecte festivals, concerts, mode, gastronomie, billetterie mobile et commerce culturel dans une experience premium pensée pour l'Afrique.</p>
+          <form id="home-search" class="glass form-grid mt-8 p-4 rounded-[28px]">
+            <input class="input" name="q" placeholder="Artiste, festival, ville">
+            <select class="select" name="category">
+              <option value="">Toutes catégories</option>
+              <option>Concert</option>
+              <option>Tradition</option>
+              <option>Mode</option>
+            </select>
+            <select class="select" name="city">
+              <option value="">Toutes les villes</option>
+              <option>Abidjan</option>
+              <option>Grand-Bassam</option>
+              <option>Bouake</option>
+              <option>Yamoussoukro</option>
+            </select>
+            <button class="btn btn-primary" type="submit"><i data-lucide="search"></i>Explorer</button>
+          </form>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="/evenements.html"><i data-lucide="ticket"></i>Voir les événements</a>
+            <a class="btn btn-secondary" href="/boutique.html"><i data-lucide="shopping-bag"></i>Boutique culturelle</a>
+          </div>
+        </div>
+        <div class="hero-visual glass">
+          <div class="floating-ticket glass">
+            <span class="tag">Billet intelligent</span>
+            <h3 class="mt-4">Abissa Experience</h3>
+            <p class="muted mt-2">QR code, paiement Wave, suivi en temps réel et accès terrain.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow">Découverte</span>
+            <h2 class="mt-4">Événements en avant</h2>
+          </div>
+          <a class="btn btn-secondary" href="/evenements.html">Tout voir</a>
+        </div>
+        <div id="featured-events" class="grid grid-3"></div>
+      </div>
+    </section>
+
+    <section class="section">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="eyebrow">Commerce culturel</span>
+            <h2 class="mt-4">Boutique officielle</h2>
+          </div>
+          <a class="btn btn-secondary" href="/boutique.html">Visiter la boutique</a>
+        </div>
+        <div id="featured-products" class="grid grid-3"></div>
+      </div>
+    </section>
+  </main>
+  <footer class="footer" data-footer></footer>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="/assets/js/api.js"></script>
+  <script src="/assets/js/ui.js"></script>
+  <script src="/assets/js/home.js"></script>
+</body>
+</html>
+

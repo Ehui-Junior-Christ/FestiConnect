@@ -1,0 +1,19 @@
+{
+  "name": "festiconnect",
+  "version": "1.0.0",
+  "description": "Plateforme SaaS evenementielle responsive pour le marche ivoirien et africain.",
+  "type": "module",
+  "scripts": {
+    "dev": "node --watch server.js",
+    "start": "node server.js",
+    "db:migrate": "node src/db/migrate.js",
+    "db:seed": "node src/db/seed.js"
+  },
+  "dependencies": {
+    "@libsql/client": "^0.15.15"
+  },
+  "engines": {
+    "node": ">=20"
+  }
+}
+
