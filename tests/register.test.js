@@ -45,7 +45,7 @@ try {
   await waitForServer();
   const payload = {
     name: 'Client Test',
-    email: 'duplicate-test@festiconnect.ci',
+    email: '  Duplicate-Test@FestiConnect.ci  ',
     password: 'Client123!',
     role: 'client',
     city: 'Abidjan'
@@ -70,8 +70,16 @@ try {
     throw new Error(`Doublon attendu 409 EMAIL_ALREADY_EXISTS, recu ${second.status}`);
   }
 
+  const invalid = await fetch(`http://localhost:${port}/api/auth/register`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ name: 'Email Invalide', email: 'pas-un-email', password: 'Client123!' })
+  });
+  if (invalid.status !== 422) {
+    throw new Error(`Email invalide attendu 422, recu ${invalid.status}`);
+  }
+
   console.log('register.test.js passed');
 } finally {
   server.kill();
 }
-

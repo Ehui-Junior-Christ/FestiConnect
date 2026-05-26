@@ -22,6 +22,14 @@ function tokenHash(token) {
   return crypto.createHash('sha256').update(token).digest('hex');
 }
 
+function normalizeEmail(value) {
+  return typeof value === 'string' ? value.trim().toLowerCase() : '';
+}
+
+function isEmailConstraintError(error) {
+  return String(error?.message || '').includes('UNIQUE constraint failed: users.email');
+}
+
 async function tableColumns(table) {
   const info = await db.execute(`pragma table_info(${table})`);
   return new Set(info.rows.map((row) => row.name));
@@ -125,32 +133,43 @@ async function routeApi(req, res, url) {
 
   if (method === 'POST' && pathname === '/api/auth/register') {
     const body = await parseBody(req);
+    const email = normalizeEmail(body.email);
     const role = ['client', 'organisateur'].includes(body.role) ? body.role : 'client';
-    if (!body.name || !body.email || !body.password) {
+    if (!body.name || !email || !body.password) {
       throw new AppError(422, 'VALIDATION_ERROR', 'Nom, email et mot de passe sont obligatoires.');
     }
-    const existing = await db.execute({ sql: 'select id from users where email = lower(?)', args: [body.email] });
+    if (!email.includes('@')) {
+      throw new AppError(422, 'VALIDATION_ERROR', 'Adresse email invalide.');
+    }
+    const existing = await db.execute({ sql: 'select id from users where email = ?', args: [email] });
     if (existing.rows[0]) {
       throw new AppError(409, 'EMAIL_ALREADY_EXISTS', 'Un compte existe deja avec cet email.');
     }
     const password = hashPassword(body.password);
     const id = randomId('usr');
-    await insertUserRecord({
-      id,
-      name: body.name,
-      email: body.email,
-      password_hash: password.hash,
-      password_salt: password.salt,
-      role,
-      phone: body.phone,
-      city: body.city
-    });
-    return sendJson(res, 201, { id, name: body.name, email: body.email, role });
+    try {
+      await insertUserRecord({
+        id,
+        name: body.name,
+        email,
+        password_hash: password.hash,
+        password_salt: password.salt,
+        role,
+        phone: body.phone,
+        city: body.city
+      });
+    } catch (error) {
+      if (isEmailConstraintError(error)) {
+        throw new AppError(409, 'EMAIL_ALREADY_EXISTS', 'Un compte existe deja avec cet email.');
+      }
+      throw error;
+    }
+    return sendJson(res, 201, { id, name: body.name, email, role });
   }
 
   if (method === 'POST' && pathname === '/api/auth/login') {
     const body = await parseBody(req);
-    const found = await db.execute({ sql: 'select * from users where email = lower(?)', args: [body.email || ''] });
+    const found = await db.execute({ sql: 'select * from users where email = ?', args: [normalizeEmail(body.email)] });
     const user = found.rows[0];
     if (!user || !verifyPassword(body.password || '', user.password_salt, user.password_hash)) {
       throw new AppError(401, 'BAD_CREDENTIALS', 'Email ou mot de passe incorrect.');
