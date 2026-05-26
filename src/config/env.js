@@ -18,6 +18,8 @@ if (fs.existsSync(envPath)) {
 export function requiredEnv(name) {
   const value = process.env[name];
   if (!value) throw new Error(`Variable d'environnement manquante: ${name}`);
+  if (value.includes('colle-ton-token') || value.includes('remplace-moi')) {
+    throw new Error(`Variable d'environnement non configuree: ${name}`);
+  }
   return value;
 }
-
