@@ -6,14 +6,15 @@ function mountLayout(active = '') {
       <div class="container nav-inner">
         <a class="brand" href="/"><span class="brand-mark">FC</span><span>FestiConnect</span></a>
         <div class="nav-links">
-          <a href="/evenements.html" class="${active === 'events' ? 'text-white' : ''}">Evenements</a>
-          <a href="/boutique.html" class="${active === 'shop' ? 'text-white' : ''}">Boutique</a>
-          <a href="/client.html">Client</a>
-          <a href="/organisateur.html">Organisateur</a>
-          <a href="/admin.html">Admin</a>
+          <a href="/evenements.html" class="${active === 'events' ? 'active' : ''}">Événements</a>
+          <a href="/boutique.html" class="${active === 'shop' ? 'active' : ''}">Boutique</a>
+          <a href="/client.html" class="${active === 'client' ? 'active' : ''}">Client</a>
+          <a href="/organisateur.html" class="${active === 'organizer' ? 'active' : ''}">Organisateur</a>
+          <a href="/admin.html" class="${active === 'admin' ? 'active' : ''}">Admin</a>
+          <a href="/contact.html" class="${active === 'support' ? 'active' : ''}">Support</a>
         </div>
         <div class="nav-actions">
-          ${user ? `<span class="muted">${user.name}</span><button class="btn btn-secondary" data-logout><i data-lucide="log-out"></i>Sortir</button>` : `<a class="btn btn-ghost" href="/connexion.html">Connexion</a><a class="btn btn-primary" href="/inscription.html">Creer un compte</a>`}
+          ${user ? `<span class="nav-user">${user.name}</span><button class="btn btn-secondary" data-logout><i data-lucide="log-out"></i>Sortir</button>` : `<a class="btn btn-ghost" href="/connexion.html">Connexion</a><a class="btn btn-primary" href="/inscription.html">Créer un compte</a>`}
         </div>
         <button class="btn btn-secondary mobile-toggle" data-menu aria-label="Menu"><i data-lucide="menu"></i></button>
       </div>`;
@@ -22,13 +23,35 @@ function mountLayout(active = '') {
   const footer = document.querySelector('[data-footer]');
   if (footer) {
     footer.innerHTML = `
-      <div class="container grid grid-3">
+      <div class="container footer-grid">
         <div>
           <a class="brand" href="/"><span class="brand-mark">FC</span><span>FestiConnect</span></a>
-          <p class="muted mt-4">Plateforme culturelle et evenementielle concue pour connecter publics, organisateurs et marques africaines.</p>
+          <p class="muted footer-copy">Plateforme culturelle et événementielle conçue pour connecter publics, organisateurs et marques africaines.</p>
         </div>
-        <div><strong>Plateforme</strong><p class="muted mt-3">Billetterie, boutique, analytics, validation et paiements mobiles.</p></div>
-        <div><strong>Paiements</strong><p class="muted mt-3">Wave, Orange Money et Moov Money integres au tunnel d'achat.</p></div>
+        <div>
+          <strong>Plateforme</strong>
+          <div class="footer-links">
+            <a href="/evenements.html">Événements</a>
+            <a href="/boutique.html">Boutique</a>
+            <a href="/client.html">Espace client</a>
+          </div>
+        </div>
+        <div>
+          <strong>Support</strong>
+          <div class="footer-links">
+            <a href="/contact.html">Contact</a>
+            <a href="/aide.html">Aide</a>
+            <a href="/confirmation.html">Confirmation</a>
+          </div>
+        </div>
+        <div>
+          <strong>Cadre légal</strong>
+          <div class="footer-links">
+            <a href="/mentions-legales.html">Mentions légales</a>
+            <a href="/confidentialite.html">Confidentialité</a>
+            <a href="/conditions.html">Conditions</a>
+          </div>
+        </div>
       </div>`;
   }
 
@@ -44,6 +67,29 @@ function mountLayout(active = '') {
   });
 
   if (window.lucide) window.lucide.createIcons();
+}
+
+function pageHeader({ eyebrow, title, lead, actions = '' }) {
+  return `
+    <div class="page-header">
+      <div class="stack">
+        ${eyebrow ? `<span class="eyebrow">${eyebrow}</span>` : ''}
+        <h1>${title}</h1>
+        ${lead ? `<p class="lead">${lead}</p>` : ''}
+      </div>
+      ${actions ? `<div class="header-actions">${actions}</div>` : ''}
+    </div>`;
+}
+
+function emptyState(title, message, action = '') {
+  return `
+    <div class="empty-state glass">
+      <div class="stack">
+        <h3>${title}</h3>
+        <p class="muted">${message}</p>
+      </div>
+      ${action ? `<div class="header-actions">${action}</div>` : ''}
+    </div>`;
 }
 
 function eventCard(event) {
@@ -82,4 +128,3 @@ function statusBadge(status) {
   const labels = { approved: 'Valide', pending: 'En attente', rejected: 'Refuse', paid: 'Paye' };
   return `<span class="status ${status}">${labels[status] || status}</span>`;
 }
-

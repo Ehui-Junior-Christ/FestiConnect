@@ -5,8 +5,12 @@ async function loadHome() {
     API.get('/api/events'),
     API.get('/api/products')
   ]);
-  document.querySelector('#featured-events').innerHTML = events.slice(0, 3).map(eventCard).join('');
-  document.querySelector('#featured-products').innerHTML = products.slice(0, 3).map(productCard).join('');
+  document.querySelector('#featured-events').innerHTML = events.length
+    ? events.slice(0, 3).map(eventCard).join('')
+    : emptyState('Aucun événement pour le moment', 'Les prochaines publications apparaîtront ici.');
+  document.querySelector('#featured-products').innerHTML = products.length
+    ? products.slice(0, 3).map(productCard).join('')
+    : emptyState('Aucun produit pour le moment', 'La boutique sera alimentée dès qu’un article sera publié.');
   if (window.lucide) window.lucide.createIcons();
 }
 
@@ -18,4 +22,3 @@ document.querySelector('#home-search')?.addEventListener('submit', (event) => {
 });
 
 loadHome().catch((error) => toast(error.message));
-

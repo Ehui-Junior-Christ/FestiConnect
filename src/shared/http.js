@@ -39,9 +39,8 @@ export function parseCookies(req) {
   );
 }
 
-export function serveFile(res, filePath) {
+export function serveFile(res, filePath, status = 200) {
   const ext = path.extname(filePath);
-  res.writeHead(200, { 'Content-Type': types[ext] || 'application/octet-stream' });
+  res.writeHead(status, { 'Content-Type': types[ext] || 'application/octet-stream' });
   fs.createReadStream(filePath).pipe(res);
 }
-

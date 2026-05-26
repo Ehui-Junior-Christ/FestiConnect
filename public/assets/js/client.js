@@ -1,4 +1,4 @@
-mountLayout();
+mountLayout('client');
 const clientUser = requireRole(['client', 'admin']);
 document.querySelector('#client-name').textContent = clientUser.name;
 
@@ -29,4 +29,3 @@ async function loadClient() {
 }
 
 loadClient().catch((error) => toast(error.message));
-

@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Confirmation - FestiConnect</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/assets/css/styles.css">
+</head>
+<body>
+  <nav class="nav" data-nav></nav>
+  <main class="section">
+    <div class="container page-grid" id="confirmation-view">
+      <div class="glass detail-panel">
+        <div class="stack">
+          <span class="eyebrow">Validation terminée</span>
+          <h1>Opération confirmée</h1>
+          <p class="lead" id="confirmation-copy">Ton achat a bien été enregistré.</p>
+        </div>
+      </div>
+    </div>
+  </main>
+  <footer class="footer" data-footer></footer>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <script src="/assets/js/api.js"></script>
+  <script src="/assets/js/ui.js"></script>
+  <script>
+    mountLayout();
+    const params = new URLSearchParams(location.search);
+    const kind = params.get('kind') || 'order';
+    const id = params.get('id') || 'N/A';
+    const amount = params.get('amount');
+    const event = params.get('event');
+    const payment = params.get('payment');
+
+    const title = kind === 'ticket' ? 'Réservation confirmée' : 'Commande confirmée';
+    const message = kind === 'ticket'
+      ? `Ton billet pour ${event || 'l’événement'} a été confirmé.`
+      : `Ta commande ${id} est validée${payment ? ` via ${payment}` : ''}.`;
+
+    document.querySelector('#confirmation-view').innerHTML = `
+      <div class="glass detail-panel stack">
+        <span class="eyebrow">Validation terminée</span>
+        <h1>${title}</h1>
+        <p class="lead">${message}</p>
+        <div class="metric-strip">
+          <div class="metric glass"><strong>${id}</strong><span>Référence</span></div>
+          <div class="metric glass"><strong>${amount ? formatMoney(amount) : '—'}</strong><span>Montant</span></div>
+          <div class="metric glass"><strong>${kind === 'ticket' ? 'Billet' : 'Commande'}</strong><span>Type</span></div>
+          <div class="metric glass"><strong>Support</strong><span>Disponible 24h</span></div>
+        </div>
+        <div class="hero-actions">
+          <a class="btn btn-primary" href="/client.html"><i data-lucide="layout-dashboard"></i>Aller à mon espace</a>
+          <a class="btn btn-secondary" href="/evenements.html"><i data-lucide="search"></i>Continuer la découverte</a>
+        </div>
+      </div>`;
+
+    if (window.lucide) window.lucide.createIcons();
+  </script>
+</body>
+</html>

@@ -1,4 +1,4 @@
-mountLayout();
+mountLayout('admin');
 requireRole(['admin']);
 
 async function loadAdmin() {
@@ -34,4 +34,3 @@ document.addEventListener('click', async (event) => {
 });
 
 loadAdmin().catch((error) => toast(error.message));
-

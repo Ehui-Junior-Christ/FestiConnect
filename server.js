@@ -459,7 +459,16 @@ async function routeStatic(req, res, url) {
     await fs.access(filePath);
     return serveFile(res, filePath);
   } catch {
-    return serveFile(res, path.join(publicDir, 'index.html'));
+    if (!path.extname(pathname) || pathname.endsWith('.html')) {
+      const notFoundPage = path.join(publicDir, '404.html');
+      try {
+        await fs.access(notFoundPage);
+        return serveFile(res, notFoundPage, 404);
+      } catch {
+        return notFound(res);
+      }
+    }
+    return notFound(res);
   }
 }
 

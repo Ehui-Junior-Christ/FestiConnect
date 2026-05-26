@@ -1,4 +1,4 @@
-mountLayout();
+mountLayout('organizer');
 const organizerUser = requireRole(['organisateur', 'admin']);
 document.querySelector('#organizer-name').textContent = organizerUser.name;
 
@@ -36,4 +36,3 @@ document.querySelector('#event-create-form')?.addEventListener('submit', async (
 });
 
 loadOrganizer().catch((error) => toast(error.message));
-
