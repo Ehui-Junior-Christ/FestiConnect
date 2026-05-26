@@ -129,6 +129,10 @@ async function routeApi(req, res, url) {
     if (!body.name || !body.email || !body.password) {
       throw new AppError(422, 'VALIDATION_ERROR', 'Nom, email et mot de passe sont obligatoires.');
     }
+    const existing = await db.execute({ sql: 'select id from users where email = lower(?)', args: [body.email] });
+    if (existing.rows[0]) {
+      throw new AppError(409, 'EMAIL_ALREADY_EXISTS', 'Un compte existe deja avec cet email.');
+    }
     const password = hashPassword(body.password);
     const id = randomId('usr');
     await insertUserRecord({

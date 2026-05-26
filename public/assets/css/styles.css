@@ -69,6 +69,7 @@ textarea {
 }
 
 .nav-inner {
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -155,8 +156,8 @@ textarea {
 
 .hero-grid {
   display: grid;
-  grid-template-columns: 1.02fr 0.98fr;
-  gap: 34px;
+  grid-template-columns: minmax(0, 1.02fr) minmax(360px, 0.98fr);
+  gap: clamp(22px, 4vw, 48px);
   align-items: center;
 }
 
@@ -213,7 +214,7 @@ h3 {
 
 .hero-visual {
   position: relative;
-  min-height: 520px;
+  min-height: clamp(380px, 48vw, 560px);
   overflow: hidden;
   border-radius: 36px;
   background: #1f1712;
@@ -239,7 +240,7 @@ h3 {
 
 .metric-strip {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 14px;
   margin-top: 24px;
 }
@@ -279,11 +280,11 @@ h3 {
 }
 
 .grid-3 {
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(3, minmax(0, 1fr));
 }
 
 .grid-2 {
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
 .event-card,
@@ -303,6 +304,20 @@ h3 {
   padding: 20px;
 }
 
+.event-card,
+.product-card,
+.panel,
+.metric {
+  min-width: 0;
+}
+
+.event-card h3,
+.product-card h3,
+.panel h2,
+.panel h3 {
+  overflow-wrap: anywhere;
+}
+
 .tag {
   display: inline-flex;
   border-radius: 999px;
@@ -315,8 +330,9 @@ h3 {
 
 .form-grid {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 12px;
+  align-items: end;
 }
 
 .input,
@@ -348,8 +364,8 @@ h3 {
 
 .dashboard {
   display: grid;
-  grid-template-columns: 260px 1fr;
-  gap: 22px;
+  grid-template-columns: 250px minmax(0, 1fr);
+  gap: clamp(18px, 3vw, 30px);
   padding: 28px 0 72px;
 }
 
@@ -474,10 +490,6 @@ h3 {
     min-height: auto;
   }
 
-  .hero-visual {
-    min-height: 390px;
-  }
-
   .form-grid {
     grid-template-columns: 1fr 1fr;
   }
@@ -497,26 +509,27 @@ h3 {
     display: none;
   }
 
+  .nav.open .nav-inner {
+    align-items: stretch;
+    flex-wrap: wrap;
+    padding: 16px 0;
+  }
+
+  .nav.open .mobile-toggle {
+    margin-left: auto;
+  }
+
   .nav.open .nav-links,
   .nav.open .nav-actions {
     display: flex;
-    position: absolute;
-    left: 16px;
-    right: 16px;
+    width: 100%;
     flex-direction: column;
     align-items: stretch;
     border: 1px solid var(--line);
     border-radius: 24px;
     padding: 16px;
+    margin-top: 12px;
     background: rgba(19, 19, 19, 0.96);
-  }
-
-  .nav.open .nav-links {
-    top: 80px;
-  }
-
-  .nav.open .nav-actions {
-    top: 254px;
   }
 
   .form-grid {
@@ -534,5 +547,35 @@ h3 {
     border-radius: 22px;
     padding: 18px;
   }
+
+  .floating-ticket {
+    left: 18px;
+    right: 18px;
+    bottom: 18px;
+    width: auto;
+  }
 }
 
+@media (max-width: 520px) {
+  .container {
+    width: min(100% - 22px, 1180px);
+  }
+
+  .hero {
+    padding-top: 34px;
+  }
+
+  .hero-visual {
+    border-radius: 26px;
+  }
+
+  .btn {
+    width: 100%;
+  }
+
+  .nav .btn,
+  .event-card .btn,
+  .product-card .btn {
+    width: auto;
+  }
+}
