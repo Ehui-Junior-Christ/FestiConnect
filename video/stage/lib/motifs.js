@@ -1,7 +1,8 @@
 // Vocabulaire graphique FestiConnect : "la trame".
 // Cinq modules geometriques derives des visuels de l'app (cercles concentriques du maquis,
 // pointilles de l'Abissa, chevrons du defile, grille-points de la ville, arcs de la lagune).
-import { rng, hash } from './motion.js';
+import { rng } from './motion.js';
+import qrcode from '../../node_modules/qrcode-generator/dist/qrcode.mjs';
 
 export const C = {
   nuit: '#0D0B0A', nuit2: '#171210', terre: '#2A1810', brun: '#4A2A1A',
@@ -91,43 +92,61 @@ export function art(kind) {
   }
 }
 
-// --- Pseudo QR deterministe (25 x 25) --------------------------------------
-// Visuel uniquement ; remplacer par un vrai encodeur si le QR doit etre scannable.
-export function qrMatrix(text, n = 25) {
-  const r = rng(hash(text));
-  const m = Array.from({ length: n }, () => Array(n).fill(0));
-  const reserved = Array.from({ length: n }, () => Array(n).fill(false));
-  const finder = (ox, oy) => {
-    for (let y = -1; y < 8; y++) for (let x = -1; x < 8; x++) {
-      const X = ox + x, Y = oy + y;
-      if (X < 0 || Y < 0 || X >= n || Y >= n) continue;
-      reserved[Y][X] = true;
-      const onRing = x >= 0 && x <= 6 && y >= 0 && y <= 6 && (x === 0 || x === 6 || y === 0 || y === 6);
-      const inCore = x >= 2 && x <= 4 && y >= 2 && y <= 4;
-      m[Y][X] = onRing || inCore ? 1 : 0;
-    }
-  };
-  finder(0, 0); finder(n - 7, 0); finder(0, n - 7);
-  for (let i = 8; i < n - 8; i++) { m[6][i] = m[i][6] = i % 2 === 0 ? 1 : 0; reserved[6][i] = reserved[i][6] = true; }
-  for (let y = 0; y < n; y++) for (let x = 0; x < n; x++) if (!reserved[y][x]) m[y][x] = r() < 0.48 ? 1 : 0;
-  return { m, reserved, n };
+// --- Produits de la boutique (viewBox 800 x 800, d'apres public/assets/img/product-*.svg) ---
+export function productArt(kind) {
+  const wrap = (bg, inner) => `<svg viewBox="0 0 800 800" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg"><rect width="800" height="800" fill="${bg}"/>${inner}</svg>`;
+  switch (kind) {
+    case 'cap':
+      return wrap(C.terre, `<g opacity=".35">${tile('cercles', C.brun, 'transparent', 560, 40, 200)}</g>
+        <ellipse cx="410" cy="600" rx="300" ry="34" fill="#000" opacity=".35"/>
+        <path d="M180 440c28-150 160-240 322-184 86 30 134 96 152 184z" fill="${C.orange}"/>
+        <path d="M200 400h440l8 40H192z" fill="${C.sable}"/><path d="M230 400h40v40h-40zm80 0h40v40h-40zm80 0h40v40h-40zm80 0h40v40h-40zm80 0h40v40h-40z" fill="${C.nuit}"/>
+        <path d="M130 456c160-48 348-54 540-6 34 9 47 54 16 74-130 82-364 72-536-8-31-14-51-50-20-60z" fill="${C.creme}"/>
+        <path d="M290 300c48 58 90 90 140 106 48-40 80-74 110-130" fill="none" stroke="${C.sable}" stroke-width="22" stroke-linecap="round"/>`);
+    case 'tote':
+      return wrap(C.nuit2, `<g opacity=".3">${tile('tirets', C.brun, 'transparent', 40, 580, 200)}</g>
+        <ellipse cx="400" cy="672" rx="250" ry="26" fill="#000" opacity=".4"/>
+        <path d="M300 260c0-100 200-100 200 0" fill="none" stroke="${C.orange}" stroke-width="26" stroke-linecap="round"/>
+        <path d="M230 250h340l58 410H172z" fill="${C.creme}"/>
+        <g transform="translate(290 360)">${tile('chevrons', C.orange, C.sable, 0, 0, 220)}</g>`);
+    default:
+      return wrap(C.brun, `<ellipse cx="400" cy="730" rx="230" ry="22" fill="#000" opacity=".35"/>
+        <rect x="200" y="90" width="400" height="610" rx="14" fill="${C.creme}"/>
+        <rect x="236" y="126" width="328" height="300" fill="${C.orange}"/>
+        <circle cx="400" cy="276" r="86" fill="${C.sable}"/>
+        <g fill="none" stroke="${C.creme}" stroke-width="8" opacity=".8"><circle cx="400" cy="276" r="116"/></g>
+        <path d="M258 470h284v26H258zm0 52h200v20H258z" fill="${C.nuit}"/>
+        <text x="542" y="664" text-anchor="end" font-family="JetBrains Mono, monospace" font-size="26" font-weight="700" fill="${C.nuit}">N° 027 / 150</text>`);
+  }
+}
+
+// --- QR code reel (qrcode-generator, MIT) ----------------------------------
+// Encodage standard, correction d'erreur M par defaut : le code affiche est scannable.
+export function qrMatrix(text, ec = 'M') {
+  const q = qrcode(0, ec);
+  q.addData(text);
+  q.make();
+  const n = q.getModuleCount();
+  const m = Array.from({ length: n }, (_, y) => Array.from({ length: n }, (_, x) => (q.isDark(y, x) ? 1 : 0)));
+  return { m, n };
 }
 
 // SVG du QR ; chaque module porte data-d (distance diagonale 0..1) pour l'animation de construction.
 export function qrSVG(text, size = 240, { fg = C.nuit, eye = C.orange } = {}) {
   const { m, n } = qrMatrix(text);
-  const u = size / n;
+  const u = Math.floor(size / n);
+  const off = Math.floor((size - u * n) / 2);
   let mods = '';
   for (let y = 0; y < n; y++) for (let x = 0; x < n; x++) {
     if (!m[y][x]) continue;
     const isEye = [[0, 0], [n - 7, 0], [0, n - 7]].some(([ox, oy]) => x >= ox + 2 && x <= ox + 4 && y >= oy + 2 && y <= oy + 4);
     if (isEye) continue;
     const d = ((x + y) / (2 * (n - 1))).toFixed(3);
-    mods += `<rect class="qm" data-d="${d}" x="${(x * u).toFixed(2)}" y="${(y * u).toFixed(2)}" width="${(u + 0.4).toFixed(2)}" height="${(u + 0.4).toFixed(2)}" fill="${fg}"/>`;
+    mods += `<rect class="qm" data-d="${d}" x="${off + x * u}" y="${off + y * u}" width="${u}" height="${u}" fill="${fg}"/>`;
   }
   const eyes = [[0, 0], [n - 7, 0], [0, n - 7]].map(([ox, oy]) =>
-    `<rect class="qeye" x="${(ox + 2) * u}" y="${(oy + 2) * u}" width="${3 * u}" height="${3 * u}" rx="${u * 0.9}" fill="${eye}"/>`).join('');
-  return `<svg viewBox="0 0 ${size} ${size}" width="${size}" height="${size}" xmlns="http://www.w3.org/2000/svg">${mods}${eyes}</svg>`;
+    `<rect class="qeye" x="${off + (ox + 2) * u}" y="${off + (oy + 2) * u}" width="${3 * u}" height="${3 * u}" rx="${u * 0.5}" fill="${eye}"/>`).join('');
+  return `<svg viewBox="0 0 ${size} ${size}" width="${size}" height="${size}" shape-rendering="crispEdges" xmlns="http://www.w3.org/2000/svg">${mods}${eyes}</svg>`;
 }
 
 // --- Icones (traits 24x24, style lucide, ISC) -------------------------------
@@ -146,6 +165,10 @@ const P = {
   bell: '<path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.9 1.9 0 0 0 3.4 0"/>',
   home: '<path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1Z"/>',
   bag: '<path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4Z"/><path d="M3 6h18M16 10a4 4 0 0 1-8 0"/>',
+  shield: '<path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10Z"/>',
+  chart: '<path d="M3 3v18h18"/><path d="M7 16v-5M12 16V8M17 16V6"/>',
+  users: '<circle cx="9" cy="8" r="4"/><path d="M2 21v-1a6 6 0 0 1 6-6h2a6 6 0 0 1 6 6v1M16 4a4 4 0 0 1 0 8M22 21v-1a6 6 0 0 0-4-5.6"/>',
+  send: '<path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/>',
   lock: '<rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/>',
 };
 export function icon(name, size = 24, color = 'currentColor', sw = 2) {

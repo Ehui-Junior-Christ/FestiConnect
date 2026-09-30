@@ -4,104 +4,336 @@
     "version": "long-80s",
     "notes": "Tous les temps sont en secondes. start/end = temps absolus du film ; cues = temps relatifs au début du plan (négatif = anticipation). Grille de conception : 120 BPM, 1 temps = 0,5 s, 1 mesure = 2 s. Recalage sur l'audio réel : npm run analyze puis npm run sync (voir SCRIPT.md, annexe B)."
   },
-  "output": { "width": 1920, "height": 1080, "fps": 30, "crf": 18, "preset": "slow" },
-  "music": { "bpm": 120, "offset": 0, "beatsPerBar": 4 },
-  "audio": { "file": null, "offset": 0, "gainDb": 0, "fadeIn": 0, "fadeOut": 1.5 },
+  "output": {
+    "width": 1920,
+    "height": 1080,
+    "fps": 30,
+    "crf": 18,
+    "preset": "slow"
+  },
+  "music": {
+    "bpm": 120,
+    "offset": 0,
+    "beatsPerBar": 4
+  },
+  "audio": {
+    "file": null,
+    "offset": 0,
+    "gainDb": 0,
+    "fadeIn": 0,
+    "fadeOut": 1.5
+  },
   "duration": 80,
   "sequences": [
     {
-      "id": "A", "module": "ouverture", "title": "Ouverture - Abidjan, 21 h",
+      "id": "A",
+      "module": "ouverture",
+      "title": "Ouverture - Abidjan, 21 h",
       "plans": [
-        { "id": "A1", "start": 0, "end": 4,
-          "cues": { "dot": 0.5, "clock": 0.5, "title1": 1.0, "title2": 2.0 },
-          "vo": "Abidjan. Vendredi, vingt et une heures.", "voAt": 1.0 },
-        { "id": "A2", "start": 4, "end": 8,
-          "cues": { "pullback": 0.0, "cities": 0.5, "cityStep": 0.5, "title3": 0.5, "title4": 1.5, "out": 3.6 },
-          "vo": "Au Plateau, à Grand-Bassam, à Bouaké… ce soir, tout le monde sort.", "voAt": 0.3 }
+        {
+          "id": "A1",
+          "start": 0,
+          "end": 4,
+          "cues": {
+            "dot": 0.5,
+            "clock": 0.5,
+            "title1": 1,
+            "title2": 2
+          },
+          "vo": "Abidjan. Vendredi, vingt et une heures.",
+          "voAt": 1
+        },
+        {
+          "id": "A2",
+          "start": 4,
+          "end": 8,
+          "cues": {
+            "pullback": 0,
+            "cities": 0.5,
+            "cityStep": 0.5,
+            "title3": 0.5,
+            "title4": 1.5,
+            "out": 3.6
+          },
+          "vo": "Au Plateau, à Grand-Bassam, à Bouaké… ce soir, tout le monde sort.",
+          "voAt": 0.3
+        }
       ]
     },
     {
-      "id": "B", "module": "affiches", "title": "La fête sous toutes ses formes",
+      "id": "B",
+      "module": "affiches",
+      "title": "La fête sous toutes ses formes",
       "plans": [
-        { "id": "B1", "start": 8, "end": 12,
-          "cues": { "w1": 0.0, "w2": 1.0, "w3": 2.0, "w4": 3.0 },
+        {
+          "id": "B1",
+          "start": 8,
+          "end": 12,
+          "cues": {
+            "w1": 0,
+            "w2": 1,
+            "w3": 2,
+            "w4": 3
+          },
           "screen": "Mots-chocs, un par temps fort, chacun sur un panneau de trame : Concerts. / Festivals. / Maquis. / Défilés.",
-          "vo": "Concert, festival, soirée maquis, défilé.", "voAt": 0.1 },
-        { "id": "B2", "start": 12, "end": 16,
-          "cues": { "p1": 0.0, "p2": 0.5, "p3": 1.0, "question": 1.5, "iris": 3.3 },
+          "vo": "Concert, festival, soirée maquis, défilé.",
+          "voAt": 0.1
+        },
+        {
+          "id": "B2",
+          "start": 12,
+          "end": 16,
+          "cues": {
+            "p1": 0,
+            "p2": 0.5,
+            "p3": 1,
+            "question": 1.5,
+            "iris": 3.3
+          },
           "screen": "Trois affiches en éventail 3D (Abissa, Maquis Electronic Night, Salon Mode Sahel). Où ? Quand ? Comment ? mot à mot. Iris orange qui couvre l'écran sur le dernier temps.",
-          "vo": "Et toujours la même question : où, quand… et comment avoir sa place ?", "voAt": 0.2 }
+          "vo": "Et toujours la même question : où, quand… et comment avoir sa place ?",
+          "voAt": 0.2
+        }
       ]
     },
     {
-      "id": "C", "module": "logo", "title": "Révélation du logo",
+      "id": "C",
+      "module": "logo",
+      "title": "Révélation du logo",
       "plans": [
-        { "id": "C1", "start": 16, "end": 20,
-          "cues": { "contract": 0.0, "word": 0.55, "tag1": 2.0, "tag2": 2.5, "tag3": 3.0 },
-          "vo": "FestiConnect. Billetterie, boutique, paiement mobile :", "voAt": 0.9 },
-        { "id": "C2", "start": 20, "end": 22,
-          "cues": { "promise": 0.0, "dive": 1.4 },
-          "vo": "tout au même endroit.", "voAt": 0.0 }
+        {
+          "id": "C1",
+          "start": 16,
+          "end": 20,
+          "cues": {
+            "contract": 0,
+            "word": 0.55,
+            "tag1": 2,
+            "tag2": 2.5,
+            "tag3": 3
+          },
+          "vo": "FestiConnect. Billetterie, boutique, paiement mobile :",
+          "voAt": 0.9
+        },
+        {
+          "id": "C2",
+          "start": 20,
+          "end": 22,
+          "cues": {
+            "promise": 0,
+            "dive": 1.4
+          },
+          "vo": "tout au même endroit.",
+          "voAt": 0
+        }
       ]
     },
     {
-      "id": "D", "module": "parcours", "title": "Parcours client dans l'app",
+      "id": "D",
+      "module": "parcours",
+      "title": "Parcours client dans l'app",
       "plans": [
-        { "id": "D1", "start": 22, "end": 28,
-          "cues": { "phoneIn": 0.0, "typeStart": 0.8, "typeEnd": 2.0, "chips": 2.0, "results": 2.5, "tap": 5.4 },
-          "vo": "Tu cherches un artiste, une ville, une date ? L'événement est là, en quelques secondes.", "voAt": 0.3 },
-        { "id": "D2", "start": 28, "end": 34,
-          "cues": { "push": -0.3, "info": 0.3, "gauge": 1.5, "cta": 3.5, "tap": 5.4 },
-          "vo": "Date, lieu, prix, places restantes : tout est clair avant même de payer.", "voAt": 0.3 },
-        { "id": "D3", "start": 34, "end": 42,
-          "cues": { "sheet": -0.3, "qty": 1.0, "methods": 1.5, "select": 3.0, "pay": 4.0, "wait": 4.3, "success": 6.0, "toast": 6.5 },
-          "vo": "Tu paies avec Wave, Orange Money ou Moov Money, depuis ton téléphone. Pas de file, pas de monnaie.", "voAt": 0.3 },
-        { "id": "D4", "start": 42, "end": 48,
-          "cues": { "ticket": -0.2, "qr": 0.8, "code": 1.8, "scan": 3.5, "valid": 4.0, "out": 5.6 },
-          "vo": "Ton billet arrive avec son code unique. À l'entrée : un scan, et tu es dedans.", "voAt": 0.3 }
+        {
+          "id": "D1",
+          "start": 22,
+          "end": 28,
+          "cues": {
+            "phoneIn": 0,
+            "typeStart": 0.8,
+            "typeEnd": 2,
+            "chips": 2,
+            "results": 2.5,
+            "tap": 5.4
+          },
+          "vo": "Tu cherches un artiste, une ville, une date ? L'événement est là, en quelques secondes.",
+          "voAt": 0.3
+        },
+        {
+          "id": "D2",
+          "start": 28,
+          "end": 34,
+          "cues": {
+            "push": -0.3,
+            "info": 0.3,
+            "gauge": 1.5,
+            "cta": 3.5,
+            "tap": 5.4
+          },
+          "vo": "Date, lieu, prix, places restantes : tout est clair avant même de payer.",
+          "voAt": 0.3
+        },
+        {
+          "id": "D3",
+          "start": 34,
+          "end": 42,
+          "cues": {
+            "sheet": -0.3,
+            "qty": 1,
+            "methods": 1.5,
+            "select": 3,
+            "pay": 4,
+            "wait": 4.3,
+            "success": 6,
+            "toast": 6.5
+          },
+          "vo": "Tu paies avec Wave, Orange Money ou Moov Money, depuis ton téléphone. Pas de file, pas de monnaie.",
+          "voAt": 0.3
+        },
+        {
+          "id": "D4",
+          "start": 42,
+          "end": 48,
+          "cues": {
+            "ticket": -0.2,
+            "qr": 0.8,
+            "code": 1.8,
+            "scan": 3.5,
+            "valid": 4,
+            "out": 5.6
+          },
+          "vo": "Ton billet arrive avec son code unique. À l'entrée : un scan, et tu es dedans.",
+          "voAt": 0.3
+        }
       ]
     },
     {
-      "id": "E", "module": "boutique", "title": "Boutique officielle",
+      "id": "E",
+      "module": "boutique",
+      "title": "Boutique officielle",
       "plans": [
-        { "id": "E1", "start": 48, "end": 54,
+        {
+          "id": "E1",
+          "start": 48,
+          "end": 54,
           "screen": "Carrousel produits : Casquette Kente Edition 12 000 F, Tote Bag Baoulé 9 000 F, Affiche Collector Abissa 15 000 F. Badge panier 1, 2, 3 sur les temps.",
-          "vo": "Et pour garder la fête avec toi, la boutique officielle : casquettes, tote bags, affiches collector.", "voAt": 0.3 }
+          "vo": "Et pour garder la fête avec toi, la boutique officielle : casquettes, tote bags, affiches collector.",
+          "voAt": 0.3,
+          "cues": {
+            "band": 0,
+            "p1": 0.5,
+            "p2": 1,
+            "p3": 1.5,
+            "add1": 2.5,
+            "add2": 3.5,
+            "add3": 4.5,
+            "out": 5.5
+          }
+        }
       ]
     },
     {
-      "id": "F", "module": "organisateur", "title": "Espace organisateur",
+      "id": "F",
+      "module": "organisateur",
+      "title": "Espace organisateur",
       "plans": [
-        { "id": "F1", "start": 54, "end": 58,
+        {
+          "id": "F1",
+          "start": 54,
+          "end": 58,
           "screen": "Tableau de bord Collectif Nouchi Live. Formulaire qui se remplit : Maquis Electronic Night, Sofitel Ivoire, 25 000 F, 900 places. Bouton Soumettre.",
-          "vo": "Tu organises ? Crée ton événement en quelques minutes.", "voAt": 0.2 },
-        { "id": "F2", "start": 58, "end": 62,
+          "vo": "Tu organises ? Crée ton événement en quelques minutes.",
+          "voAt": 0.2,
+          "cues": {
+            "switch": 0,
+            "reveal": 0.8,
+            "f1": 1,
+            "f2": 1.5,
+            "f3": 2,
+            "f4": 2.5,
+            "f5": 3,
+            "submit": 3.5
+          }
+        },
+        {
+          "id": "F2",
+          "start": 58,
+          "end": 62,
           "screen": "Compteurs en direct : 621 / 900 billets, 15 525 000 F de recettes, histogramme qui pousse sur les temps.",
-          "vo": "Suis tes ventes en direct, billet par billet…", "voAt": 0.2 },
-        { "id": "F3", "start": 62, "end": 66,
+          "vo": "Suis tes ventes en direct, billet par billet…",
+          "voAt": 0.2,
+          "cues": {
+            "push": 0,
+            "count": 0.2,
+            "n1": 1,
+            "n2": 2,
+            "n3": 3
+          }
+        },
+        {
+          "id": "F3",
+          "start": 62,
+          "end": 66,
           "screen": "Retrait : solde disponible, bouton Retirer vers Wave, confirmation verte.",
-          "vo": "… et retire tes recettes sur mobile money.", "voAt": 0.2 }
+          "vo": "… et retire tes recettes sur mobile money.",
+          "voAt": 0.2,
+          "cues": {
+            "push": 0,
+            "tap": 1.5,
+            "ok": 2,
+            "sent": 2.5,
+            "fly": 3.3
+          }
+        }
       ]
     },
     {
-      "id": "G", "module": "validation", "title": "Validation et confiance",
+      "id": "G",
+      "module": "validation",
+      "title": "Validation et confiance",
       "plans": [
-        { "id": "G1", "start": 66, "end": 70,
+        {
+          "id": "G1",
+          "start": 66,
+          "end": 70,
           "screen": "File de modération : Nuit Mandingue Premium, Yamoussoukro, En attente. Tampon « Validé » sur le premier temps de la mesure 2.",
-          "vo": "Chaque événement est vérifié avant publication. Ton public achète en confiance.", "voAt": 0.2 }
+          "vo": "Chaque événement est vérifié avant publication. Ton public achète en confiance.",
+          "voAt": 0.2,
+          "cues": {
+            "in": 0,
+            "c1": 0.5,
+            "c2": 1,
+            "c3": 1.5,
+            "scan": 1.6,
+            "stamp": 2,
+            "publish": 2.5,
+            "out": 3.6
+          }
+        }
       ]
     },
     {
-      "id": "H", "module": "final", "title": "Final",
+      "id": "H",
+      "module": "final",
+      "title": "Final",
       "plans": [
-        { "id": "H1", "start": 70, "end": 74,
-          "cues": { "w1": 0.0, "w2": 1.0, "w3": 2.0, "iris": 3.0 },
+        {
+          "id": "H1",
+          "start": 70,
+          "end": 74,
+          "cues": {
+            "w1": 0,
+            "w2": 1,
+            "w3": 2,
+            "iris": 3
+          },
           "screen": "Triptyque rythmique : Trouve. / Paie. / Entre. Un mot par temps fort, fonds de trame alternés.",
-          "vo": "Trouve ta sortie. Paie en un geste. Entre en un scan.", "voAt": 0.1 },
-        { "id": "H2", "start": 74, "end": 80,
-          "cues": { "logo": 0.0, "url": 1.5, "sign": 3.0, "fade": 4.8 },
+          "vo": "Trouve ta sortie. Paie en un geste. Entre en un scan.",
+          "voAt": 0.1
+        },
+        {
+          "id": "H2",
+          "start": 74,
+          "end": 80,
+          "cues": {
+            "logo": 0,
+            "url": 1.5,
+            "sign": 3,
+            "fade": 4.8
+          },
           "screen": "Carton final : la pastille tombe sur le i, logo, festiconnect.ci, « On est ensemble. », extinction, point final.",
-          "vo": "FestiConnect. Rendez-vous sur festiconnect point c i. On est ensemble.", "voAt": 0.4 }
+          "vo": "FestiConnect. Rendez-vous sur festiconnect point c i. On est ensemble.",
+          "voAt": 0.4
+        }
       ]
     }
   ]
