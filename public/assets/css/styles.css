@@ -3874,8 +3874,11 @@ a.notif-body:hover {
 }
 
 .ticket-stub .ticket-code {
-  font-size: var(--text-base);
-  letter-spacing: 0.04em;
+  font-size: clamp(0.8125rem, 3.4vw, var(--text-base));
+  letter-spacing: 0.02em;
+  /* Coupe aux tirets (FC-…) plutôt qu'au milieu du code. */
+  word-break: normal;
+  overflow-wrap: anywhere;
 }
 
 .ticket-link {
