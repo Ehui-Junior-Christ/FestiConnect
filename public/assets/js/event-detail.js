@@ -41,7 +41,7 @@ function bookingBlock(event, user) {
   let blocker = '';
   if (!approved) blocker = alertBox('warning', 'Cet événement n\'est pas encore ouvert à la réservation : il est en cours de validation.');
   else if (phase === 'live') blocker = alertBox('info', `L'événement a commencé à ${formatTime(event.starts_at)} : la réservation en ligne est fermée. Renseigne-toi sur place pour la vente au guichet.`, 'Billetterie fermée');
-  else if (phase === 'past') blocker = alertBox('info', 'Cet événement est terminé : la billetterie est fermée.', 'Événement terminé');
+  else if (phase === 'past') blocker = alertBox('info', 'La billetterie est fermée. Merci à celles et ceux qui sont venus.', 'Événement terminé');
   else if (soldOut) blocker = alertBox('warning', 'Tous les billets ont été vendus pour cet événement.', 'Complet');
   else if (user && user.role === 'organisateur') blocker = alertBox('info', 'Les billets se réservent avec un compte client. Déconnecte-toi puis connecte-toi avec ton compte client.');
 

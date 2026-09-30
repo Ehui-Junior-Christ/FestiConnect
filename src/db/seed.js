@@ -187,4 +187,16 @@ await seedTicket({ id: 'tkt_demo_client', event_id: 'evt_abissa_2026', user_id: 
 await seedTicket({ id: 'tkt_demo_maquis', event_id: 'evt_maquis_night', user_id: client.id, code: 'FC-DEMO-MAQUIS', quantity: 1, amount_xof: 25000, payment_method: 'Orange Money', created_at: ago(3) });
 await seedTicket({ id: 'tkt_demo_zouglou', event_id: 'evt_zouglou_past', user_id: client.id, code: 'FC-DEMO-ZOUGLOU', quantity: 2, amount_xof: 10000, payment_method: 'Moov Money', created_at: ago(15) });
 
+// Notifications de demonstration (le rappel J-1 du client est calcule a la lecture).
+await insertOrUpdateById('notifications', {
+  id: 'ntf_demo_abissa_ok',
+  user_id: organizer.id,
+  type: 'event_status',
+  title: '« Festival Abissa Experience » est en ligne',
+  body: 'Ton événement est visible dans le catalogue et la billetterie est ouverte.',
+  link: '/evenement.html?id=evt_abissa_2026',
+  read_at: null,
+  created_at: ago(20)
+});
+
 console.log('Données de démonstration insérées.');

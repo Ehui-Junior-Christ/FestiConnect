@@ -85,7 +85,16 @@ const ICONS = {
   file: '<path d="M14 3H6.5A1.5 1.5 0 0 0 5 4.5v15A1.5 1.5 0 0 0 6.5 21h11a1.5 1.5 0 0 0 1.5-1.5V8Z"/><path d="M14 3v5h5M9 13h6M9 17h6"/>',
   settings: '<circle cx="12" cy="12" r="3"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1"/>',
   'plus-circle': '<circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/>',
-  star: '<path d="m12 3 2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 16.8 6.6 19.7l1.1-6.1-4.5-4.2 6.1-.8Z"/>'
+  star: '<path d="m12 3 2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 16.8 6.6 19.7l1.1-6.1-4.5-4.2 6.1-.8Z"/>',
+  bell: '<path d="M6 16.5V11a6 6 0 0 1 12 0v5.5l1.6 2.2a.5.5 0 0 1-.4.8H4.8a.5.5 0 0 1-.4-.8Z"/><path d="M10 21a2.2 2.2 0 0 0 4 0"/>',
+  heart: '<path d="M12 20.3s-8.3-5-8.3-11.1A4.6 4.6 0 0 1 12 6.4a4.6 4.6 0 0 1 8.3 2.8c0 6.1-8.3 11.1-8.3 11.1Z"/>',
+  qr: '<rect x="3.5" y="3.5" width="6.5" height="6.5" rx="1"/><rect x="14" y="3.5" width="6.5" height="6.5" rx="1"/><rect x="3.5" y="14" width="6.5" height="6.5" rx="1"/><path d="M14 14h2.5v2.5H14zM18 18h2.5v2.5H18zM14 19v1.5M19 14h1.5"/>',
+  camera: '<path d="M4 7.5h3l1.8-2.5h6.4L17 7.5h3a1.5 1.5 0 0 1 1.5 1.5v9.5A1.5 1.5 0 0 1 20 20H4a1.5 1.5 0 0 1-1.5-1.5V9A1.5 1.5 0 0 1 4 7.5Z"/><circle cx="12" cy="13.5" r="3.8"/>',
+  download: '<path d="M12 3.5v12M7 11l5 5 5-5M4 20.5h16"/>',
+  message: '<path d="M4.2 19.8 5.4 16a8.2 8.2 0 1 1 3 3Z"/><path d="M8.5 11h.01M12 11h.01M15.5 11h.01"/>',
+  tag: '<path d="M3.5 12.3V4.5a1 1 0 0 1 1-1h7.8l8.2 8.2a1.4 1.4 0 0 1 0 2l-6.3 6.3a1.4 1.4 0 0 1-2 0Z"/><circle cx="8" cy="8" r="1.5"/>',
+  hourglass: '<path d="M6.5 3.5h11M6.5 20.5h11"/><path d="M7.5 3.5c0 4.5 4.5 5.5 4.5 8.5s-4.5 4-4.5 8.5M16.5 3.5c0 4.5-4.5 5.5-4.5 8.5s4.5 4 4.5 8.5"/>',
+  edit: '<path d="M4 20h4L19.5 8.5a2.1 2.1 0 0 0-3-3L5 17Z"/><path d="m14.5 7.5 3 3"/>'
 };
 
 function icon(name, className = '') {
@@ -329,7 +338,8 @@ function mountLayout(active = document.body.dataset.nav || '') {
         <div class="header-actions">
           <a class="icon-link hide-mobile" href="/panier.html" data-cart-link>${icon('cart')}<span class="count-badge" data-cart-count hidden></span></a>
           ${user
-            ? `<a class="user-chip" href="${spaceFor(user)}" title="Mon espace"><span class="avatar">${escapeHtml(initials(user.name))}</span><span>${escapeHtml(firstName)}</span></a>
+            ? `<a class="icon-link" href="/notifications.html" data-notif-link aria-label="Notifications"${current('notifications')}>${icon('bell')}<span class="count-badge" data-notif-count hidden></span></a>
+               <a class="user-chip" href="${spaceFor(user)}" title="Mon espace"><span class="avatar">${escapeHtml(initials(user.name))}</span><span>${escapeHtml(firstName)}</span></a>
                <button class="btn btn-ghost btn-icon hide-mobile" type="button" data-logout aria-label="Se déconnecter" title="Se déconnecter">${icon('logout')}</button>`
             : `<a class="btn btn-ghost btn-sm" href="${loginUrl()}">Connexion</a>
                <a class="btn btn-primary btn-sm hide-mobile" href="/inscription.html">Créer un compte</a>`}
@@ -391,6 +401,29 @@ function mountLayout(active = document.body.dataset.nav || '') {
   }
 
   updateCartBadges();
+}
+
+/* Notifications : pastille du nombre de non lues dans l'en-tête
+   ------------------------------------------------------------------------ */
+function setNotificationCount(count) {
+  const unread = Math.max(0, Number(count) || 0);
+  document.querySelectorAll('[data-notif-count]').forEach((node) => {
+    node.textContent = unread > 99 ? '99+' : String(unread);
+    node.hidden = unread === 0;
+  });
+  document.querySelectorAll('[data-notif-link]').forEach((node) => {
+    node.setAttribute('aria-label', unread ? `Notifications, ${plural(unread, 'non lue', 'non lues')}` : 'Notifications, aucune non lue');
+  });
+}
+
+async function refreshNotificationCount() {
+  if (!API.user() || !document.querySelector('[data-notif-link]')) return;
+  try {
+    const { unread } = await API.get('/api/notifications/unread-count');
+    setNotificationCount(unread);
+  } catch {
+    /* pastille indicative : une erreur réseau ne gêne pas la page */
+  }
 }
 
 document.addEventListener('click', (event) => {
@@ -823,6 +856,7 @@ function fillUserIdentity(user) {
 /* Démarrage commun
    ------------------------------------------------------------------------ */
 mountLayout();
+refreshNotificationCount();
 hydrateIcons();
 document.querySelectorAll('[data-stepper]').forEach(syncStepper);
 initDashNav();

@@ -84,6 +84,16 @@ const tableStatements = [
     status text not null default 'pending',
     created_at text not null default (datetime('now'))
   )`,
+  `create table if not exists notifications (
+    id text primary key,
+    user_id text not null references users(id) on delete cascade,
+    type text not null,
+    title text not null,
+    body text not null default '',
+    link text not null default '',
+    read_at text,
+    created_at text not null
+  )`,
 ];
 
 const indexStatements = [
@@ -92,7 +102,8 @@ const indexStatements = [
   `create index if not exists idx_tickets_user on tickets(user_id)`,
   `create index if not exists idx_tickets_event on tickets(event_id)`,
   `create index if not exists idx_sessions_user on sessions(user_id)`,
-  `create index if not exists idx_sessions_expires on sessions(expires_at)`
+  `create index if not exists idx_sessions_expires on sessions(expires_at)`,
+  `create index if not exists idx_notifications_user on notifications(user_id, created_at)`
 ];
 
 const COLUMN_DEFINITION = /^(text|integer) default (?:'[A-Za-z0-9_\/.-]*'|-?\d+)$/;

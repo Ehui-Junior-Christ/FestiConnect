@@ -3550,6 +3550,88 @@ dd {
   font-size: var(--text-xl);
 }
 
+/* 21. Notifications
+   ----------------------------------------------------------------------- */
+.notif-list {
+  display: grid;
+  gap: var(--space-2);
+  list-style: none;
+}
+
+.notif-body {
+  display: grid;
+  grid-template-columns: 44px minmax(0, 1fr) auto;
+  gap: var(--space-3);
+  align-items: start;
+  padding: var(--space-4);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  color: var(--text);
+  text-decoration: none;
+}
+
+a.notif-body:hover {
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-sm);
+}
+
+.notif-item.is-unread .notif-body {
+  border-color: color-mix(in srgb, var(--primary) 35%, var(--border));
+  box-shadow: inset 3px 0 0 var(--primary);
+}
+
+.notif-icon {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  border-radius: var(--radius-md);
+  background: var(--surface-alt);
+  color: var(--text-muted);
+}
+
+.notif-item.is-unread .notif-icon {
+  background: var(--primary-soft);
+  color: var(--primary);
+}
+
+.notif-text {
+  display: grid;
+  gap: 2px;
+  min-width: 0;
+}
+
+.notif-text strong {
+  line-height: var(--leading-snug);
+  overflow-wrap: anywhere;
+}
+
+.notif-text span {
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+}
+
+.notif-text time {
+  margin-top: var(--space-1);
+  color: var(--text-muted);
+  font-size: var(--text-xs);
+  font-weight: 600;
+}
+
+.notif-dot {
+  width: 10px;
+  height: 10px;
+  margin-top: var(--space-2);
+  border-radius: 50%;
+  background: var(--primary);
+}
+
+.icon-link[aria-current="page"] {
+  color: var(--primary);
+  background: var(--primary-soft);
+}
+
 /* 20. Mouvement réduit
    ----------------------------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {

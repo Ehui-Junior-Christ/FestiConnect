@@ -6,6 +6,7 @@ import { config } from './src/config/env.js';
 import { NOT_STARTED_SQL, db, eventTimeMs, limiters, randomId, requireUser, safely } from './src/app/context.js';
 import { matchRoute, pathId, route, routes, searchParam } from './src/app/router.js';
 import { buildInsert, insertByExistingColumns, tableColumns } from './src/db/schema.js';
+import { notify } from './src/features/notifications.js';
 import { AppError, errorResponse, notFound } from './src/shared/errors.js';
 import { parseBody, sendJson, serveStatic } from './src/shared/http.js';
 import { dummyVerify, hashPassword, needsRehash, passwordPolicyError, verifyPassword } from './src/shared/passwords.js';
@@ -325,8 +326,21 @@ route('PATCH', /^\/api\/events\/([^/]+)\/status$/, async ({ req, res, params }) 
   if (!eventId) return notFound(res);
   const body = await parseBody(req);
   const status = v.oneOf(body.status, EVENT_STATUSES, { label: 'Statut' });
-  const result = await db.execute({ sql: 'update events set status = ? where id = ?', args: [status, eventId] });
-  if (!result.rowsAffected) return notFound(res);
+  const found = await db.execute({ sql: 'select id, title, status, organizer_id from events where id = ?', args: [eventId] });
+  const event = found.rows[0];
+  if (!event) return notFound(res);
+  await db.execute({ sql: 'update events set status = ? where id = ?', args: [status, eventId] });
+  if (event.status !== status && status !== 'pending') {
+    const approved = status === 'approved';
+    await notify(event.organizer_id, {
+      type: 'event_status',
+      title: approved ? `« ${event.title} » est en ligne` : `« ${event.title} » n'a pas été validé`,
+      body: approved
+        ? 'Ton événement est visible dans le catalogue et la billetterie est ouverte.'
+        : 'L\'équipe FestiConnect ne l\'a pas publié. Vérifie le titre, la date, le lieu et la description, puis écris au support si besoin.',
+      link: approved ? `/evenement.html?id=${encodeURIComponent(event.id)}` : '/organisateur.html#analytics'
+    });
+  }
   return sendJson(res, 200, { ok: true });
 });
 
