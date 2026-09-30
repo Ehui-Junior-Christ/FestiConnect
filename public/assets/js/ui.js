@@ -252,6 +252,13 @@ function requireRole(roles) {
 async function logout() {
   await API.post('/api/auth/logout', {}).catch(() => null);
   API.clearSession();
+  // Téléphone partagé : les favoris du compte ne restent pas sur l'appareil.
+  try {
+    localStorage.removeItem('festiconnect_favorites');
+    sessionStorage.removeItem('festiconnect_fav_synced');
+  } catch {
+    /* rien à nettoyer */
+  }
   location.href = '/';
 }
 
@@ -306,6 +313,91 @@ const Cart = {
     document.dispatchEvent(new CustomEvent('cart:change'));
   }
 };
+
+/* Favoris : localStorage hors connexion, synchronisés avec le compte ensuite
+   ------------------------------------------------------------------------ */
+const Favorites = {
+  key: 'festiconnect_favorites',
+  max: 100,
+
+  ids() {
+    try {
+      const ids = JSON.parse(localStorage.getItem(this.key) || '[]');
+      return Array.isArray(ids) ? ids.filter((id) => typeof id === 'string').slice(0, this.max) : [];
+    } catch {
+      return [];
+    }
+  },
+
+  store(ids) {
+    try {
+      localStorage.setItem(this.key, JSON.stringify([...new Set(ids)].slice(0, this.max)));
+    } catch {
+      /* stockage indisponible : les favoris restent côté compte */
+    }
+    document.dispatchEvent(new CustomEvent('favorites:change'));
+  },
+
+  has(id) {
+    return this.ids().includes(id);
+  },
+
+  async toggle(id, title = '') {
+    const saved = !this.has(id);
+    this.store(saved ? [id, ...this.ids()] : this.ids().filter((item) => item !== id));
+    if (API.user()) {
+      try {
+        if (saved) await API.put(`/api/favorites/${encodeURIComponent(id)}`);
+        else await API.del(`/api/favorites/${encodeURIComponent(id)}`);
+      } catch (error) {
+        this.store(saved ? this.ids().filter((item) => item !== id) : [id, ...this.ids()]);
+        toast(error.message, { type: 'error' });
+        return;
+      }
+    }
+    const name = title ? `« ${title} »` : 'L\'événement';
+    toast(saved ? `${name} est gardé.` : `${name} est retiré de tes favoris.`, saved
+      ? { type: 'success', action: { label: 'Voir', href: API.user() ? '/client.html#favoris' : loginUrl('/client.html#favoris') } }
+      : { type: 'info' });
+  },
+
+  // Fusionne la liste locale avec celle du compte (à la connexion).
+  async sync() {
+    if (!API.user()) return;
+    try {
+      const { ids } = await API.post('/api/favorites/sync', { event_ids: this.ids() });
+      this.store(ids);
+    } catch {
+      /* la synchronisation sera retentée au prochain chargement */
+    }
+  }
+};
+
+function favButton(event, { withLabel = false } = {}) {
+  const saved = Favorites.has(event.id);
+  return `<button class="fav-btn${withLabel ? ' btn btn-sm' : ''}" type="button" data-fav="${escapeHtml(event.id)}" data-fav-title="${escapeHtml(event.title)}" aria-pressed="${saved}" aria-label="Garder « ${escapeHtml(event.title)} »">${icon('heart')}${withLabel ? `<span data-fav-label>${saved ? 'Gardé' : 'Garder'}</span>` : ''}</button>`;
+}
+
+function syncFavButtons() {
+  const ids = new Set(Favorites.ids());
+  document.querySelectorAll('[data-fav]').forEach((button) => {
+    const saved = ids.has(button.dataset.fav);
+    button.setAttribute('aria-pressed', String(saved));
+    const label = button.querySelector('[data-fav-label]');
+    if (label) label.textContent = saved ? 'Gardé' : 'Garder';
+  });
+}
+
+document.addEventListener('click', (event) => {
+  const button = event.target.closest('[data-fav]');
+  if (!button) return;
+  event.preventDefault();
+  Favorites.toggle(button.dataset.fav, button.dataset.favTitle);
+});
+document.addEventListener('favorites:change', syncFavButtons);
+window.addEventListener('storage', (event) => {
+  if (event.key === Favorites.key) syncFavButtons();
+});
 
 function updateCartBadges() {
   const count = Cart.count();
@@ -610,6 +702,7 @@ function eventCard(event) {
       <div class="media">
         <img src="${escapeHtml(safeUrl(event.cover_url, '/assets/img/event-default.svg'))}" alt="" loading="lazy" width="960" height="600">
         ${event.category ? `<span class="badge badge-solid">${escapeHtml(event.category)}</span>` : ''}
+        ${favButton(event)}
         <div class="date-stub" aria-hidden="true"><span class="day">${escapeHtml(parts.day)}</span><span class="month">${escapeHtml(parts.month)}</span></div>
       </div>
       <div class="body">
@@ -867,6 +960,15 @@ function fillUserIdentity(user) {
    ------------------------------------------------------------------------ */
 mountLayout();
 refreshNotificationCount();
+// Une synchronisation des favoris par session de navigation.
+try {
+  if (API.user() && !sessionStorage.getItem('festiconnect_fav_synced')) {
+    sessionStorage.setItem('festiconnect_fav_synced', '1');
+    Favorites.sync();
+  }
+} catch {
+  /* sessionStorage indisponible */
+}
 hydrateIcons();
 document.querySelectorAll('[data-stepper]').forEach(syncStepper);
 initDashNav();

@@ -4057,6 +4057,61 @@ a.notif-body:hover {
   border: 0;
 }
 
+/* 25. Favoris (cœur « Garder »)
+   ----------------------------------------------------------------------- */
+.fav-btn {
+  display: inline-grid;
+  place-items: center;
+  border: 0;
+  color: var(--text);
+  -webkit-tap-highlight-color: transparent;
+}
+
+.media .fav-btn {
+  position: absolute;
+  top: var(--space-2);
+  right: var(--space-2);
+  z-index: 2;
+  width: var(--tap);
+  height: var(--tap);
+  border-radius: var(--radius-pill);
+  background: color-mix(in srgb, var(--surface) 92%, transparent);
+  box-shadow: var(--shadow-sm);
+}
+
+.fav-btn .icon {
+  width: 22px;
+  height: 22px;
+  transition: transform 150ms var(--ease);
+}
+
+.fav-btn.btn .icon {
+  width: 20px;
+  height: 20px;
+}
+
+.fav-btn.btn {
+  display: inline-flex;
+  border: 1.5px solid var(--btn-border);
+}
+
+.fav-btn[aria-pressed="true"] {
+  color: var(--primary);
+}
+
+.fav-btn[aria-pressed="true"] .icon svg {
+  fill: currentColor;
+}
+
+.fav-btn:active .icon {
+  transform: scale(0.88);
+}
+
+.media .fav-btn:hover {
+  background: var(--surface);
+  color: var(--primary);
+}
+
 /* 20. Mouvement réduit
    ----------------------------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {

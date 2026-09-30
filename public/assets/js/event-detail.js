@@ -154,6 +154,7 @@ function render(event) {
           ${event.organizer_name ? `<li><span class="fact-icon">${icon('users')}</span><div><strong>${escapeHtml(event.organizer_name)}</strong><span>Organisateur</span></div></li>` : ''}
         </ul>
         <div class="cluster mt-6">
+          ${event.status === 'approved' ? favButton(event, { withLabel: true }) : ''}
           <button class="btn btn-sm" type="button" data-share>${icon('share')}<span>Partager</span></button>
           <a class="btn btn-sm btn-ghost" href="/evenements.html?city=${encodeURIComponent(event.city || '')}">${icon('pin')}<span>Autres dates à ${escapeHtml(event.city)}</span></a>
         </div>

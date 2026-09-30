@@ -222,6 +222,14 @@ await seedTicket({ id: 'tkt_demo_client', event_id: 'evt_abissa_2026', category_
 await seedTicket({ id: 'tkt_demo_maquis', event_id: 'evt_maquis_night', category_id: 'cat_maquis_std', category_name: 'Standard', user_id: client.id, code: 'FC-DEMO-MAQUIS', quantity: 1, amount_xof: 25000, payment_method: 'Orange Money', created_at: ago(3) });
 await seedTicket({ id: 'tkt_demo_zouglou', event_id: 'evt_zouglou_past', user_id: client.id, code: 'FC-DEMO-ZOUGLOU', quantity: 2, amount_xof: 10000, payment_method: 'Moov Money', created_at: ago(15), checked_in_at: ago(10, -20), checked_in_by: organizer.id });
 
+// Favoris du client de demonstration.
+for (const [favoriteId, eventId] of [['fav_demo_mode', 'evt_mode_sahel'], ['fav_demo_abissa', 'evt_abissa_2026']]) {
+  await db.execute({
+    sql: 'insert or ignore into favorites (id, user_id, event_id, created_at) values (?, ?, ?, ?)',
+    args: [favoriteId, client.id, eventId, ago(4)]
+  });
+}
+
 // Notifications de demonstration (le rappel J-1 du client est calcule a la lecture).
 await insertOrUpdateById('notifications', {
   id: 'ntf_demo_abissa_ok',

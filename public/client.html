@@ -23,6 +23,7 @@
         <ul>
           <li><a href="#dashboard" aria-current="true"><span data-icon="dashboard"></span>Aperçu</a></li>
           <li><a href="#tickets"><span data-icon="ticket"></span>Mes billets</a></li>
+          <li><a href="#favoris"><span data-icon="heart"></span>Gardés</a></li>
           <li><a href="#profil"><span data-icon="user"></span>Profil</a></li>
           <li class="nav-sep" role="presentation"></li>
           <li><button type="button" data-logout><span data-icon="logout"></span>Déconnexion</button></li>
@@ -49,6 +50,16 @@
             </div>
           </div>
           <div id="tickets-list" class="stack" aria-busy="true"></div>
+        </section>
+
+        <section id="favoris" class="panel" aria-labelledby="favorites-title">
+          <div class="panel-title">
+            <div>
+              <h2 id="favorites-title">Gardés pour plus tard</h2>
+              <p>Les événements marqués d'un cœur, sur ce téléphone comme sur tes autres appareils.</p>
+            </div>
+          </div>
+          <div id="favorites-list" class="grid-cards" aria-busy="true"></div>
         </section>
 
         <section id="profil" class="panel" aria-labelledby="profile-title">

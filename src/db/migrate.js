@@ -119,6 +119,13 @@ const tableStatements = [
     unique(event_id, code),
     check(used >= 0 and (max_uses = 0 or used <= max_uses))
   )`,
+  `create table if not exists favorites (
+    id text primary key,
+    user_id text not null references users(id) on delete cascade,
+    event_id text not null references events(id) on delete cascade,
+    created_at text not null,
+    unique(user_id, event_id)
+  )`,
 ];
 
 const indexStatements = [
@@ -131,7 +138,8 @@ const indexStatements = [
   `create index if not exists idx_notifications_user on notifications(user_id, created_at)`,
   `create index if not exists idx_ticket_categories_event on ticket_categories(event_id)`,
   `create index if not exists idx_promo_codes_event on promo_codes(event_id)`,
-  `create index if not exists idx_tickets_code on tickets(code)`
+  `create index if not exists idx_tickets_code on tickets(code)`,
+  `create index if not exists idx_favorites_user on favorites(user_id)`
 ];
 
 const COLUMN_DEFINITION = /^(text|integer) default (?:'[A-Za-z0-9_\/.-]*'|-?\d+)$/;

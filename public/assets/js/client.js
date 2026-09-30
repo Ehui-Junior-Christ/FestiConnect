@@ -142,6 +142,38 @@ async function loadClient() {
 }
 
 let clientTickets = [];
+const favoritesList = document.querySelector('#favorites-list');
+let favoriteEvents = [];
+
+function renderFavorites() {
+  const kept = new Set(Favorites.ids());
+  const visible = favoriteEvents.filter((event) => kept.has(event.id));
+  favoritesList.innerHTML = visible.length
+    ? visible.map(eventCard).join('')
+    : emptyState({
+        title: 'Aucun événement gardé',
+        message: 'Touche le cœur sur un événement pour le retrouver ici, même si tu n\'es pas encore décidé.',
+        actions: [{ label: 'Parcourir l\'agenda', href: '/evenements.html', variant: 'primary', icon: 'heart' }]
+      });
+}
+
+async function loadFavorites() {
+  favoritesList.innerHTML = skeletonCards(2, 'event');
+  setLoading(favoritesList, true);
+  try {
+    await Favorites.sync();
+    ({ events: favoriteEvents } = await API.get('/api/favorites'));
+    renderFavorites();
+  } catch (error) {
+    renderError(favoritesList, error, loadFavorites);
+  } finally {
+    setLoading(favoritesList, false);
+  }
+}
+
+document.addEventListener('favorites:change', () => {
+  if (favoriteEvents.length) renderFavorites();
+});
 
 ticketsList.addEventListener('click', (event) => {
   const open = event.target.closest('[data-qr-open]');
@@ -181,4 +213,5 @@ if (clientUser) {
   fillUserIdentity(clientUser);
   renderProfile(clientUser);
   loadClient();
+  loadFavorites();
 }

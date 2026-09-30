@@ -13,7 +13,8 @@ export const ALLOWED_TABLES = Object.freeze(new Set([
   'withdrawals',
   'notifications',
   'ticket_categories',
-  'promo_codes'
+  'promo_codes',
+  'favorites'
 ]));
 
 const IDENTIFIER = /^[A-Za-z_][A-Za-z0-9_]{0,63}$/;
