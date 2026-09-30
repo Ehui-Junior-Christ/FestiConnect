@@ -22,7 +22,7 @@
     "gainDb": 0,
     "fadeIn": 0,
     "fadeOut": 0.3,
-    "_note": "Mix maître généré par npm run audio (voix TTS + musique originale + sound design, -14 LUFS / -1 dBTP). Remplacer par le mix définitif le moment venu."
+    "_note": "Mix maître généré par npm run audio : voix du propriétaire (prise montée, voice/vo_edit_*.json) + musique originale + sound design, -14 LUFS / -1 dBTP."
   },
   "duration": 80,
   "sequences": [
@@ -91,7 +91,7 @@
           },
           "screen": "Trois affiches en éventail 3D (Abissa, Maquis Electronic Night, Salon Mode Sahel). Où ? Quand ? Comment ? mot à mot. Iris orange qui couvre l'écran sur le dernier temps.",
           "vo": "Mais où, quand, et comment avoir sa place ?",
-          "voAt": 0.2
+          "voAt": 0.5
         }
       ]
     },
@@ -173,7 +173,7 @@
             "success": 6,
             "toast": 6.5
           },
-          "vo": "Tu réserves, puis tu paies avec Wave, Orange Money ou Moov Money, directement depuis ton téléphone.",
+          "vo": "Tu réserves, puis tu paies avec Wave, Orange Money et Moov Money, directement depuis ton téléphone. C'est pas bien ça ?",
           "voAt": 0.3
         },
         {
@@ -312,7 +312,7 @@
             "iris": 3
           },
           "screen": "Triptyque rythmique : Trouve. / Paie. / Entre. Un mot par temps fort, fonds de trame alternés.",
-          "vo": "Trouve, paie, entre. C'est aussi simple que ça.",
+          "vo": "Trouve, paie et entre. C'est aussi simple que ça.",
           "voAt": 0.1
         },
         {

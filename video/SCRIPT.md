@@ -216,7 +216,7 @@ Pour chaque plan : visuel, animation, texte à l'écran, voix off (heure de dép
 - **Visuel** : fond nuit. Trois affiches en éventail (Festival Abissa Experience, Maquis Electronic Night, Salon Mode Sahel) avec catégorie, ville, date et prix. Au-dessus, une question en trois mots.
 - **Animation** : les affiches montent depuis le bas en ressort, une par temps, et dérivent en s'écartant. Les mots de la question tombent sur les temps. À 00:15.3, **iris orange** depuis le centre qui couvre tout le cadre à 00:16.0, pendant que les affiches reculent.
 - **Texte à l'écran** : **Où ? Quand ? Comment ?** (« Comment ? » en orange) — sur les affiches : `TRADITION · GRAND-BASSAM`, `Ven. 14 août 2026 · dès 15 000 F`, etc.
-- **Voix off** (00:12.2) : « Mais où, quand, et comment avoir sa place ? »
+- **Voix off** (00:12.5) : « Mais où, quand, et comment avoir sa place ? »
 - **Musique / SD** : la montée s'intensifie, roulement de caisse claire ou de percussions sur la mesure 8, coupure d'une demi-mesure (silence ou aspiration inversée) avant le drop.
 - **Temps forts** : 00:12.0 / 00:12.5 / 00:13.0 affiches · 00:13.5 « Où ? » · 00:14.0 « Quand ? » · 00:14.5 « Comment ? » · 00:15.3 début de l'iris · **00:16.0 plein orange**.
 
@@ -389,16 +389,14 @@ Même univers, mêmes modules. Grille 120 BPM, 15 mesures. Fichier : `video/time
 
 | Plan | Temps | Visuel | Voix off |
 |---|---|---|---|
-| A1–A2 | 00:00.0 → 00:04.0 | Pastille, « Abidjan. », recul sur la constellation, « Ce soir, tout le monde sort. » | (00:01.7) « Vendredi soir, tout le monde sort. » |
-| B1 | 00:04.0 → 00:06.0 | Quatre mots-chocs, un par temps (Concerts. Festivals. Maquis. Défilés.) | (00:04.0, se prolonge sur B2) « Concerts, festivals, maquis… mais où trouver sa place ? » |
-| B2 | 00:06.0 → 00:08.0 | Trois affiches, « Où ? Quand ? Comment ? », iris orange | — |
-| C1–C2 | 00:08.0 → 00:12.0 | La pastille se pose sur le i, promesses, aspiration, plongée | (00:08.8) « Avec FestiConnect, » |
-| D1 | 00:12.0 → 00:14.5 | Recherche « Abissa », résultats | (00:12.3) « tu trouves ton événement, » |
-| D2 | 00:14.5 → 00:17.0 | Fiche, jauge, « Réserver » | (00:14.7) « tu choisis ta place, » |
-| D3 | 00:17.0 → 00:21.5 | Paiement Wave, pastille d'attente, coche verte | (00:17.2) « tu paies avec Wave, Orange Money ou Moov Money… » |
-| D4 | 00:21.5 → 00:25.0 | Billet, QR, scan, ACCÈS VALIDÉ (00:23.8) | (00:22.0) « et tu entres en un scan. » |
-| F2 | 00:25.0 → 00:27.0 | Tableau de bord en accéléré : 621 / 900, 15 525 000 F, « Retirer vers Wave » | (00:25.1) « Tu organises ? Vends ici aussi. » |
-| H2 | 00:27.0 → 00:30.0 | La pastille tombe sur le i, signature, URL, point final | (00:27.15) « FestiConnect. On est ensemble. » |
+| A1–A2 | 00:00.0 → 00:04.0 | Pastille, « Abidjan. », recul sur la constellation, « Ce soir, tout le monde sort. » | (00:01.7) « Vendredi soir… tout le monde sort. » |
+| B1–B2 | 00:04.0 → 00:08.0 | Quatre mots-chocs sur les temps, puis trois affiches, « Où ? Quand ? Comment ? », iris orange | (00:04.0) « Concerts, festivals, soirées maquis, défilés : les idées ne manquent pas. » |
+| C1–C2 | 00:08.0 → 00:12.0 | La pastille se pose sur le i, promesses, aspiration, plongée | (00:08.65) « Voici FestiConnect : billetterie, boutique et paiement mobile. » |
+| D1 | 00:12.0 → 00:14.5 | Recherche « Abissa », résultats | (00:12.3) « Tout commence par une recherche. » |
+| D2–D3 | 00:14.5 → 00:21.5 | Fiche, jauge, « Réserver », paiement Wave, coche verte | (00:14.7) « Tu réserves, puis tu paies avec Wave, Orange Money et Moov Money, directement depuis ton téléphone. » |
+| D4 | 00:21.5 → 00:25.0 | Billet, QR, scan, ACCÈS VALIDÉ (00:23.8) | (00:21.7) « Le jour J, un scan à l'entrée, et c'est parti. » |
+| F2 | 00:25.0 → 00:27.0 | Tableau de bord en accéléré : 621 / 900, 15 525 000 F, « Retirer vers Wave » | (00:25.1) « Et si c'est toi qui organises ? » |
+| H2 | 00:27.0 → 00:30.0 | La pastille tombe sur le i, signature, URL, point final | (00:27.15) « FestiConnect… On est ensemble ! » |
 
 Pour les réseaux, prévoir des sous-titres incrustés (une grande partie des vidéos y est regardée sans le son) : les textes ci-dessus servent de fichier de sous-titres ; la zone basse des plans est libre à partir de y = 900 px, sauf en D4.
 
@@ -466,7 +464,7 @@ Options acceptées :
 |---|---|---|---|---|
 | 01 | A1–A2 | 00:01.0 | 6,9 s | Vendredi soir à Abidjan. Du Plateau à Grand-Bassam, jusqu'à Bouaké, tout le monde sort. |
 | 02 | B1 | 00:08.1 | 4,0 s | Concerts, festivals, soirées maquis, défilés : les idées ne manquent pas. |
-| 03 | B2 | 00:12.2 | 4,3 s | Mais où, quand, et comment avoir sa place ? |
+| 03 | B2 | 00:12.5 | 4,1 s | Mais où, quand, et comment avoir sa place ? |
 | 04 | C1–C2 | 00:16.65 | 5,5 s | Voici FestiConnect : billetterie, boutique et paiement mobile, réunis au même endroit. |
 | 05 | D1 | 00:22.3 | 5,9 s | Tout commence par une recherche : un artiste, une ville ou une date. |
 | 06 | D2 | 00:28.3 | 5,9 s | Sur la page de l'événement, tout est clair : le lieu, le prix, les places restantes. |
@@ -479,19 +477,18 @@ Options acceptées :
 | 13 | H1 | 01:10.1 | 4,2 s | Trouve, paie, entre. C'est aussi simple que ça. |
 | 14 | H2 | 01:14.4 | 4,5 s | FestiConnect. Rendez-vous sur festiconnect point c i. On est ensemble ! |
 
-- **Texte exact — version courte (30 s)** :
+- **Texte exact — version courte (30 s)** : le propriétaire n'a enregistré que la version longue ; la version courte est **montée à partir de fragments de sa prise 80 s** (`voice/vo_edit_30s.json`). Le texte ci-dessous est ce qui est réellement dit.
 
-| N° | Plan | Départ indicatif | Texte |
+| N° | Plan | Départ | Texte (fragment de la prise 80 s) |
 |---|---|---|---|
-| c01 | A2 | 00:01.7 | Vendredi soir, tout le monde sort. |
-| c02 | B1–B2 | 00:04.0 | Concerts, festivals, maquis… mais où trouver sa place ? |
-| c03 | C1 | 00:08.8 | Avec FestiConnect, |
-| c04 | D1 | 00:12.3 | tu trouves ton événement, |
-| c05 | D2 | 00:14.7 | tu choisis ta place, |
-| c06 | D3 | 00:17.2 | tu paies avec Wave, Orange Money ou Moov Money… |
-| c07 | D4 | 00:22.0 | et tu entres en un scan. |
-| c08 | F2 | 00:25.1 | Tu organises ? Vends ici aussi. |
-| c09 | H2 | 00:27.15 | FestiConnect. On est ensemble. |
+| c01 | A2 | 00:01.7 | Vendredi soir… tout le monde sort. (ligne 01) |
+| c02 | B1 | 00:04.0 | Concerts, festivals, soirées maquis, défilés : les idées ne manquent pas. (ligne 02) |
+| c03 | C1 | 00:08.65 | Voici FestiConnect : billetterie, boutique et paiement mobile. (ligne 04) |
+| c04 | D1 | 00:12.3 | Tout commence par une recherche. (ligne 05) |
+| c05 | D2 | 00:14.7 | Tu réserves, puis tu paies avec Wave, Orange Money et Moov Money, directement depuis ton téléphone. (ligne 07) |
+| c06 | D4 | 00:21.7 | Le jour J, un scan à l'entrée, et c'est parti. (ligne 08) |
+| c07 | F2 | 00:25.1 | Et si c'est toi qui organises ? (ligne 10) |
+| c08 | H2 | 00:27.15 | FestiConnect… On est ensemble ! (ligne 14) |
 
 Les fenêtres indiquent la durée disponible avant la phrase suivante ; ce qui compte le plus est le **début** de chaque phrase (c'est lui qui déclenche le plan). Une fin de phrase peut déborder de quelques dixièmes sur le plan suivant.
 
@@ -531,22 +528,23 @@ Tous les temps du film sont dans **un seul fichier** par version (`video/timelin
 
 ---
 
-### 7.4 Audio de la version actuelle (généré, provisoire)
+### 7.4 Audio de la version actuelle
 
-À la demande du propriétaire, la version livrée embarque une voix off et une musique **produites par nos soins**, en attendant (ou à la place de) l'enregistrement décrit en 7.1. `npm run audio` les régénère à partir des timelines.
+`npm run audio` régénère voix, musique, sound design et mix maître des deux versions à partir des timelines.
 
-- **Voix off** : synthèse vocale locale sherpa-onnx, modèle **Kokoro-82M v1.0, voix française `ff_siwis`**. Le modèle est sous licence Apache-2.0, la voix est entraînée sur le corpus SIWIS (CC-BY 4.0) ; l'usage promotionnel est permis, **avec la mention « Voix de synthèse : Kokoro-82M (Apache-2.0), corpus SIWIS (CC-BY 4.0) »** dans la description de la vidéo ou le générique.
-  - Choix objectivé sur 7 voix testées : même phrase, puis aller-retour par reconnaissance vocale (Whisper) pour mesurer le taux d'erreur par mot, ainsi que l'étendue de la hauteur (prosodie) et le débit. Kokoro obtient 22 % contre 39 à 94 % pour les voix Piper. Deux voix « low » perdent les voyelles nasales ; la voix « tom » est sous AGPLv3 et a été écartée.
-  - Limite assumée : **aucune voix de synthèse disponible n'a l'accent ivoirien**. C'est une voix française standard, féminine et claire. Pour une diffusion publique, une vraie voix ivoirienne (7.1.4) reste recommandée.
-  - Prononciation : le texte envoyé au moteur est adapté sans changer l'écran (`voice/prononciation.json`) : « Festi Connecte », « Ouève » pour Wave, « Orange Monni », « Mouv Monni », énumérations séparées par des points pour une diction nette.
-  - Calage : chaque ligne démarre à son temps prévu (`voAt`) et sa vitesse est ajustée pour tenir dans sa fenêtre (×0,94 à ×1,18).
-  - Traitement : passe-haut 80 Hz, chaleur, présence, de-esser, compression douce, saturation légère, 48 kHz.
+- **Voix off : la voix du propriétaire** (enregistrement téléphone, une prise continue des 14 lignes de la version longue ; fichier `audio/voix_proprietaire/source.wav`, non versionné).
+  - Montage décrit dans `voice/vo_edit_80s.json` : coupes de chaque ligne dans la prise, avec la respiration d'attaque conservée et des fondus de 40 ms. Toutes les coupes ont été vérifiées par transcription et par l'enveloppe (`voice/inspect_take.py`, `voice/plot_take.py`).
+  - Retouches : le doublon « festivals » de la ligne 02 est retiré ; les pauses longues (lignes 06, 11, 13, 14) sont ramenées à environ 0,45 s. Le débit n'est pas modifié (aucun time-stretch nécessaire). Le `voAt` de B2 passe à 0,5 s pour éviter un chevauchement.
+  - L'ajout spontané « C'est pas bien ça ? » (ligne 07) est conservé : il tombe sur « Paiement reçu ».
+  - Nettoyage (`voice/real_voice.py`), identique sur toute la prise : passe-haut 80 Hz, réduction de bruit spectrale douce (au plus 10 dB, plancher -69 → -74 dB), -2 dB à 300 Hz (effet « boîte » du téléphone), +3 dB de présence à 3,5 kHz, de-esser, compression douce 2,2:1. Nivellement ligne à ligne de ±2 dB au plus : l'accent et la dynamique naturelle sont conservés.
+  - Version 30 s : montée à partir de fragments de la même prise (`voice/vo_edit_30s.json`, texte en 7.1.4).
+- **Voix de synthèse (repli)** : si la prise n'est pas disponible, `npm run audio -- --voice tts` régénère une voix de synthèse. Elle utilise sherpa-onnx, Kokoro-82M v1.0, voix `ff_siwis` (modèle Apache-2.0, corpus SIWIS CC-BY 4.0 ; mention obligatoire). Elle a été choisie parmi 7 voix par aller-retour de reconnaissance vocale. Aucune voix de synthèse n'a l'accent ivoirien.
 - **Musique** : composition originale entièrement synthétisée par code (`music/compose.py`, aucun échantillon externe), donc libre de droits.
   - Afro-house à 120 BPM en la mineur : kick, clap, shaker, clave 3-2, djembé, log drum, basse, nappes, riff boisé en E, arpège en F.
   - Break de 01:06 à 01:10, impacts à 00:16, 00:46, 01:08 et 01:14, son de marque (cloche et lame boisée, la–mi–la) sur l'atterrissage du logo.
   - Sound design synchronisé sur les cues (taps, carillon de paiement, bip de scan, tampons, notifications).
-- **Mix** (`music/mix.py`) : la musique baisse de 7 dB sous la voix (anticipation de 60 ms), le master est à **-14 LUFS intégrés, crête vraie ≤ -1 dBTP**.
-- **Remplacer par une vraie voix** : déposer la voix enregistrée (48 kHz), déjà calée sur le film, dans `audio/voix_80s/voix.wav`, puis lancer `npm run audio -- --version 80 --skip-voice` et `npm run render`. On peut aussi la découper en une ligne par plan et recaler avec `npm run analyze` / `npm run sync -- --mode phrases` (7.3). La musique se remplace de la même façon (`audio/musique_80s/musique.wav`, option `--skip-music`).
+- **Mix** (`music/mix.py`) : la musique baisse de 10 dB sous la voix (anticipation de 60 ms), avec 8 à 14 dB d'écart voix/fond selon les phrases. Le master est à **-14 LUFS intégrés, crête vraie ≤ -1 dBTP**. L'intelligibilité mesurée par reconnaissance vocale est la même dans le mix que sur la voix seule.
+- **Réenregistrer une ligne** : remplacer la prise, ajuster les temps de la ligne dans `voice/vo_edit_80s.json` (repérage avec `python voice/inspect_take.py`), puis lancer `npm run audio` et `npm run render`.
 
 ## 8. Livrables, spécifications d'export, contrôle qualité
 
@@ -609,12 +607,15 @@ Chromium n'est pas téléchargé par `npm install`. Les scripts cherchent `PLAYW
 | `npm run preview:30s` | Idem pour la version courte |
 | `npm run still -- 17.5 46.2` | Images PNG 1920 × 1080 aux temps donnés (`out/stills/`) |
 | `npm run serve` | Serveur local pour relire en temps réel dans un navigateur (espace, flèches) |
-| `npm run audio` | Régénère voix off TTS, musique, sound design et mix maître des deux versions (7.4) |
+| `npm run audio` | Régénère voix off (voix du propriétaire montée, ou synthèse en repli), musique, sound design et mix maître des deux versions (7.4) |
 | `npm run analyze -- audio/x.wav` | Analyse audio vers `audio/analysis.json` |
 | `npm run sync -- --mode grid` | Recalage de la timeline (voir 7.3) |
 | `npm run render` | Master 1920 × 1080, 30 i/s, CRF 18, avec audio si déclaré |
 | `npm run render:60fps` | Master à 60 i/s |
 | `npm run render:30s` | Version courte |
+| `npm run verify -- out/x.mp4` | Contrôle d'un MP4 : flux, durée, loudness et crête vraie, position des impacts, images aux impacts |
+| `npm run remux -- out/x.mp4 --timeline timeline.json` | Remplace l'audio d'un MP4 rendu (nouveau mix) sans refaire le rendu vidéo |
+| `npm run web -- out/x.mp4 --audio audio/mix_80s.wav` | Version web < 28 Mo (x264 2 passes, 1080p conservé, audio encodé une seule fois depuis le mix) |
 | `npm run qc:qr` | Vérifie que le QR du billet se décode (plan D4) |
 
 Options de `render` : `--width`, `--fps`, `--crf`, `--preset`, `--workers` (rendu parallèle par segments, 3 par défaut), `--from`/`--to`, `--audio`, `--mute`, `--hud 0|1|2`, `--frames` (conserve les PNG dans `frames/`), `--timeline`. Temps mesurés dans ce conteneur (4 cœurs) : environ 20 i/s en 960 × 540 et 4,5 i/s en 1920 × 1080 preset `slow`, soit une dizaine de minutes pour le master 80 s.

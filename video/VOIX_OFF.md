@@ -58,23 +58,20 @@ Intentions :
 - **10** relance l'attention : change légèrement de ton, comme si tu te tournais vers quelqu'un d'autre.
 - **13** : trois mots bien détachés, puis la phrase détendue.
 
-## Version courte — 30 s (9 lignes, pour les réseaux)
+## Version courte — 30 s (montée à partir de ta prise longue)
 
-Fichiers à nommer `c01.wav`, `c02.wav`…
+Rien à enregistrer : la version courte est montée avec des morceaux de ta lecture de la version longue. Voici ce qu'on entend :
 
-| N° | Moment dans la vidéo | Texte à lire |
-|---|---|---|
-| c01 | 0:01 | Vendredi soir, tout le monde sort. |
-| c02 | 0:04 | Concerts, festivals, maquis… mais où trouver sa place ? |
-| c03 | 0:08 | Avec FestiConnect, |
-| c04 | 0:12 | tu trouves ton événement, |
-| c05 | 0:14 | tu choisis ta place, |
-| c06 | 0:17 | tu paies avec Wave, Orange Money ou Moov Money… |
-| c07 | 0:22 | et tu entres en un scan. |
-| c08 | 0:25 | Tu organises ? Vends ici aussi. |
-| c09 | 0:27 | FestiConnect. On est ensemble. |
-
-Les lignes c03 à c07 forment une seule phrase : garde la même énergie montante de l'une à l'autre.
+| N° | Moment dans la vidéo | Texte entendu | Tiré de la ligne |
+|---|---|---|---|
+| c01 | 0:01 | Vendredi soir… tout le monde sort. | 01 |
+| c02 | 0:04 | Concerts, festivals, soirées maquis, défilés : les idées ne manquent pas. | 02 |
+| c03 | 0:08 | Voici FestiConnect : billetterie, boutique et paiement mobile. | 04 |
+| c04 | 0:12 | Tout commence par une recherche. | 05 |
+| c05 | 0:14 | Tu réserves, puis tu paies avec Wave, Orange Money et Moov Money, directement depuis ton téléphone. | 07 |
+| c06 | 0:21 | Le jour J, un scan à l'entrée, et c'est parti. | 08 |
+| c07 | 0:25 | Et si c'est toi qui organises ? | 10 |
+| c08 | 0:27 | FestiConnect… On est ensemble ! | 14 |
 
 ---
 

@@ -22,7 +22,7 @@
     "gainDb": 0,
     "fadeIn": 0,
     "fadeOut": 0.3,
-    "_note": "Mix maître généré par npm run audio (voix TTS + musique originale + sound design, -14 LUFS / -1 dBTP). Remplacer par le mix définitif le moment venu."
+    "_note": "Mix maître généré par npm run audio : voix du propriétaire (prise montée, voice/vo_edit_*.json) + musique originale + sound design, -14 LUFS / -1 dBTP."
   },
   "duration": 30,
   "sequences": [
@@ -54,7 +54,7 @@
             "title4": 0.7,
             "out": 2.1
           },
-          "vo": "Vendredi soir, tout le monde sort.",
+          "vo": "Vendredi soir… tout le monde sort.",
           "voAt": 0.2
         }
       ]
@@ -74,7 +74,7 @@
             "w3": 1,
             "w4": 1.5
           },
-          "vo": "Concerts, festivals, maquis… mais où trouver sa place ?",
+          "vo": "Concerts, festivals, soirées maquis, défilés : les idées ne manquent pas.",
           "voAt": 0
         },
         {
@@ -107,8 +107,8 @@
             "tag2": 1.5,
             "tag3": 1.75
           },
-          "vo": "Avec FestiConnect,",
-          "voAt": 0.8
+          "vo": "Voici FestiConnect : billetterie, boutique et paiement mobile.",
+          "voAt": 0.65
         },
         {
           "id": "C2",
@@ -138,7 +138,7 @@
             "results": 1.2,
             "tap": 2
           },
-          "vo": "tu trouves ton événement,",
+          "vo": "Tout commence par une recherche.",
           "voAt": 0.3
         },
         {
@@ -152,7 +152,7 @@
             "cta": 1.4,
             "tap": 2.1
           },
-          "vo": "tu choisis ta place,",
+          "vo": "Tu réserves, puis tu paies avec Wave, Orange Money et Moov Money, directement depuis ton téléphone.",
           "voAt": 0.2
         },
         {
@@ -168,9 +168,7 @@
             "wait": 2.1,
             "success": 3.1,
             "toast": 3.5
-          },
-          "vo": "tu paies avec Wave, Orange Money ou Moov Money…",
-          "voAt": 0.2
+          }
         },
         {
           "id": "D4",
@@ -184,8 +182,8 @@
             "valid": 2.3,
             "out": 3.1
           },
-          "vo": "et tu entres en un scan.",
-          "voAt": 0.5
+          "vo": "Le jour J, un scan à l'entrée, et c'est parti.",
+          "voAt": 0.2
         }
       ]
     },
@@ -199,7 +197,7 @@
           "start": 25,
           "end": 27,
           "screen": "Tableau de bord en accéléré : 621 / 900 billets, 15 525 000 F, bouton Retirer vers Wave.",
-          "vo": "Tu organises ? Vends ici aussi.",
+          "vo": "Et si c'est toi qui organises ?",
           "voAt": 0.1,
           "cues": {
             "push": 0,
@@ -226,7 +224,7 @@
             "sign": 1.3,
             "fade": 2.2
           },
-          "vo": "FestiConnect. On est ensemble.",
+          "vo": "FestiConnect… On est ensemble !",
           "voAt": 0.15
         }
       ]
