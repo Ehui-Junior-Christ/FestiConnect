@@ -16,7 +16,9 @@
     "preview:30s": "node scripts/render.mjs --preview --timeline timeline-30s.json",
     "qc:qr": "node scripts/check-qr.mjs",
     "audio": "node scripts/build-audio.mjs",
-    "verify": "node scripts/verify-final.mjs"
+    "verify": "node scripts/verify-final.mjs",
+    "web": "node scripts/web-encode.mjs",
+    "remux": "node scripts/remux-audio.mjs"
   },
   "dependencies": {
     "@fontsource-variable/bricolage-grotesque": "5.3.0",

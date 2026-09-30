@@ -4,7 +4,7 @@
         --sfx video/audio/musique_80s/sfx.wav --out video/audio/mix_80s.wav
 
 Le ducking (sidechain) suit l'enveloppe de la voix avec une anticipation de 60 ms : la musique baisse juste avant
-chaque phrase et remonte en 350 ms. Le master est verifie en crete vraie (sur-echantillonnage x4).
+chaque phrase (-10 dB) et remonte en 350 ms. Le master est verifie en crete vraie (sur-echantillonnage x4).
 """
 import argparse
 import sys
@@ -35,12 +35,12 @@ def main():
     ap.add_argument("--music", required=True)
     ap.add_argument("--sfx")
     ap.add_argument("--out", required=True)
-    ap.add_argument("--duck-db", type=float, default=7.0)
-    ap.add_argument("--music-lufs", type=float, default=-21.0, help="niveau de la musique avant ducking")
-    ap.add_argument("--voice-lufs", type=float, default=-15.5)
+    ap.add_argument("--duck-db", type=float, default=10.0)
+    ap.add_argument("--music-lufs", type=float, default=-22.5, help="niveau de la musique avant ducking")
+    ap.add_argument("--voice-lufs", type=float, default=-15.0)
     ap.add_argument("--sfx-db", type=float, default=-9.0, help="gain du sound design par rapport a la voix")
     ap.add_argument("--target", type=float, default=-14.0)
-    ap.add_argument("--ceiling", type=float, default=-1.2)
+    ap.add_argument("--ceiling", type=float, default=-1.5)
     a = ap.parse_args()
 
     v = load(a.voice)

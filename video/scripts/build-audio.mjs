@@ -1,14 +1,18 @@
-// Chaine audio complete : voix off TTS + musique originale + sound design -> mix maitre (-14 LUFS, -1 dBTP).
+// Chaine audio complete : voix off + musique originale + sound design -> mix maitre audio/mix_<v>s.wav
+// (-14 LUFS, -1 dBTP), reference par audio.file dans les timelines.
 //
-//   npm run audio                       les deux versions (80 s et 30 s)
-//   npm run audio -- --version 80       une seule version
-//   npm run audio -- --skip-voice       garde les voix deja generees (ex. une vraie voix deposee dans audio/voix_80s/voix.wav)
+//   npm run audio                          les deux versions (80 s et 30 s)
+//   npm run audio -- --version 80          une seule version
+//   npm run audio -- --voice tts           force la voix de synthese (sinon : vraie voix si disponible)
+//   npm run audio -- --skip-voice / --skip-music   garde les pistes deja generees
 //
-// Prerequis : Python 3 avec voice/requirements.txt (variable PYTHON, defaut python3) et les modeles TTS
-// (variable TTS_MODELS, defaut ../.tts-models ; telechargement : python voice/fetch_models.py <dossier> kokoro-multi-lang-v1_0).
+// Voix reelle : prise du proprietaire dans audio/voix_proprietaire/source.wav, montee selon voice/vo_edit_<v>s.json
+// (voice/real_voice.py). Voix de synthese : voice/make_voice.py (modeles TTS dans TTS_MODELS, defaut ../.tts-models).
+// Prerequis : Python 3 avec voice/requirements.txt (variable PYTHON, defaut python3).
+import fs from 'node:fs';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
-import { VIDEO_DIR, parseArgs } from './lib.mjs';
+import { VIDEO_DIR, parseArgs, readJSON } from './lib.mjs';
 
 const args = parseArgs();
 const PY = process.env.PYTHON || 'python3';
@@ -28,8 +32,15 @@ function py(script, ...a) {
 for (const v of versions) {
   const c = cfg[v];
   if (!c) { console.error(`Version inconnue : ${v}`); process.exit(1); }
-  if (!args['skip-voice']) py('voice/make_voice.py', '--timeline', c.timeline, '--models', MODELS, '--out', `audio/voix_${v}s`, '--tail', c.tail);
+  const edit = path.join(VIDEO_DIR, 'voice', `vo_edit_${v}s.json`);
+  const real = args.voice !== 'tts' && fs.existsSync(edit) && fs.existsSync(path.join(VIDEO_DIR, readJSON(edit).source));
+  const voiceDir = real ? `audio/voix_${v}s_reelle` : `audio/voix_${v}s`;
+  console.log(`Version ${v} s : voix ${real ? 'reelle (proprietaire)' : 'de synthese (TTS)'}`);
+  if (!args['skip-voice']) {
+    if (real) py('voice/real_voice.py', '--edit', `voice/vo_edit_${v}s.json`, '--out', voiceDir);
+    else py('voice/make_voice.py', '--timeline', c.timeline, '--models', MODELS, '--out', voiceDir, '--tail', c.tail);
+  }
   if (!args['skip-music']) py('music/compose.py', '--timeline', c.timeline, '--out', `audio/musique_${v}s`);
-  py('music/mix.py', '--voice', `audio/voix_${v}s/voix.wav`, '--music', `audio/musique_${v}s/musique.wav`,
+  py('music/mix.py', '--voice', `${voiceDir}/voix.wav`, '--music', `audio/musique_${v}s/musique.wav`,
     '--sfx', `audio/musique_${v}s/sfx.wav`, '--out', `audio/mix_${v}s.wav`);
 }

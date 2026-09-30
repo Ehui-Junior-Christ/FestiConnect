@@ -1,0 +1,23 @@
+{
+  "_note": "Montage de la voix du propriétaire (prise continue unique, audio/voix_proprietaire/source.wav, non versionnée). Temps en secondes dans la source. 'remove' = passages retirés (doublon), les pauses internes > max_pause sont ramenées à pause_to. Vérifié par transcription (voice/inspect_take.py) et enveloppe (voice/plot_take.py).",
+  "source": "audio/voix_proprietaire/source.wav",
+  "timeline": "timeline.json",
+  "pre": 0.06, "post": 0.08, "fade": 0.04,
+  "max_pause": 0.55, "pause_to": 0.45,
+  "lines": [
+    { "plan": "A1", "pieces": [[1.82, 6.94]] },
+    { "plan": "B1", "pieces": [[7.50, 12.42]], "remove": [[8.00, 8.90]], "_why": "« festivals » dit deux fois : la première occurrence est retirée" },
+    { "plan": "B2", "pieces": [[13.10, 15.24]] },
+    { "plan": "C1", "pieces": [[15.76, 20.62]] },
+    { "plan": "D1", "pieces": [[21.02, 24.72]] },
+    { "plan": "D2", "pieces": [[25.30, 30.12]], "remove": [[27.88, 28.02], [28.48, 28.90]], "_why": "deux pauses (0,36 s et 0,73 s) autour de « prix » raccourcies ; le mot est conservé" },
+    { "plan": "D3", "pieces": [[30.28, 36.34]], "_why": "garde l'ajout « C'est pas bien ça ? », qui tombe sur « Paiement reçu »" },
+    { "plan": "D4", "pieces": [[36.84, 41.34]] },
+    { "plan": "E1", "pieces": [[42.76, 46.42]] },
+    { "plan": "F1", "pieces": [[47.12, 48.20]], "_why": "« Et si » très bref en attaque : entrée à 47,06 s pour le garder" },
+    { "plan": "F2", "pieces": [[50.00, 55.42]] },
+    { "plan": "G1", "pieces": [[55.68, 58.84]] },
+    { "plan": "H1", "pieces": [[59.30, 61.96]] },
+    { "plan": "H2", "pieces": [[62.30, 66.56]] }
+  ]
+}
