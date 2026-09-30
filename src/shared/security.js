@@ -16,7 +16,8 @@ export const CONTENT_SECURITY_POLICY = [
 ].join('; ');
 
 export const PERMISSIONS_POLICY = [
-  'accelerometer=()', 'camera=()', 'geolocation=()', 'gyroscope=()', 'magnetometer=()',
+  // camera=(self) : le scanner de billets (/controle.html) lit les QR codes.
+  'accelerometer=()', 'camera=(self)', 'geolocation=()', 'gyroscope=()', 'magnetometer=()',
   'microphone=()', 'payment=()', 'usb=()', 'browsing-topics=()'
 ].join(', ');
 

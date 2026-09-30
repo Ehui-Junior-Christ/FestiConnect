@@ -3,9 +3,6 @@ const organizerMetrics = document.querySelector('#organizer-metrics');
 const organizerEvents = document.querySelector('#organizer-events');
 const organizerTickets = document.querySelector('#organizer-tickets');
 const revenueList = document.querySelector('#revenue-list');
-const scanForm = document.querySelector('#scan-form');
-const scanResult = document.querySelector('#scan-result');
-let soldTickets = [];
 
 function metric(label, value, iconName, hint = '', accent = false) {
   return `
@@ -87,7 +84,6 @@ async function loadOrganizer() {
       API.get('/api/organizer/events'),
       API.get('/api/organizer/tickets')
     ]);
-    soldTickets = tickets;
     const pending = events.filter((event) => event.status === 'pending').length;
     organizerMetrics.innerHTML = [
       metric('Revenus', formatMoney(summary.revenue), 'wallet', 'billets payés', true),
@@ -118,19 +114,6 @@ async function loadOrganizer() {
 organizerEvents.addEventListener('click', (event) => {
   const edit = event.target.closest('[data-edit-event]');
   if (edit) startEditEvent(edit.dataset.editEvent);
-});
-
-/* Contrôle d'entrée : recherche du code parmi les billets de l'organisateur */
-enhanceForm(scanForm);
-scanForm.addEventListener('submit', (event) => {
-  event.preventDefault();
-  if (!validateForm(scanForm)) return;
-  const code = scanForm.elements.code.value.trim().toUpperCase();
-  const ticket = soldTickets.find((item) => String(item.code).toUpperCase() === code);
-  scanResult.innerHTML = ticket
-    ? alertBox('success', `${ticket.client_name} · ${ticket.title} · ${plural(ticket.quantity, 'place', 'places')}`, 'Billet valide')
-    : alertBox('error', `Aucun billet ${code} sur tes événements. Vérifie la saisie (lettres et chiffres) ou demande la confirmation au client.`, 'Code inconnu');
-  scanForm.elements.code.select();
 });
 
 if (organizerUser) {

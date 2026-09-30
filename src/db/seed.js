@@ -220,7 +220,7 @@ async function seedTicket(ticket) {
 // demain (rappel J-1) et un evenement passe (avis).
 await seedTicket({ id: 'tkt_demo_client', event_id: 'evt_abissa_2026', category_id: 'cat_abissa_std', category_name: 'Standard', user_id: client.id, code: 'FC-DEMO-2026', quantity: 2, amount_xof: 30000, payment_method: 'Wave', created_at: ago(6) });
 await seedTicket({ id: 'tkt_demo_maquis', event_id: 'evt_maquis_night', category_id: 'cat_maquis_std', category_name: 'Standard', user_id: client.id, code: 'FC-DEMO-MAQUIS', quantity: 1, amount_xof: 25000, payment_method: 'Orange Money', created_at: ago(3) });
-await seedTicket({ id: 'tkt_demo_zouglou', event_id: 'evt_zouglou_past', user_id: client.id, code: 'FC-DEMO-ZOUGLOU', quantity: 2, amount_xof: 10000, payment_method: 'Moov Money', created_at: ago(15) });
+await seedTicket({ id: 'tkt_demo_zouglou', event_id: 'evt_zouglou_past', user_id: client.id, code: 'FC-DEMO-ZOUGLOU', quantity: 2, amount_xof: 10000, payment_method: 'Moov Money', created_at: ago(15), checked_in_at: ago(10, -20), checked_in_by: organizer.id });
 
 // Notifications de demonstration (le rappel J-1 du client est calcule a la lecture).
 await insertOrUpdateById('notifications', {

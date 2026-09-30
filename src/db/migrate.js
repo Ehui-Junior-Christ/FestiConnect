@@ -130,7 +130,8 @@ const indexStatements = [
   `create index if not exists idx_sessions_expires on sessions(expires_at)`,
   `create index if not exists idx_notifications_user on notifications(user_id, created_at)`,
   `create index if not exists idx_ticket_categories_event on ticket_categories(event_id)`,
-  `create index if not exists idx_promo_codes_event on promo_codes(event_id)`
+  `create index if not exists idx_promo_codes_event on promo_codes(event_id)`,
+  `create index if not exists idx_tickets_code on tickets(code)`
 ];
 
 const COLUMN_DEFINITION = /^(text|integer) default (?:'[A-Za-z0-9_\/.-]*'|-?\d+)$/;
@@ -187,6 +188,8 @@ await ensureColumn('tickets', 'category_name', `text default ''`);
 await ensureColumn('tickets', 'promo_id', `text default ''`);
 await ensureColumn('tickets', 'promo_code', `text default ''`);
 await ensureColumn('tickets', 'discount_xof', `integer default 0`);
+await ensureColumn('tickets', 'checked_in_at', `text default ''`);
+await ensureColumn('tickets', 'checked_in_by', `text default ''`);
 
 await ensureColumn('products', 'name', `text default ''`);
 await ensureColumn('products', 'category', `text default 'Lifestyle'`);

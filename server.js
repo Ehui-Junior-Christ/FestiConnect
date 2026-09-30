@@ -9,6 +9,7 @@ import { buildInsert, insertByExistingColumns, tableColumns } from './src/db/sch
 import './src/features/notifications.js';
 import { PAYMENT_METHODS } from './src/features/events.js';
 import './src/features/promos.js';
+import './src/features/checkin.js';
 import { AppError, errorResponse, notFound } from './src/shared/errors.js';
 import { parseBody, sendJson, serveStatic } from './src/shared/http.js';
 import { dummyVerify, hashPassword, needsRehash, passwordPolicyError, verifyPassword } from './src/shared/passwords.js';
@@ -306,10 +307,10 @@ route('GET', '/api/client/summary', async ({ req, res }) => {
 route('GET', '/api/client/tickets', async ({ req, res }) => {
   const user = await requireUser(req, ['client', 'admin']);
   const tickets = await db.execute({
-    sql: `select tickets.*, events.title, events.city, events.location, events.starts_at
+    sql: `select tickets.*, events.title, events.city, events.location, events.starts_at, events.ends_at
           from tickets join events on events.id = tickets.event_id
           where tickets.user_id = ?
-          order by datetime(tickets.created_at) desc`,
+          order by datetime(coalesce(nullif(events.ends_at, ''), events.starts_at)) < datetime('now'), datetime(events.starts_at) asc`,
     args: [user.id]
   });
   return sendJson(res, 200, { tickets: tickets.rows });

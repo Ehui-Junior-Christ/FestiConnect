@@ -208,20 +208,13 @@
           <div class="panel-title">
             <div>
               <h2 id="scan-title">Contrôle d'entrée</h2>
-              <p>Saisis le code présenté par le client pour vérifier qu'il correspond à un billet de tes événements.</p>
+              <p>Ouvre le scanner sur le téléphone de l'équipe à l'entrée : il lit le QR code des billets avec la caméra et marque chaque billet comme utilisé. Un billet ne passe qu'une fois.</p>
             </div>
           </div>
-          <form id="scan-form" class="form" novalidate>
-            <div class="field">
-              <label class="field-label" for="scan-code">Code du billet</label>
-              <div class="cluster">
-                <input class="input mono" id="scan-code" name="code" required autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="FC-XXXXXXXXXX" data-msg-required="Saisis le code affiché sur le billet.">
-                <button class="btn btn-dark" type="submit"><span data-icon="scan"></span><span>Vérifier</span></button>
-              </div>
-            </div>
-          </form>
-          <div id="scan-result" class="check-result" aria-live="polite"></div>
-          <p class="small muted mt-4">Cette vérification ne marque pas encore le billet comme utilisé : garde un œil sur les codes déjà présentés.</p>
+          <div class="cluster">
+            <a class="btn btn-dark" href="/controle.html"><span data-icon="scan"></span><span>Ouvrir le scanner</span></a>
+            <span class="small muted">Sans caméra, le code écrit sous le QR se saisit à la main.</span>
+          </div>
         </section>
 
         <section id="revenus" class="panel" aria-labelledby="revenue-title">

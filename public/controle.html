@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Contrôle d'entrée · FestiConnect</title>
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#fcf8f2">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&amp;display=swap">
+  <link rel="stylesheet" href="/assets/css/styles.css">
+</head>
+<body data-nav="account">
+  <a class="skip-link" href="#main">Aller au contenu</a>
+  <header class="site-header" data-header></header>
+
+  <main id="main" tabindex="-1">
+    <div class="container container-narrow scan-page">
+      <div class="page-head">
+        <a class="link-arrow back-link" href="/organisateur.html"><span data-icon="arrow-left"></span>Espace organisateur</a>
+        <h1 class="mt-2">Contrôle d'entrée</h1>
+        <p class="lead">Vise le QR code du billet avec la caméra. Chaque billet ne passe qu'une fois ; le nombre de personnes s'affiche à l'écran.</p>
+      </div>
+
+      <section class="panel stack" aria-labelledby="scan-title">
+        <h2 id="scan-title" class="sr-only">Scanner</h2>
+        <div class="scan-view" id="scan-view">
+          <video id="scan-video" playsinline muted aria-label="Image de la caméra"></video>
+          <div class="scan-frame" aria-hidden="true"></div>
+          <div class="scan-idle" id="scan-idle">
+            <span class="scan-idle-icon" data-icon="camera"></span>
+            <p id="scan-idle-text">La caméra est éteinte.</p>
+            <button class="btn btn-primary" type="button" id="scan-start"><span data-icon="scan"></span><span>Activer la caméra</span></button>
+          </div>
+        </div>
+        <div class="cluster cluster-between">
+          <span class="small muted" id="scan-engine" aria-live="polite"></span>
+          <button class="btn btn-sm btn-ghost" type="button" id="scan-stop" hidden><span data-icon="x"></span><span>Éteindre la caméra</span></button>
+        </div>
+
+        <div id="scan-result" class="scan-result" aria-live="assertive" hidden></div>
+
+        <form id="manual-form" class="form" novalidate>
+          <div class="field">
+            <label class="field-label" for="manual-code">Saisie manuelle du code</label>
+            <div class="promo-row">
+              <input class="input mono" id="manual-code" name="code" required autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="44" placeholder="FC-XXXXXXXXXXXXXXXX" data-msg-required="Saisis le code écrit sous le QR code.">
+              <button class="btn btn-dark" type="submit"><span data-icon="check"></span><span>Valider</span></button>
+            </div>
+            <p class="field-hint">Si le QR code ne passe pas (écran fissuré, lumière), saisis le code écrit dessous.</p>
+          </div>
+        </form>
+      </section>
+
+      <section class="panel mt-6" aria-labelledby="summary-title">
+        <div class="panel-title">
+          <div>
+            <h2 id="summary-title">Entrées par événement</h2>
+            <p>Événements en cours et à venir.</p>
+          </div>
+        </div>
+        <ul id="scan-summary" class="bar-list" aria-busy="true"></ul>
+      </section>
+
+      <section class="panel mt-6" aria-labelledby="history-title">
+        <div class="panel-title">
+          <div>
+            <h2 id="history-title">Derniers passages</h2>
+            <p>Sur cet appareil, depuis l'ouverture de la page.</p>
+          </div>
+        </div>
+        <ol id="scan-history" class="scan-history"><li class="muted small">Aucun billet contrôlé pour l'instant.</li></ol>
+      </section>
+    </div>
+  </main>
+
+  <footer class="site-footer" data-footer></footer>
+  <nav class="tabbar" data-tabbar></nav>
+  <script src="/assets/js/api.js"></script>
+  <script src="/assets/js/ui.js"></script>
+  <script src="/assets/js/controle.js"></script>
+</body>
+</html>
