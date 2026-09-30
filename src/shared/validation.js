@@ -21,12 +21,12 @@ export function text(value, { label, min = 0, max = 200, required = false, multi
   }
   if (typeof value !== 'string' && typeof value !== 'number') throw invalid(`${label} invalide.`);
   const result = String(value).normalize('NFC').trim();
-  if (result.length < min) throw invalid(`${label} doit contenir au moins ${min} caracteres.`);
-  if (result.length > max) throw invalid(`${label} ne doit pas depasser ${max} caracteres.`);
+  if (result.length < min) throw invalid(`${label} doit contenir au moins ${min} caractères.`);
+  if (result.length > max) throw invalid(`${label} ne doit pas dépasser ${max} caractères.`);
   if ((multiline ? CONTROL_MULTILINE : CONTROL_STRICT).test(result)) {
-    throw invalid(`${label} contient des caracteres non autorises.`);
+    throw invalid(`${label} contient des caractères non autorisés.`);
   }
-  if (MARKUP.test(result)) throw invalid(`${label} ne doit pas contenir les caracteres < ou >.`);
+  if (MARKUP.test(result)) throw invalid(`${label} ne doit pas contenir les caractères < ou >.`);
   return result;
 }
 
@@ -39,7 +39,7 @@ export function integer(value, { label, min, max, fallback }) {
   if (typeof value === 'number') number = value;
   else if (typeof value === 'string' && /^\s*-?\d{1,16}\s*$/.test(value)) number = Number(value);
   if (!Number.isSafeInteger(number) || number < min || number > max) {
-    throw invalid(`${label} doit etre un nombre entier entre ${min} et ${max}.`);
+    throw invalid(`${label} doit être un nombre entier entre ${min} et ${max}.`);
   }
   return number;
 }
@@ -68,13 +68,25 @@ export function email(value, { label = 'Email' } = {}) {
 
 const PHONE = /^\+?[0-9][0-9 .()-]{5,24}$/;
 
-export function phone(value, { label = 'Telephone' } = {}) {
+export function phone(value, { label = 'Téléphone' } = {}) {
   if (isEmpty(value)) return '';
   if (typeof value !== 'string') throw invalid(`${label} invalide.`);
   const result = value.trim();
   const digits = result.replace(/\D/g, '');
   if (!PHONE.test(result) || digits.length < 6 || digits.length > 15) throw invalid(`${label} invalide.`);
   return result;
+}
+
+// Numero Mobile Money ivoirien : +225 puis 10 chiffres commencant par 01
+// (Moov), 05 (MTN) ou 07 (Orange). Espaces, points et tirets toleres ;
+// normalise en « +225 07 00 00 00 00 ».
+export function ivorianMobile(value, { label = 'Numéro Mobile Money' } = {}) {
+  if (isEmpty(value)) throw invalid(`${label} est obligatoire.`);
+  if (typeof value !== 'string' || value.length > 30) throw invalid(`${label} invalide.`);
+  const compact = value.trim().replace(/[\s.()-]/g, '');
+  const match = /^(?:\+225|00225)?(0[157]\d{8})$/.exec(compact);
+  if (!match) throw invalid(`${label} invalide : +225 suivi de 10 chiffres commençant par 01, 05 ou 07.`);
+  return `+225 ${match[1].replace(/(\d{2})(?=\d)/g, '$1 ')}`;
 }
 
 const DATE_TIME = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2})(?::(\d{2})(?:\.\d{1,3})?)?(?:Z|[+-]\d{2}:\d{2})?$/;

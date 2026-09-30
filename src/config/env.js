@@ -100,7 +100,21 @@ function parsePort(raw) {
   return port;
 }
 
+// Commission de la plateforme sur les ventes de billets, en pourcentage
+// (0 a 50, deux decimales max). Stockee en points de base pour des calculs
+// entiers identiques en JavaScript et en SQL.
+function parseCommission(raw) {
+  if (raw === undefined || raw === '') return 0;
+  if (!/^\d{1,2}(?:[.,]\d{1,2})?$/.test(String(raw).trim())) {
+    throw new Error('PLATFORM_COMMISSION_PERCENT doit etre un pourcentage entre 0 et 50 (ex. 5 ou 2.5).');
+  }
+  const bps = Math.round(Number(String(raw).trim().replace(',', '.')) * 100);
+  if (bps < 0 || bps > 5000) throw new Error('PLATFORM_COMMISSION_PERCENT doit etre compris entre 0 et 50.');
+  return bps;
+}
+
 export const config = Object.freeze({
+  commissionBps: parseCommission(process.env.PLATFORM_COMMISSION_PERCENT),
   nodeEnv,
   isProduction,
   port: parsePort(process.env.PORT),

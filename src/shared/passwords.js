@@ -88,10 +88,10 @@ export async function dummyVerify(password) {
 export function passwordPolicyError(password, { email = '', name = '' } = {}) {
   if (typeof password !== 'string' || !password) return 'Le mot de passe est obligatoire.';
   if (password.length < PASSWORD_MIN_LENGTH) {
-    return `Le mot de passe doit contenir au moins ${PASSWORD_MIN_LENGTH} caracteres.`;
+    return `Le mot de passe doit contenir au moins ${PASSWORD_MIN_LENGTH} caractères.`;
   }
   if (password.length > PASSWORD_MAX_LENGTH) {
-    return `Le mot de passe ne doit pas depasser ${PASSWORD_MAX_LENGTH} caracteres.`;
+    return `Le mot de passe ne doit pas dépasser ${PASSWORD_MAX_LENGTH} caractères.`;
   }
   if (!/\p{L}/u.test(password) || !/\p{N}/u.test(password)) {
     return 'Le mot de passe doit contenir au moins une lettre et un chiffre.';
@@ -103,7 +103,7 @@ export function passwordPolicyError(password, { email = '', name = '' } = {}) {
     return 'Le mot de passe ne doit pas contenir ton adresse email.';
   }
   if (name && lower === String(name).trim().toLowerCase()) {
-    return 'Le mot de passe ne doit pas etre identique a ton nom.';
+    return 'Le mot de passe ne doit pas être identique à ton nom.';
   }
   return null;
 }

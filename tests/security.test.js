@@ -74,7 +74,8 @@ describe('en-tetes de securite', () => {
       assert.equal(h.get('x-content-type-options'), 'nosniff', pathname);
       assert.equal(h.get('x-frame-options'), 'DENY', pathname);
       assert.equal(h.get('referrer-policy'), 'strict-origin-when-cross-origin', pathname);
-      assert.match(h.get('permissions-policy'), /camera=\(\)/, pathname);
+      assert.match(h.get('permissions-policy'), /camera=\(self\)/, pathname);
+      assert.match(h.get('permissions-policy'), /microphone=\(\)/, pathname);
       assert.equal(h.get('cross-origin-opener-policy'), 'same-origin', pathname);
       assert.equal(h.get('x-powered-by'), null, pathname);
       assert.equal(h.get('strict-transport-security'), null, 'pas de HSTS hors production');

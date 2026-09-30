@@ -16,7 +16,8 @@ export const CONTENT_SECURITY_POLICY = [
 ].join('; ');
 
 export const PERMISSIONS_POLICY = [
-  'accelerometer=()', 'camera=()', 'geolocation=()', 'gyroscope=()', 'magnetometer=()',
+  // camera=(self) : le scanner de billets (/controle.html) lit les QR codes.
+  'accelerometer=()', 'camera=(self)', 'geolocation=()', 'gyroscope=()', 'magnetometer=()',
   'microphone=()', 'payment=()', 'usb=()', 'browsing-topics=()'
 ].join(', ');
 
@@ -92,7 +93,7 @@ const MUTATING = new Set(['POST', 'PUT', 'PATCH', 'DELETE']);
 // forgeable cross-site sans CORS, et aucun CORS n'est accorde).
 export function assertSameOrigin(req, { hasCookieSession = false, hasBearer = false } = {}) {
   if (!MUTATING.has(req.method)) return;
-  const forbidden = () => new AppError(403, 'CSRF_REJECTED', 'Origine de la requete non autorisee.');
+  const forbidden = () => new AppError(403, 'CSRF_REJECTED', 'Origine de la requête non autorisée.');
   const origin = req.headers.origin;
   if (origin) {
     if (origin === 'null' || !isAllowedOrigin(origin, req)) throw forbidden();

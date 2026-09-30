@@ -85,7 +85,16 @@ const ICONS = {
   file: '<path d="M14 3H6.5A1.5 1.5 0 0 0 5 4.5v15A1.5 1.5 0 0 0 6.5 21h11a1.5 1.5 0 0 0 1.5-1.5V8Z"/><path d="M14 3v5h5M9 13h6M9 17h6"/>',
   settings: '<circle cx="12" cy="12" r="3"/><path d="M12 2.5v3M12 18.5v3M2.5 12h3M18.5 12h3M5.3 5.3l2.1 2.1M16.6 16.6l2.1 2.1M5.3 18.7l2.1-2.1M16.6 7.4l2.1-2.1"/>',
   'plus-circle': '<circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/>',
-  star: '<path d="m12 3 2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 16.8 6.6 19.7l1.1-6.1-4.5-4.2 6.1-.8Z"/>'
+  star: '<path d="m12 3 2.7 5.6 6.1.8-4.5 4.2 1.1 6.1L12 16.8 6.6 19.7l1.1-6.1-4.5-4.2 6.1-.8Z"/>',
+  bell: '<path d="M6 16.5V11a6 6 0 0 1 12 0v5.5l1.6 2.2a.5.5 0 0 1-.4.8H4.8a.5.5 0 0 1-.4-.8Z"/><path d="M10 21a2.2 2.2 0 0 0 4 0"/>',
+  heart: '<path d="M12 20.3s-8.3-5-8.3-11.1A4.6 4.6 0 0 1 12 6.4a4.6 4.6 0 0 1 8.3 2.8c0 6.1-8.3 11.1-8.3 11.1Z"/>',
+  qr: '<rect x="3.5" y="3.5" width="6.5" height="6.5" rx="1"/><rect x="14" y="3.5" width="6.5" height="6.5" rx="1"/><rect x="3.5" y="14" width="6.5" height="6.5" rx="1"/><path d="M14 14h2.5v2.5H14zM18 18h2.5v2.5H18zM14 19v1.5M19 14h1.5"/>',
+  camera: '<path d="M4 7.5h3l1.8-2.5h6.4L17 7.5h3a1.5 1.5 0 0 1 1.5 1.5v9.5A1.5 1.5 0 0 1 20 20H4a1.5 1.5 0 0 1-1.5-1.5V9A1.5 1.5 0 0 1 4 7.5Z"/><circle cx="12" cy="13.5" r="3.8"/>',
+  download: '<path d="M12 3.5v12M7 11l5 5 5-5M4 20.5h16"/>',
+  message: '<path d="M4.2 19.8 5.4 16a8.2 8.2 0 1 1 3 3Z"/><path d="M8.5 11h.01M12 11h.01M15.5 11h.01"/>',
+  tag: '<path d="M3.5 12.3V4.5a1 1 0 0 1 1-1h7.8l8.2 8.2a1.4 1.4 0 0 1 0 2l-6.3 6.3a1.4 1.4 0 0 1-2 0Z"/><circle cx="8" cy="8" r="1.5"/>',
+  hourglass: '<path d="M6.5 3.5h11M6.5 20.5h11"/><path d="M7.5 3.5c0 4.5 4.5 5.5 4.5 8.5s-4.5 4-4.5 8.5M16.5 3.5c0 4.5-4.5 5.5-4.5 8.5s4.5 4 4.5 8.5"/>',
+  edit: '<path d="M4 20h4L19.5 8.5a2.1 2.1 0 0 0-3-3L5 17Z"/><path d="m14.5 7.5 3 3"/>'
 };
 
 function icon(name, className = '') {
@@ -180,6 +189,23 @@ function dateParts(value) {
   };
 }
 
+// Les horaires des événements sont saisis en heure d'Abidjan (UTC, sans heure d'été) :
+// pour savoir si un événement a commencé, on les lit donc en UTC.
+function eventTimeMs(value) {
+  const text = String(value ?? '').trim();
+  if (!text) return Number.NaN;
+  if (/(?:Z|[+-]\d{2}:\d{2})$/.test(text)) return Date.parse(text);
+  return Date.parse(`${text}${text.length === 16 ? ':00' : ''}Z`);
+}
+
+// 'upcoming' (billetterie ouverte), 'live' (commencé) ou 'past' (terminé).
+function eventPhase(event, now = Date.now()) {
+  const start = eventTimeMs(event.starts_at);
+  const end = eventTimeMs(event.ends_at);
+  if (Number.isNaN(start) || now < start) return 'upcoming';
+  return now < (Number.isNaN(end) ? start : end) ? 'live' : 'past';
+}
+
 function plural(count, singular, pluralForm) {
   return `${formatNumber(count)} ${Number(count) > 1 ? pluralForm : singular}`;
 }
@@ -226,6 +252,13 @@ function requireRole(roles) {
 async function logout() {
   await API.post('/api/auth/logout', {}).catch(() => null);
   API.clearSession();
+  // Téléphone partagé : les favoris du compte ne restent pas sur l'appareil.
+  try {
+    localStorage.removeItem('festiconnect_favorites');
+    sessionStorage.removeItem('festiconnect_fav_synced');
+  } catch {
+    /* rien à nettoyer */
+  }
   location.href = '/';
 }
 
@@ -281,6 +314,91 @@ const Cart = {
   }
 };
 
+/* Favoris : localStorage hors connexion, synchronisés avec le compte ensuite
+   ------------------------------------------------------------------------ */
+const Favorites = {
+  key: 'festiconnect_favorites',
+  max: 100,
+
+  ids() {
+    try {
+      const ids = JSON.parse(localStorage.getItem(this.key) || '[]');
+      return Array.isArray(ids) ? ids.filter((id) => typeof id === 'string').slice(0, this.max) : [];
+    } catch {
+      return [];
+    }
+  },
+
+  store(ids) {
+    try {
+      localStorage.setItem(this.key, JSON.stringify([...new Set(ids)].slice(0, this.max)));
+    } catch {
+      /* stockage indisponible : les favoris restent côté compte */
+    }
+    document.dispatchEvent(new CustomEvent('favorites:change'));
+  },
+
+  has(id) {
+    return this.ids().includes(id);
+  },
+
+  async toggle(id, title = '') {
+    const saved = !this.has(id);
+    this.store(saved ? [id, ...this.ids()] : this.ids().filter((item) => item !== id));
+    if (API.user()) {
+      try {
+        if (saved) await API.put(`/api/favorites/${encodeURIComponent(id)}`);
+        else await API.del(`/api/favorites/${encodeURIComponent(id)}`);
+      } catch (error) {
+        this.store(saved ? this.ids().filter((item) => item !== id) : [id, ...this.ids()]);
+        toast(error.message, { type: 'error' });
+        return;
+      }
+    }
+    const name = title ? `« ${title} »` : 'L\'événement';
+    toast(saved ? `${name} est gardé.` : `${name} est retiré de tes favoris.`, saved
+      ? { type: 'success', action: { label: 'Voir', href: API.user() ? '/client.html#favoris' : loginUrl('/client.html#favoris') } }
+      : { type: 'info' });
+  },
+
+  // Fusionne la liste locale avec celle du compte (à la connexion).
+  async sync() {
+    if (!API.user()) return;
+    try {
+      const { ids } = await API.post('/api/favorites/sync', { event_ids: this.ids() });
+      this.store(ids);
+    } catch {
+      /* la synchronisation sera retentée au prochain chargement */
+    }
+  }
+};
+
+function favButton(event, { withLabel = false } = {}) {
+  const saved = Favorites.has(event.id);
+  return `<button class="fav-btn${withLabel ? ' btn btn-sm' : ''}" type="button" data-fav="${escapeHtml(event.id)}" data-fav-title="${escapeHtml(event.title)}" aria-pressed="${saved}" aria-label="Garder « ${escapeHtml(event.title)} »">${icon('heart')}${withLabel ? `<span data-fav-label>${saved ? 'Gardé' : 'Garder'}</span>` : ''}</button>`;
+}
+
+function syncFavButtons() {
+  const ids = new Set(Favorites.ids());
+  document.querySelectorAll('[data-fav]').forEach((button) => {
+    const saved = ids.has(button.dataset.fav);
+    button.setAttribute('aria-pressed', String(saved));
+    const label = button.querySelector('[data-fav-label]');
+    if (label) label.textContent = saved ? 'Gardé' : 'Garder';
+  });
+}
+
+document.addEventListener('click', (event) => {
+  const button = event.target.closest('[data-fav]');
+  if (!button) return;
+  event.preventDefault();
+  Favorites.toggle(button.dataset.fav, button.dataset.favTitle);
+});
+document.addEventListener('favorites:change', syncFavButtons);
+window.addEventListener('storage', (event) => {
+  if (event.key === Favorites.key) syncFavButtons();
+});
+
 function updateCartBadges() {
   const count = Cart.count();
   document.querySelectorAll('[data-cart-count]').forEach((node) => {
@@ -312,7 +430,8 @@ function mountLayout(active = document.body.dataset.nav || '') {
         <div class="header-actions">
           <a class="icon-link hide-mobile" href="/panier.html" data-cart-link>${icon('cart')}<span class="count-badge" data-cart-count hidden></span></a>
           ${user
-            ? `<a class="user-chip" href="${spaceFor(user)}" title="Mon espace"><span class="avatar">${escapeHtml(initials(user.name))}</span><span>${escapeHtml(firstName)}</span></a>
+            ? `<a class="icon-link" href="/notifications.html" data-notif-link aria-label="Notifications"${current('notifications')}>${icon('bell')}<span class="count-badge" data-notif-count hidden></span></a>
+               <a class="user-chip" href="${spaceFor(user)}" title="Mon espace"><span class="avatar">${escapeHtml(initials(user.name))}</span><span>${escapeHtml(firstName)}</span></a>
                <button class="btn btn-ghost btn-icon hide-mobile" type="button" data-logout aria-label="Se déconnecter" title="Se déconnecter">${icon('logout')}</button>`
             : `<a class="btn btn-ghost btn-sm" href="${loginUrl()}">Connexion</a>
                <a class="btn btn-primary btn-sm hide-mobile" href="/inscription.html">Créer un compte</a>`}
@@ -374,6 +493,29 @@ function mountLayout(active = document.body.dataset.nav || '') {
   }
 
   updateCartBadges();
+}
+
+/* Notifications : pastille du nombre de non lues dans l'en-tête
+   ------------------------------------------------------------------------ */
+function setNotificationCount(count) {
+  const unread = Math.max(0, Number(count) || 0);
+  document.querySelectorAll('[data-notif-count]').forEach((node) => {
+    node.textContent = unread > 99 ? '99+' : String(unread);
+    node.hidden = unread === 0;
+  });
+  document.querySelectorAll('[data-notif-link]').forEach((node) => {
+    node.setAttribute('aria-label', unread ? `Notifications, ${plural(unread, 'non lue', 'non lues')}` : 'Notifications, aucune non lue');
+  });
+}
+
+async function refreshNotificationCount() {
+  if (!API.user() || !document.querySelector('[data-notif-link]')) return;
+  try {
+    const { unread } = await API.get('/api/notifications/unread-count');
+    setNotificationCount(unread);
+  } catch {
+    /* pastille indicative : une erreur réseau ne gêne pas la page */
+  }
 }
 
 document.addEventListener('click', (event) => {
@@ -540,9 +682,19 @@ function seatsLeft(event) {
   return Math.max(0, capacity - Number(event.tickets_sold || 0));
 }
 
+// Prix affiché sur une carte : tarif unique, ou « Dès » le moins cher des tarifs encore disponibles.
+function cardPrice(event) {
+  const withCategories = Number(event.categories_count || 0) > 0;
+  const price = withCategories && event.min_available_price_xof !== null && event.min_available_price_xof !== undefined
+    ? Number(event.min_available_price_xof)
+    : Number(event.price_xof || 0);
+  return { price, label: `${Number(event.categories_count || 0) > 1 && price > 0 ? 'Dès ' : ''}${formatPrice(price)}` };
+}
+
 function eventCard(event) {
   const parts = dateParts(event.starts_at);
   const left = seatsLeft(event);
+  const shown = cardPrice(event);
   const scarce = left !== null && left > 0 && left <= Math.max(20, Number(event.capacity) * 0.15);
   const place = [event.location, event.city].filter(Boolean).filter((v, i, all) => all.indexOf(v) === i).join(', ');
   return `
@@ -550,6 +702,7 @@ function eventCard(event) {
       <div class="media">
         <img src="${escapeHtml(safeUrl(event.cover_url, '/assets/img/event-default.svg'))}" alt="" loading="lazy" width="960" height="600">
         ${event.category ? `<span class="badge badge-solid">${escapeHtml(event.category)}</span>` : ''}
+        ${favButton(event)}
         <div class="date-stub" aria-hidden="true"><span class="day">${escapeHtml(parts.day)}</span><span class="month">${escapeHtml(parts.month)}</span></div>
       </div>
       <div class="body">
@@ -560,7 +713,7 @@ function eventCard(event) {
         </ul>
         ${left === 0 ? '<span class="badge badge-danger">Complet</span>' : scarce ? `<span class="badge badge-warning badge-dot">Plus que ${formatNumber(left)} places</span>` : ''}
         <div class="card-foot">
-          <span class="price${Number(event.price_xof) === 0 ? ' price-free' : ''}">${escapeHtml(formatPrice(event.price_xof))}</span>
+          <span class="price${shown.price === 0 ? ' price-free' : ''}">${escapeHtml(shown.label)}</span>
           <span class="card-cta" aria-hidden="true">Réserver${icon('arrow-right')}</span>
         </div>
       </div>
@@ -589,12 +742,24 @@ const STATUS = {
   approved: ['Validé', 'success'],
   pending: ['En attente', 'warning'],
   rejected: ['Refusé', 'danger'],
-  paid: ['Payé', 'success']
+  paid: ['Payé', 'success'],
+  cancelled: ['Annulé', 'danger']
 };
 
 function statusBadge(status) {
   const [label, tone] = STATUS[status] || [status || 'Inconnu', 'neutral'];
   return `<span class="badge badge-${tone} badge-dot">${escapeHtml(label)}</span>`;
+}
+
+// Note sur 5 : étoiles pleines arrondies à l'unité, texte accessible.
+function formatRating(value) {
+  return Number(value).toLocaleString('fr-FR', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+}
+
+function stars(rating, { small = false } = {}) {
+  const full = Math.round(Number(rating) || 0);
+  return `<span class="stars${small ? ' stars-sm' : ''}" role="img" aria-label="Note : ${escapeHtml(formatRating(rating))} sur 5">${
+    [1, 2, 3, 4, 5].map((n) => `<span class="star${n <= full ? ' is-on' : ''}">${icon('star')}</span>`).join('')}</span>`;
 }
 
 /* Formulaires : validation inline, états d'envoi
@@ -766,17 +931,43 @@ async function copyText(text) {
   }
 }
 
-async function shareLink({ title, url = location.href }) {
+// Partage : feuille de partage native (Web Share API) si le téléphone la propose,
+// sinon WhatsApp (lien wa.me) et copie du lien, plus l'ajout à l'agenda si fourni.
+async function shareLink({ title, text = '', url = location.href, icsUrl = '' }) {
   if (navigator.share) {
     try {
-      await navigator.share({ title, url });
+      await navigator.share({ title, text, url });
       return;
     } catch (error) {
       if (error?.name === 'AbortError') return;
     }
   }
-  const ok = await copyText(url);
-  toast(ok ? 'Lien copié. Tu peux le coller dans WhatsApp ou ailleurs.' : 'Copie impossible, sélectionne l\'adresse dans la barre du navigateur.', { type: ok ? 'success' : 'error' });
+  const message = [text || title, url].filter(Boolean).join('\n');
+  const dialog = document.createElement('dialog');
+  dialog.className = 'dialog share-dialog';
+  dialog.setAttribute('aria-labelledby', 'share-title');
+  dialog.innerHTML = `
+    <form method="dialog">
+      <h2 id="share-title" class="h3">Partager</h2>
+      <p class="muted small" data-share-name></p>
+      <div class="share-options">
+        <a class="share-option" data-share-whatsapp target="_blank" rel="noopener noreferrer">${icon('message')}<span><strong>WhatsApp</strong><small>Envoyer à un contact ou un groupe</small></span></a>
+        <button class="share-option" type="button" data-share-copy>${icon('copy')}<span><strong>Copier le lien</strong><small>Pour Instagram, Facebook, SMS…</small></span></button>
+        ${icsUrl ? `<a class="share-option" data-share-ics download>${icon('calendar')}<span><strong>Ajouter à mon agenda</strong><small>Fichier .ics avec rappel la veille</small></span></a>` : ''}
+      </div>
+      <div class="cluster"><button class="btn btn-ghost" value="close" type="submit">Fermer</button></div>
+    </form>`;
+  dialog.querySelector('[data-share-name]').textContent = title;
+  dialog.querySelector('[data-share-whatsapp]').href = `https://wa.me/?text=${encodeURIComponent(message)}`;
+  if (icsUrl) dialog.querySelector('[data-share-ics]').href = safeUrl(icsUrl, '/');
+  dialog.querySelector('[data-share-copy]').addEventListener('click', async () => {
+    const ok = await copyText(url);
+    dialog.close();
+    toast(ok ? 'Lien copié. Colle-le où tu veux.' : 'Copie impossible : sélectionne l\'adresse dans la barre du navigateur.', { type: ok ? 'success' : 'error' });
+  });
+  document.body.appendChild(dialog);
+  dialog.addEventListener('close', () => dialog.remove());
+  dialog.showModal();
 }
 
 // Menu des espaces connectés : met en évidence la section visible.
@@ -806,6 +997,16 @@ function fillUserIdentity(user) {
 /* Démarrage commun
    ------------------------------------------------------------------------ */
 mountLayout();
+refreshNotificationCount();
+// Une synchronisation des favoris par session de navigation.
+try {
+  if (API.user() && !sessionStorage.getItem('festiconnect_fav_synced')) {
+    sessionStorage.setItem('festiconnect_fav_synced', '1');
+    Favorites.sync();
+  }
+} catch {
+  /* sessionStorage indisponible */
+}
 hydrateIcons();
 document.querySelectorAll('[data-stepper]').forEach(syncStepper);
 initDashNav();

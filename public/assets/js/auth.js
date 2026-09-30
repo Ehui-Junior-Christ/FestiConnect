@@ -45,6 +45,7 @@ if (loginForm) {
     try {
       const { token, user } = await API.post('/api/auth/login', data);
       API.setSession(token, user);
+      await Favorites.sync();
       location.href = destinationFor(user);
     } catch (error) {
       setBusy(button, false);
@@ -85,6 +86,7 @@ if (registerForm) {
       await API.post('/api/auth/register', data);
       const { token, user } = await API.post('/api/auth/login', { email: data.email, password: data.password });
       API.setSession(token, user);
+      await Favorites.sync();
       formNotice(registerForm, 'Compte créé. Redirection vers ton espace…', 'success');
       setTimeout(() => { location.href = destinationFor(user); }, 500);
     } catch (error) {

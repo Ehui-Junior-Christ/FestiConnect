@@ -7,6 +7,8 @@ const amount = params.get('amount');
 const eventTitle = params.get('event');
 const payment = params.get('payment');
 const quantity = params.get('qty');
+const categoryName = params.get('category');
+const discount = Number(params.get('discount') || 0);
 
 if (!reference) {
   confirmationView.innerHTML = emptyState({
@@ -24,6 +26,8 @@ if (!reference) {
     ['Référence', `<span class="mono">${escapeHtml(reference)}</span>`],
     isTicket && eventTitle ? ['Événement', escapeHtml(eventTitle)] : null,
     isTicket && quantity ? ['Billets', escapeHtml(plural(Number(quantity) || 1, 'billet', 'billets'))] : null,
+    isTicket && categoryName ? ['Catégorie', escapeHtml(categoryName)] : null,
+    isTicket && discount > 0 ? ['Remise', escapeHtml(`-${formatMoney(discount)}`)] : null,
     amount !== null ? ['Montant payé', escapeHtml(formatPrice(amount))] : null,
     payment ? ['Paiement', escapeHtml(payment)] : null
   ].filter(Boolean);

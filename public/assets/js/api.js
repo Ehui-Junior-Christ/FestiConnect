@@ -53,17 +53,8 @@ const API = {
     NETWORK: 'Impossible de joindre FestiConnect. Vérifie ta connexion internet et réessaie.'
   },
 
-  // Les messages serveur sont écrits sans accents : on corrige les mots courants.
-  polish(message) {
-    const fixes = [
-      [/\bcaracteres\b/g, 'caractères'], [/\bdepasser\b/g, 'dépasser'], [/\betre\b/g, 'être'],
-      [/\bidentique a\b/g, 'identique à'], [/\bdeja\b/g, 'déjà'], [/\bcategorie\b/g, 'catégorie'],
-      [/\bQuantite\b/g, 'Quantité'], [/\bposterieure a\b/g, 'postérieure à'], [/\bEvenement\b/g, 'Événement'],
-      [/\bevenement\b/g, 'événement'], [/\bReessaie\b/g, 'Réessaie'], [/\brequete\b/g, 'requête']
-    ];
-    return fixes.reduce((text, [pattern, value]) => text.replace(pattern, value), String(message || ''));
-  },
-
+  // Les messages du serveur sont rédigés en français correct : on les affiche tels quels
+  // (hors erreurs 5xx, remplacées par un message générique).
   errorMessage(code, serverMessage, response) {
     if (code === 'RATE_LIMITED') {
       const seconds = Number(response.headers.get('Retry-After'));
@@ -72,10 +63,10 @@ const API = {
       return `Trop de tentatives. Réessaie dans ${minutes > 1 ? `${minutes} minutes` : 'une minute'}.`;
     }
     if (code === 'OUT_OF_STOCK') {
-      return `${this.polish(serverMessage) || 'Stock insuffisant.'} Réduis la quantité dans ton panier.`;
+      return `${serverMessage || 'Stock insuffisant.'} Réduis la quantité dans ton panier.`;
     }
     if (this.messages[code]) return this.messages[code];
-    if (serverMessage && response.status < 500) return this.polish(serverMessage);
+    if (serverMessage && response.status < 500) return serverMessage;
     return response.status >= 500 ? this.messages.INTERNAL_ERROR : 'Une erreur est survenue. Réessaie.';
   },
 
@@ -116,5 +107,13 @@ const API = {
 
   patch(path, data) {
     return this.request(path, { method: 'PATCH', body: JSON.stringify(data) });
+  },
+
+  put(path, data = {}) {
+    return this.request(path, { method: 'PUT', body: JSON.stringify(data) });
+  },
+
+  del(path) {
+    return this.request(path, { method: 'DELETE' });
   }
 };

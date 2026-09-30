@@ -84,6 +84,68 @@ const tableStatements = [
     status text not null default 'pending',
     created_at text not null default (datetime('now'))
   )`,
+  `create table if not exists notifications (
+    id text primary key,
+    user_id text not null references users(id) on delete cascade,
+    type text not null,
+    title text not null,
+    body text not null default '',
+    link text not null default '',
+    read_at text,
+    created_at text not null
+  )`,
+  `create table if not exists ticket_categories (
+    id text primary key,
+    event_id text not null references events(id) on delete cascade,
+    name text not null,
+    price_xof integer not null default 0,
+    capacity integer not null default 0,
+    sold integer not null default 0 check(sold >= 0),
+    position integer not null default 0,
+    created_at text not null
+  )`,
+  `create table if not exists promo_codes (
+    id text primary key,
+    event_id text not null references events(id) on delete cascade,
+    organizer_id text not null references users(id),
+    code text not null,
+    kind text not null check(kind in ('percent', 'fixed')),
+    value integer not null check(value > 0),
+    max_uses integer not null default 0,
+    used integer not null default 0,
+    expires_at text not null default '',
+    active integer not null default 1,
+    created_at text not null,
+    unique(event_id, code),
+    check(used >= 0 and (max_uses = 0 or used <= max_uses))
+  )`,
+  `create table if not exists favorites (
+    id text primary key,
+    user_id text not null references users(id) on delete cascade,
+    event_id text not null references events(id) on delete cascade,
+    created_at text not null,
+    unique(user_id, event_id)
+  )`,
+  `create table if not exists waitlist (
+    id text primary key,
+    event_id text not null references events(id) on delete cascade,
+    category_id text not null default '',
+    user_id text not null references users(id) on delete cascade,
+    created_at text not null,
+    notified_at text not null default '',
+    unique(event_id, category_id, user_id)
+  )`,
+  `create table if not exists reviews (
+    id text primary key,
+    event_id text not null references events(id) on delete cascade,
+    user_id text not null references users(id) on delete cascade,
+    rating integer not null check(rating between 1 and 5),
+    comment text not null default '',
+    hidden integer not null default 0,
+    created_at text not null,
+    updated_at text not null,
+    unique(event_id, user_id)
+  )`,
 ];
 
 const indexStatements = [
@@ -92,7 +154,15 @@ const indexStatements = [
   `create index if not exists idx_tickets_user on tickets(user_id)`,
   `create index if not exists idx_tickets_event on tickets(event_id)`,
   `create index if not exists idx_sessions_user on sessions(user_id)`,
-  `create index if not exists idx_sessions_expires on sessions(expires_at)`
+  `create index if not exists idx_sessions_expires on sessions(expires_at)`,
+  `create index if not exists idx_notifications_user on notifications(user_id, created_at)`,
+  `create index if not exists idx_ticket_categories_event on ticket_categories(event_id)`,
+  `create index if not exists idx_promo_codes_event on promo_codes(event_id)`,
+  `create index if not exists idx_tickets_code on tickets(code)`,
+  `create index if not exists idx_favorites_user on favorites(user_id)`,
+  `create index if not exists idx_waitlist_event on waitlist(event_id, category_id)`,
+  `create index if not exists idx_withdrawals_org on withdrawals(organizer_id, status)`,
+  `create index if not exists idx_reviews_event on reviews(event_id, hidden)`
 ];
 
 const COLUMN_DEFINITION = /^(text|integer) default (?:'[A-Za-z0-9_\/.-]*'|-?\d+)$/;
@@ -144,6 +214,20 @@ await ensureColumn('tickets', 'amount_xof', `integer default 0`);
 await ensureColumn('tickets', 'status', `text default 'paid'`);
 await ensureColumn('tickets', 'payment_method', `text default 'Wave'`);
 await ensureColumn('tickets', 'created_at', `text default ''`);
+await ensureColumn('tickets', 'category_id', `text default ''`);
+await ensureColumn('tickets', 'category_name', `text default ''`);
+await ensureColumn('tickets', 'promo_id', `text default ''`);
+await ensureColumn('tickets', 'promo_code', `text default ''`);
+await ensureColumn('tickets', 'discount_xof', `integer default 0`);
+await ensureColumn('tickets', 'checked_in_at', `text default ''`);
+await ensureColumn('tickets', 'checked_in_by', `text default ''`);
+await ensureColumn('tickets', 'cancelled_at', `text default ''`);
+
+await ensureColumn('withdrawals', 'method', `text default ''`);
+await ensureColumn('withdrawals', 'phone', `text default ''`);
+await ensureColumn('withdrawals', 'admin_note', `text default ''`);
+await ensureColumn('withdrawals', 'processed_at', `text default ''`);
+await ensureColumn('withdrawals', 'processed_by', `text default ''`);
 
 await ensureColumn('products', 'name', `text default ''`);
 await ensureColumn('products', 'category', `text default 'Lifestyle'`);
