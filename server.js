@@ -485,3 +485,27 @@ const server = http.createServer(async (req, res) => {
 server.listen(port, () => {
   console.log(`FestiConnect lance sur http://localhost:${port}`);
 });
+
+// --- Arret gracieux (SIGTERM envoye par l'hebergeur lors d'un redeploiement ou d'une mise en veille) ---
+let shuttingDown = false;
+function shutdown(signal) {
+  if (shuttingDown) return;
+  shuttingDown = true;
+  console.log(`${signal} recu : arret gracieux de FestiConnect...`);
+  const forceExit = setTimeout(() => {
+    console.error('Arret force apres 10 s (connexions encore ouvertes).');
+    process.exit(1);
+  }, 10_000);
+  forceExit.unref();
+  server.close(() => {
+    try {
+      db.close();
+    } catch {
+      // Client deja ferme : rien a faire.
+    }
+    process.exit(0);
+  });
+  server.closeIdleConnections();
+}
+process.once('SIGTERM', () => shutdown('SIGTERM'));
+process.once('SIGINT', () => shutdown('SIGINT'));
