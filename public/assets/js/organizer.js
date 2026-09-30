@@ -24,16 +24,17 @@ function eventRow(event) {
     <tr>
       <td class="cell-main" data-label="Événement">
         <div class="cell-title">${event.status === 'approved' ? `<a href="${eventUrl(event)}">${escapeHtml(event.title)}</a>` : escapeHtml(event.title)}</div>
-        <div class="cell-sub small">${escapeHtml(event.category)}</div>
+        <div class="cell-sub small">${escapeHtml(event.category)} · ${escapeHtml(event.city)}</div>
       </td>
-      <td data-label="Ville">${escapeHtml(event.city)}</td>
       <td data-label="Date">${escapeHtml(formatDateShort(event.starts_at))}</td>
-      <td class="num" data-label="Prix">${escapeHtml(formatPrice(event.price_xof))}</td>
+      <td class="num" data-label="Prix">${escapeHtml(cardPrice({ ...event, categories_count: event.categories_count, min_available_price_xof: event.min_available_price_xof }).label)}</td>
       <td class="num" data-label="Ventes">${escapeHtml(formatNumber(sold))}${capacity ? ` / ${escapeHtml(formatNumber(capacity))}` : ''}${Number(event.waitlist_count) ? `<div class="small waitlist-hint">${escapeHtml(plural(event.waitlist_count, 'personne en attente', 'personnes en attente'))}</div>` : ''}</td>
       <td data-label="Statut">${statusBadge(event.status)}</td>
       <td class="actions-cell">
         <div class="actions">
           <button class="btn btn-sm" type="button" data-edit-event="${escapeHtml(event.id)}">${icon('edit')}<span>Modifier</span></button>
+          <button class="btn btn-sm btn-icon" type="button" data-duplicate-event="${escapeHtml(event.id)}" data-title="${escapeHtml(event.title)}" aria-label="Dupliquer « ${escapeHtml(event.title)} »" title="Dupliquer">${icon('copy')}<span class="actions-label">Dupliquer</span></button>
+          ${sold ? `<a class="btn btn-sm btn-icon" href="/api/organizer/events/${encodeURIComponent(event.id)}/attendees.csv" download aria-label="Télécharger les participants de « ${escapeHtml(event.title)} » (CSV)" title="Participants (CSV)">${icon('download')}<span class="actions-label">Participants</span></a>` : ''}
         </div>
       </td>
     </tr>`;
@@ -80,7 +81,7 @@ function renderRevenue(tickets) {
 
 async function loadOrganizer() {
   organizerMetrics.innerHTML = skeletonStats(4);
-  organizerEvents.innerHTML = skeletonRows(3, 7);
+  organizerEvents.innerHTML = skeletonRows(3, 6);
   organizerTickets.innerHTML = skeletonRows(3, 7);
   [organizerMetrics, organizerEvents, organizerTickets].forEach((node) => setLoading(node, true));
   try {
@@ -94,11 +95,11 @@ async function loadOrganizer() {
       metric('Revenus', formatMoney(summary.revenue), 'wallet', 'billets payés', true),
       metric('Billets vendus', formatNumber(summary.sold), 'ticket'),
       metric('Événements', formatNumber(summary.events), 'calendar', pending ? `${pending} en attente de validation` : ''),
-      metric('Conversion', `${formatNumber(summary.conversion)} %`, 'chart')
+      metric('Remplissage', summary.fill_rate === null ? '—' : `${formatNumber(summary.fill_rate)} %`, 'chart', 'événements à venir')
     ].join('');
     organizerEvents.innerHTML = events.length
       ? events.map(eventRow).join('')
-      : emptyRow(7, 'Tu n\'as encore publié aucun événement.', '<a class="btn btn-primary btn-sm" href="#creation">Créer mon premier événement</a>');
+      : emptyRow(6, 'Tu n\'as encore publié aucun événement.', '<a class="btn btn-primary btn-sm" href="#creation">Créer mon premier événement</a>');
     organizerTickets.innerHTML = tickets.length
       ? tickets.map(ticketRow).join('')
       : emptyRow(7, 'Aucun billet vendu pour le moment.');
@@ -138,9 +139,31 @@ organizerTickets.addEventListener('click', async (event) => {
   }
 });
 
-organizerEvents.addEventListener('click', (event) => {
+organizerEvents.addEventListener('click', async (event) => {
   const edit = event.target.closest('[data-edit-event]');
-  if (edit) startEditEvent(edit.dataset.editEvent);
+  if (edit) {
+    startEditEvent(edit.dataset.editEvent);
+    return;
+  }
+  const duplicate = event.target.closest('[data-duplicate-event]');
+  if (!duplicate) return;
+  const confirmed = await confirmDialog({
+    title: 'Dupliquer cet événement ?',
+    message: `Une copie de « ${duplicate.dataset.title} » est créée avec ses catégories et ses prix, sans les ventes. Si la date est passée, elle est avancée d'autant de semaines que nécessaire. La copie devra être validée avant publication.`,
+    confirmLabel: 'Dupliquer'
+  });
+  if (!confirmed) return;
+  setBusy(duplicate, true);
+  try {
+    const copy = await API.post(`/api/organizer/events/${encodeURIComponent(duplicate.dataset.duplicateEvent)}/duplicate`, {});
+    toast(`Copie créée pour le ${formatDateShort(copy.starts_at)}. Vérifie-la avant envoi.`, { type: 'success' });
+    await loadOrganizer();
+    startEditEvent(copy.id);
+  } catch (error) {
+    toast(error.message, { type: 'error' });
+  } finally {
+    setBusy(duplicate, false);
+  }
 });
 
 if (organizerUser) {

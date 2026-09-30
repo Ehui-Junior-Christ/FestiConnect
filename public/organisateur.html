@@ -22,6 +22,7 @@
         <div class="dash-user"><span class="avatar avatar-lg" data-user-initials></span><div><strong data-user-name></strong><span>Organisateur</span></div></div>
         <ul>
           <li><a href="#apercu" aria-current="true"><span data-icon="dashboard"></span>Aperçu</a></li>
+          <li><a href="#ventes"><span data-icon="chart"></span>Ventes</a></li>
           <li><a href="#analytics"><span data-icon="calendar"></span>Mes événements</a></li>
           <li><a href="#creation"><span data-icon="plus-circle"></span>Créer</a></li>
           <li><a href="#promos"><span data-icon="tag"></span>Codes promo</a></li>
@@ -45,6 +46,41 @@
           <div id="organizer-metrics" class="stats" aria-busy="true"></div>
         </section>
 
+        <section id="ventes" class="panel" aria-labelledby="sales-title">
+          <div class="panel-title">
+            <div>
+              <h2 id="sales-title">Ventes</h2>
+              <p id="sales-summary">Billets vendus par jour et remplissage de chaque catégorie.</p>
+            </div>
+          </div>
+          <div class="chart-filters" role="group" aria-label="Filtres des ventes">
+            <label class="sr-only" for="stats-event">Événement</label>
+            <select class="select select-sm" id="stats-event"><option value="">Tous mes événements</option></select>
+            <div class="segmented" id="stats-period" role="group" aria-label="Période">
+              <button type="button" data-days="7" aria-pressed="false">7 jours</button>
+              <button type="button" data-days="30" aria-pressed="true">30 jours</button>
+              <button type="button" data-days="90" aria-pressed="false">90 jours</button>
+            </div>
+          </div>
+          <figure class="chart" id="sales-chart" aria-busy="true">
+            <figcaption class="chart-title"><span>Billets vendus par jour</span><strong id="sales-total"></strong></figcaption>
+            <div class="chart-plot" id="sales-plot"></div>
+            <div class="chart-tooltip" id="sales-tooltip" role="status" hidden></div>
+          </figure>
+          <details class="chart-table mt-4">
+            <summary>Voir les chiffres jour par jour</summary>
+            <div class="table-wrap">
+              <table class="table">
+                <caption class="sr-only">Ventes par jour</caption>
+                <thead><tr><th scope="col">Jour</th><th scope="col" class="num">Billets</th><th scope="col" class="num">Montant</th></tr></thead>
+                <tbody id="sales-table"></tbody>
+              </table>
+            </div>
+          </details>
+          <h3 class="h4 mt-8">Remplissage par catégorie</h3>
+          <div id="fill-list" class="fill-list mt-4"></div>
+        </section>
+
         <section id="analytics" class="panel" aria-labelledby="events-title">
           <div class="panel-title">
             <div>
@@ -55,7 +91,7 @@
           <div class="table-wrap">
             <table class="table table-stack">
               <caption class="sr-only">Liste de mes événements</caption>
-              <thead><tr><th scope="col">Événement</th><th scope="col">Ville</th><th scope="col">Date</th><th scope="col" class="num">Prix</th><th scope="col" class="num">Ventes</th><th scope="col">Statut</th><th scope="col" class="text-right">Actions</th></tr></thead>
+              <thead><tr><th scope="col">Événement</th><th scope="col">Date</th><th scope="col" class="num">Prix</th><th scope="col" class="num">Ventes</th><th scope="col">Statut</th><th scope="col" class="text-right">Actions</th></tr></thead>
               <tbody id="organizer-events"></tbody>
             </table>
           </div>
@@ -280,5 +316,6 @@
   <script src="/assets/js/organizer-form.js"></script>
   <script src="/assets/js/organizer-promos.js"></script>
   <script src="/assets/js/organizer-wallet.js"></script>
+  <script src="/assets/js/organizer-stats.js"></script>
 </body>
 </html>

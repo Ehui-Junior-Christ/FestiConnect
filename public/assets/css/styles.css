@@ -78,6 +78,8 @@
   --info-soft: var(--lagoon-50);
   --skeleton: var(--sand-100);
   --skeleton-shine: var(--sand-50);
+  /* Série unique des graphiques (validée : bande de luminosité, contraste) */
+  --chart-series: var(--orange-600);
 
   /* Espacements (base 4px) */
   --space-1: 0.25rem;
@@ -146,6 +148,7 @@
     --info-soft: #102730;
     --skeleton: #2b2018;
     --skeleton-shine: #36291f;
+    --chart-series: #e8601a;
     --shadow-sm: 0 1px 2px rgb(0 0 0 / 0.4);
     --shadow-md: 0 6px 16px -4px rgb(0 0 0 / 0.5);
     --shadow-lg: 0 24px 48px -16px rgb(0 0 0 / 0.6);
@@ -4454,6 +4457,203 @@ a.notif-body:hover {
 .rating-input:has(input:checked) label:has(~ label input:checked) svg,
 .rating-input label:has(input:checked) svg {
   fill: currentColor;
+}
+
+/* 30. Graphique des ventes (SVG dessiné à la main)
+   ----------------------------------------------------------------------- */
+.chart-filters {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: var(--space-4);
+}
+
+.select-sm {
+  width: auto;
+  max-width: 100%;
+  min-height: 42px;
+  font-size: var(--text-sm);
+}
+
+.chart {
+  position: relative;
+  margin: 0;
+  transition: opacity 150ms var(--ease);
+}
+
+.chart.is-loading {
+  opacity: 0.55;
+}
+
+.chart-title {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: var(--space-2);
+  margin-bottom: var(--space-3);
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+  font-weight: 600;
+}
+
+.chart-title strong {
+  color: var(--text);
+  font-variant-numeric: tabular-nums;
+}
+
+.chart-plot {
+  position: relative;
+  min-height: 200px;
+}
+
+.chart-plot svg {
+  display: block;
+  overflow: visible;
+}
+
+.chart-grid {
+  stroke: var(--border);
+  stroke-width: 1;
+  stroke-dasharray: 3 4;
+}
+
+.chart-axis {
+  stroke: var(--border-strong);
+  stroke-width: 1;
+}
+
+.chart-label {
+  fill: var(--text-muted);
+  font-size: 12px;
+  font-variant-numeric: tabular-nums;
+}
+
+.chart-value {
+  fill: var(--text);
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.chart-line {
+  fill: none;
+  stroke: var(--chart-series);
+  stroke-width: 2;
+  stroke-linejoin: round;
+  stroke-linecap: round;
+}
+
+.chart-area {
+  fill: var(--chart-series);
+  fill-opacity: 0.12;
+  stroke: none;
+}
+
+.chart-dot {
+  fill: var(--chart-series);
+  stroke: var(--surface);
+  stroke-width: 2;
+}
+
+.chart-dot-active {
+  stroke-width: 2.5;
+}
+
+.chart-cross {
+  stroke: var(--text-muted);
+  stroke-width: 1;
+}
+
+.chart-hit {
+  fill: transparent;
+  cursor: crosshair;
+}
+
+.chart-hit:focus {
+  outline: none;
+}
+
+.chart-hit:focus-visible {
+  stroke: var(--focus);
+  stroke-width: 2;
+}
+
+.chart-tooltip {
+  position: absolute;
+  z-index: 3;
+  display: grid;
+  gap: 2px;
+  min-width: 140px;
+  padding: var(--space-2) var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+  box-shadow: var(--shadow-md);
+  font-size: var(--text-sm);
+  pointer-events: none;
+}
+
+.chart-tooltip strong {
+  font-size: var(--text-base);
+}
+
+.chart-tooltip > * {
+  white-space: nowrap;
+}
+
+.chart-table summary {
+  display: inline-flex;
+  min-height: var(--tap);
+  align-items: center;
+  color: var(--link);
+  font-weight: 700;
+  font-size: var(--text-sm);
+  cursor: pointer;
+}
+
+.chart-table .table-wrap {
+  max-height: 320px;
+  overflow-y: auto;
+}
+
+@media (min-width: 720px) {
+  .table .actions .btn-icon {
+    width: 36px;
+    min-height: 36px;
+  }
+
+  .table .actions-label {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+  }
+
+  .table td[data-label="Date"] {
+    white-space: nowrap;
+  }
+
+  .table td.cell-main {
+    min-width: 190px;
+  }
+}
+
+@media (max-width: 719px) {
+  .table .actions .btn-icon {
+    width: auto;
+    padding-inline: var(--space-3);
+  }
+}
+
+.fill-list {
+  display: grid;
+  gap: var(--space-6);
+}
+
+.fill-title {
+  margin-bottom: var(--space-3);
 }
 
 /* 20. Mouvement réduit

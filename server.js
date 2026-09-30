@@ -15,6 +15,7 @@ import './src/features/calendar.js';
 import './src/features/waitlist.js';
 import './src/features/withdrawals.js';
 import './src/features/reviews.js';
+import './src/features/organizerStats.js';
 import { AppError, errorResponse, notFound } from './src/shared/errors.js';
 import { parseBody, sendJson, serveStatic } from './src/shared/http.js';
 import { dummyVerify, hashPassword, needsRehash, passwordPolicyError, verifyPassword } from './src/shared/passwords.js';
@@ -337,14 +338,24 @@ route('GET', '/api/organizer/summary', async ({ req, res, url }) => {
           where events.organizer_id = ?`,
     args: [orgId]
   });
-  return sendJson(res, 200, { summary: { events: events.rows[0].count, sold: events.rows[0].sold, revenue: revenue.rows[0].revenue, conversion: 68 } });
+  // Remplissage des evenements a venir (billets vendus / places mises en vente).
+  const upcoming = await db.execute({
+    sql: `select coalesce(sum(tickets_sold), 0) as sold, coalesce(sum(capacity), 0) as capacity from events
+          where organizer_id = ? and status = 'approved' and datetime(coalesce(nullif(ends_at, ''), starts_at)) > datetime('now')`,
+    args: [orgId]
+  });
+  const capacity = Number(upcoming.rows[0].capacity);
+  const fillRate = capacity ? Math.round((Number(upcoming.rows[0].sold) / capacity) * 100) : null;
+  return sendJson(res, 200, { summary: { events: events.rows[0].count, sold: events.rows[0].sold, revenue: revenue.rows[0].revenue, fill_rate: fillRate } });
 });
 
 route('GET', '/api/organizer/events', async ({ req, res }) => {
   const user = await requireUser(req, ['organisateur', 'admin']);
   const result = await db.execute({
     sql: `select events.*,
-                 (select count(*) from waitlist where waitlist.event_id = events.id and waitlist.notified_at = '') as waitlist_count
+                 (select count(*) from waitlist where waitlist.event_id = events.id and waitlist.notified_at = '') as waitlist_count,
+                 (select count(*) from ticket_categories c where c.event_id = events.id) as categories_count,
+                 (select min(c.price_xof) from ticket_categories c where c.event_id = events.id and c.sold < c.capacity) as min_available_price_xof
           from events where organizer_id = ? order by datetime(created_at) desc`,
     args: [user.id]
   });

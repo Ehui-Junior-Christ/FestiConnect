@@ -274,6 +274,34 @@ for (const [index, [userId, rating, comment, hidden]] of pastReviews.entries()) 
 }
 await db.execute({ sql: "update events set tickets_sold = (select coalesce(sum(quantity), 0) from tickets where event_id = 'evt_zouglou_past' and status = 'paid') where id = 'evt_zouglou_past'", args: [] });
 
+// Historique de ventes sur les 28 derniers jours (courbe du tableau de bord).
+// Generation deterministe : le seed donne toujours la meme courbe.
+const salesPlan = [
+  ['evt_abissa_2026', 'cat_abissa_std', 'Standard', 15000],
+  ['evt_abissa_2026', 'cat_abissa_vip', 'VIP', 35000],
+  ['evt_maquis_night', 'cat_maquis_std', 'Standard', 25000],
+  ['evt_maquis_night', 'cat_maquis_vip', 'VIP carré', 50000],
+  ['evt_mode_sahel', '', '', 8000]
+];
+const methods = ['Wave', 'Orange Money', 'Moov Money'];
+for (let index = 0; index < 48; index += 1) {
+  const [eventId, categoryId, categoryName, price] = salesPlan[(index * 7) % salesPlan.length];
+  const quantity = 1 + ((index * 5) % 4);
+  const daysAgo = 27 - Math.floor((index * index) % 28 * 0.6 + index * 0.4) % 28;
+  await seedTicket({
+    id: `tkt_seed_sale_${String(index).padStart(2, '0')}`,
+    event_id: eventId,
+    category_id: categoryId,
+    category_name: categoryName,
+    user_id: participants[index % participants.length][0],
+    code: `FC-SEED-${String(index).padStart(3, '0')}-${eventId.slice(4, 10).toUpperCase()}`,
+    quantity,
+    amount_xof: quantity * price,
+    payment_method: methods[index % methods.length],
+    created_at: ago(Math.max(0, daysAgo), (index * 3) % 20)
+  });
+}
+
 // Notifications de demonstration (le rappel J-1 du client est calcule a la lecture).
 await insertOrUpdateById('notifications', {
   id: 'ntf_demo_abissa_ok',
