@@ -1,6 +1,6 @@
 {
   "brand": { "name": "FestiConnect", "url": "festiconnect.ci", "signoff": "On est ensemble." },
-  "client": { "name": "Junior Ehui", "firstName": "Junior", "city": "Yamoussoukro" },
+  "client": { "name": "Awa Yao", "firstName": "Awa", "city": "Yamoussoukro" },
   "organizer": { "name": "Collectif Nouchi Live" },
   "events": [
     { "id": "abissa", "title": "Festival Abissa Experience", "category": "Tradition", "city": "Grand-Bassam", "venue": "Place Abissa", "dateLong": "Ven. 14 août 2026", "dateShort": "14 août", "time": "18:00", "price": 15000, "capacity": 1200, "sold": 384, "art": "abissa" },

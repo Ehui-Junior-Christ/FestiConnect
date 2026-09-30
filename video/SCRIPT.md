@@ -10,7 +10,7 @@ Version 1.0 — 30 septembre 2026 — statut : script validable, en attente de l
 | Déclinaison | **30 s** réseaux sociaux (15 mesures), même univers, mêmes scènes resserrées |
 | Langue | Français, voix off en tutoiement, sous-titrage recommandé pour la diffusion sans le son |
 | Fichier maître des temps | `video/timeline.json` (80 s) et `video/timeline-30s.json` (30 s) |
-| Prévisualisation actuelle | Séquences A, B, C, D et H animées ; E, F, G en animatic (cartons) |
+| Prévisualisation actuelle | Toutes les séquences (A à H) animées, dans les deux versions |
 
 Notation des temps dans ce document : `mm:ss.d` (minutes, secondes, dixièmes). À 120 BPM, un temps = 0,5 s, une mesure = 2 s ; la mesure *n* commence à (n − 1) × 2 s. Les timecodes seront recalés sur l'audio réel (section 7.3) : ce qui compte ici, c'est l'ordre, les durées relatives et les temps forts.
 
@@ -129,7 +129,7 @@ Les modules mesurent 160 px de base et s'utilisent en panneaux pleins (transitio
 **Transitions signatures** :
 
 1. **La Pastille** (iris) : un disque orange grandit depuis un point de l'image jusqu'à couvrir le cadre, ou un aplat orange se referme sur un élément du plan suivant (le i du logo, le bouton de recherche). C'est le raccord principal du film (B2 vers C1, C2 vers D1, H1 vers H2).
-2. **Le Pagne** : un panneau de trame entre en biais (bord d'attaque à 12°) de droite à gauche en 0,2 s et arrive exactement sur le temps (B1, H1, et à produire pour E1).
+2. **Le Pagne** : un panneau de trame entre en biais (bord d'attaque à 12°) de droite à gauche en 0,2 s et arrive exactement sur le temps (B1, H1, et en bande de trame pour E1).
 3. **Le Scan** : une ligne lumineuse verte balaie un élément et le valide (billet D4, validation G1).
 4. **Le Push** : changement d'écran à l'intérieur du téléphone (poussée latérale, l'écran sortant recule de 32 % et s'assombrit).
 5. **Raccord de forme** : un rond devient un autre rond (pastille, bouton, tap, coche, œil de QR, point final).
@@ -252,7 +252,7 @@ Le verbe change sur le premier temps de chaque plan. Derrière le téléphone, d
 
 #### Plan D1 — 00:22.0 → 00:28.0 (6,0 s) — mesures 12–14 — « Trouve. »
 
-- **Visuel** : écran d'accueil de l'app. « Salut Junior », « Qu'est-ce qu'on fait ce soir ? », champ de recherche avec bouton rond orange, filtres, trois résultats.
+- **Visuel** : écran d'accueil de l'app. « Salut Awa », « Qu'est-ce qu'on fait ce soir ? », champ de recherche avec bouton rond orange, filtres, trois résultats.
 - **Animation** : **raccord Pastille**, l'aplat orange se referme exactement sur le bouton de recherche (0,7 s) pendant que le téléphone monte. Saisie lettre par lettre de « Abissa », avec un curseur qui clignote sur les temps. Les filtres « Tradition » puis « Grand-Bassam » s'allument sur deux temps. Les trois cartes de résultat montent une par temps. Tap sur la première carte.
 - **Texte à l'écran** : légende `01 / 04 · RECHERCHE` — **Trouve.** — *Artiste, ville, date.* ; à l'écran du téléphone : `3 résultats`, « Festival Abissa Experience — Grand-Bassam · 14 août — dès 15 000 F », « Maquis Electronic Night — Abidjan · 21 juin — dès 25 000 F », « Salon Mode Sahel — Bouaké · 5 juil. — dès 8 000 F ».
 - **Voix off** (00:22.3) : « Tu cherches un artiste, une ville, une date ? L'événement est là, en quelques secondes. »
@@ -281,23 +281,23 @@ Le verbe change sur le premier temps de chaque plan. Derrière le téléphone, d
 
 - **Visuel** : le téléphone sort par la droite en pivotant ; **le billet** en sort et vient se poser au centre-droit, en grand. C'est un billet papier crème à encoches : visuel Abissa à gauche, infos au centre, talon à droite avec le QR code et le code du billet.
 - **Animation** : le billet arrive en 3D (rotation Y de −38° à 0°, échelle 0,45 → 1). Le QR se construit module par module en diagonale (0,7 s), ses trois yeux orange apparaissent en ressort (encore la pastille). Le code se tape caractère par caractère. **Le Scan** : une ligne verte balaie le QR en 0,5 s. Le tampon « ACCÈS VALIDÉ » **claque sur le temps** (échelle 2,2 → 1, rotation −6°), accompagné d'un éclat vert.
-- **Texte à l'écran** : `04 / 04 · BILLET` — **Entre.** — *Un code unique. Un scan.* ; billet : `BILLET · TRADITION`, « Festival Abissa Experience », « Ven. 14 août 2026 · 18:00 », « Place Abissa, Grand-Bassam », « 2 billets · Junior Ehui », « Payé via Wave · 30 000 F », `FC-DEMO-2026`, « Présente ce code à l'entrée », tampon `ACCÈS VALIDÉ`.
+- **Texte à l'écran** : `04 / 04 · BILLET` — **Entre.** — *Un code unique. Un scan.* ; billet : `BILLET · TRADITION`, « Festival Abissa Experience », « Ven. 14 août 2026 · 18:00 », « Place Abissa, Grand-Bassam », « 2 billets · Awa Yao », « Payé via Wave · 30 000 F », `FC-DEMO-2026`, « Présente ce code à l'entrée », tampon `ACCÈS VALIDÉ`.
 - **Voix off** (00:42.3) : « Ton billet arrive avec son code unique. À l'entrée : un scan, et tu es dedans. »
 - **Musique / SD** : un froissé de papier à l'arrivée du billet, un grésillement numérique pendant la construction du QR, une frappe de clavier mécanique pour le code, le **bip de scanner** à 00:45.5, un **coup de tampon grave** à 00:46.0, puis la rumeur de la foule qui s'ouvre (on « entre » dans la fête).
 - **Temps forts** : 00:41.8 le téléphone sort · 00:42.0 « Entre. » · 00:42.8 QR · 00:43.8 code · 00:45.5 scan · **00:46.0 ACCÈS VALIDÉ** · 00:47.6 sortie.
 
-### SÉQUENCE E — Boutique officielle *(en animatic, à produire)*
+### SÉQUENCE E — Boutique officielle
 
 #### Plan E1 — 00:48.0 → 00:54.0 (6,0 s) — mesures 25–27
 
 - **Visuel** : transition « Le Pagne » en bande de trame multicolore qui révèle la boutique. Trois produits en carrousel horizontal, sur des socles aux couleurs de la trame : **Casquette Kente Edition** (12 000 F), **Tote Bag Baoulé** (9 000 F), **Affiche Collector Abissa** (15 000 F, tirage numéroté). À gauche, légende : `BOUTIQUE OFFICIELLE` / **Garde la fête.**
 - **Animation** : les produits entrent un par temps (00:48.5, 00:49.0, 00:49.5) avec une rotation 3D légère. Trois taps « Ajouter » sur les temps (00:50.5, 00:51.5, 00:52.5) ; à chaque tap, une pastille orange vole du produit jusqu'à l'icône panier, dont le badge passe 1 → 2 → 3 avec un rebond. À 00:53.5, le carrousel file vers la gauche.
-- **Texte à l'écran** : noms et prix des produits, badge panier `3`, `Total 36 000 F`.
+- **Texte à l'écran** : `BOUTIQUE OFFICIELLE` — **Garde la fête.** — *Casquettes, tote bags, affiches.* — noms, catégories et prix des produits, boutons « Ajouter » qui deviennent « Ajouté », panier avec badge `3` et `36 000 F`.
 - **Voix off** (00:48.3) : « Et pour garder la fête avec toi, la boutique officielle : casquettes, tote bags, affiches collector. »
 - **Musique / SD** : variation mélodique (motif percussif boisé, type balafon ou marimba traité moderne, joué comme un riff). Un « plop » par produit ajouté, accordé sur la tonalité.
 - **Temps forts** : 00:48.0 Pagne · 00:48.5 / 00:49.0 / 00:49.5 produits · 00:50.5 / 00:51.5 / 00:52.5 ajouts au panier · 00:53.5 sortie.
 
-### SÉQUENCE F — Espace organisateur *(en animatic, à produire)*
+### SÉQUENCE F — Espace organisateur
 
 Dispositif : on change de point de vue. Ce n'est plus un téléphone mais un **écran d'ordinateur** en perspective (tableau de bord), cadré à droite. Le client utilise un téléphone, l'organisateur travaille sur un ordinateur : le spectateur comprend le changement de rôle sans explication.
 
@@ -305,7 +305,7 @@ Dispositif : on change de point de vue. Ce n'est plus un téléphone mais un **�
 
 - **Visuel** : carton de bascule sur le premier temps (fond sable, **Tu organises ?** en nuit), puis le tableau de bord « Collectif Nouchi Live » avec le formulaire « Nouvel événement ».
 - **Animation** : les champs se remplissent un par temps : titre « Maquis Electronic Night » (00:55.0), lieu « Sofitel Ivoire, Abidjan » (00:55.5), date « Dim. 21 juin 2026 · 20:00 » (00:56.0), prix « 25 000 F » (00:56.5), places « 900 » (00:57.0). Une affiche se génère en vignette. Tap « Soumettre » à 00:57.5.
-- **Texte à l'écran** : `ESPACE ORGANISATEUR` — **Crée.** — champs ci-dessus.
+- **Texte à l'écran** : `ORGANISATEUR · 01 / 03` — **Crée.** — *Un événement en quelques minutes.* — champs ci-dessus, bouton « Soumettre pour validation » qui devient « Envoyé pour validation », statut de l'aperçu « Brouillon » → « En attente de validation » (sable).
 - **Voix off** (00:54.2) : « Tu organises ? Crée ton événement en quelques minutes. »
 - **Musique / SD** : la pulsation devient régulière (kick en quatre temps, arpège synthétique discret). Une frappe de touche par champ.
 - **Temps forts** : **00:54.0 bascule** · 00:55.0 → 00:57.0 champs · 00:57.5 Soumettre.
@@ -314,29 +314,29 @@ Dispositif : on change de point de vue. Ce n'est plus un téléphone mais un **�
 
 - **Visuel** : tableau de bord des ventes de « Maquis Electronic Night » : grand compteur de billets, compteur de recettes, histogramme par jour, fil de ventes en direct.
 - **Animation** : le compteur roule de 0 à **621 / 900** billets et les recettes de 0 à **15 525 000 F** (621 × 25 000 F) en 2 s. L'histogramme pousse une barre par temps. Trois notifications de vente glissent dans le fil sur les temps (« +2 billets · Wave », « +1 billet · Orange Money », « +4 billets · Moov Money »).
-- **Texte à l'écran** : **Vends.** — `621 / 900 billets` — `15 525 000 F` — jauge 69 %.
+- **Texte à l'écran** : `ORGANISATEUR · 02 / 03` — **Vends.** — *Tes ventes, en direct.* — `621 / 900 billets` — `15 525 000 F` — jauge 69 %.
 - **Voix off** (00:58.2) : « Suis tes ventes en direct, billet par billet… »
 - **Musique / SD** : tic de compteur, un « ding » doux par notification, qui suit le rythme.
 - **Temps forts** : 00:58.0 compteurs · 00:59.0 / 01:00.0 / 01:01.0 notifications · barres de l'histogramme sur chaque temps.
 
 #### Plan F3 — 01:02.0 → 01:06.0 (4,0 s) — mesures 32–33
 
-- **Visuel** : panneau « Retrait » : solde disponible, choix du compte mobile money (Wave), bouton « Retirer vers Wave ».
-- **Animation** : le solde s'affiche, tap sur « Retirer » à 01:03.5 ; le bouton se resserre en pastille (même geste qu'en D3, pour la cohérence), puis coche verte à 01:04.0 et « Retrait envoyé » à 01:04.5. La pastille part vers la droite du cadre (le « chemin de l'argent ») et sert de transition.
-- **Texte à l'écran** : **Encaisse.** — « Solde disponible », « Retirer vers Wave », « Retrait envoyé ».
+- **Visuel** : vue « Retraits » : recettes de la vente, compte mobile money de destination (Wave, numéro masqué, « Compte vérifié »), bouton « Retirer vers Wave ».
+- **Animation** : la vue monte sur le premier temps, tap sur « Retirer » à 01:03.5 ; le bouton se resserre en pastille (même geste qu'en D3, pour la cohérence), puis coche verte à 01:04.0 et « Retrait envoyé » à 01:04.5. La pastille part vers la droite du cadre (le « chemin de l'argent ») et sert de transition.
+- **Texte à l'écran** : `ORGANISATEUR · 03 / 03` — **Encaisse.** — *Tes recettes, sur mobile money.* — « Recettes de la vente · Maquis Electronic Night », `15 525 000 F`, « Retirer vers Wave », « Retrait envoyé », `15 525 000 F vers Wave`.
 - **Voix off** (01:02.2) : « … et retire tes recettes sur mobile money. »
 - **Musique / SD** : carillon de succès en variation (même famille que D3, une tierce au-dessus).
 - **Temps forts** : 01:03.5 tap · **01:04.0 coche** · 01:04.5 confirmation.
 
-> Les montants de solde et de retrait dépendent des règles de commission de FestiConnect : **à confirmer avec le propriétaire** avant production (sinon on affiche uniquement « Recettes disponibles » sans montant net).
+> Les montants de solde et de retrait dépendent des règles de commission de FestiConnect : **à confirmer avec le propriétaire** avant production. La prévisualisation affiche la recette brute de démonstration (621 × 25 000 F), sans commission.
 
-### SÉQUENCE G — Validation et confiance *(en animatic, à produire)*
+### SÉQUENCE G — Validation et confiance
 
 #### Plan G1 — 01:06.0 → 01:10.0 (4,0 s) — mesures 34–35
 
-- **Visuel** : file de modération de l'administration, en cartes empilées. En tête, « Nuit Mandingue Premium — Yamoussoukro — Fondation FHB — En attente ». Liste de contrôle à côté.
-- **Animation** : trois coches tombent sur les temps : « Organisateur vérifié » (01:06.5), « Lieu et date confirmés » (01:07.0), « Billetterie conforme » (01:07.5). **Le Scan** balaie la carte, puis le **tampon VALIDÉ** claque à **01:08.0** (premier temps de la mesure 35). Le statut passe de « En attente » (sable) à « Publié » (vert) à 01:08.5.
-- **Texte à l'écran** : `ADMINISTRATION` — **Vérifié.** — items ci-dessus, tampon `VALIDÉ`.
+- **Visuel** : file de modération de l'administration, en cartes empilées. En tête, « Nuit Mandingue Premium — Yamoussoukro — En attente » ; à côté, la fiche détaillée (Fondation FHB, Sam. 12 sept. 2026 · 19:30, Collectif Nouchi Live, 18 000 F · 700 places) avec sa liste de contrôle, et les boutons « Refuser » / « Valider ».
+- **Animation** : trois coches tombent sur les temps : « Organisateur vérifié » (01:06.5), « Lieu et date confirmés » (01:07.0), « Billetterie conforme » (01:07.5). **Le Scan** balaie la fiche, tap sur « Valider » à 01:07.9, puis le **tampon VALIDÉ** claque à **01:08.0** sur le visuel de la fiche, avec un éclat et une onde verts (premier temps de la mesure 35). Le statut passe de « En attente » (sable) à « Publié » (vert) à 01:08.5, et le badge de la file disparaît.
+- **Texte à l'écran** : `ADMINISTRATION` — **Vérifié.** — *Avant chaque publication.* — items ci-dessus, tampon `VALIDÉ`, URL `festiconnect.ci/admin`.
 - **Voix off** (01:06.2) : « Chaque événement est vérifié avant publication. Ton public achète en confiance. »
 - **Musique / SD** : break : la batterie s'arrête, il ne reste qu'une nappe et une pulsation sourde. Trois tics pour les coches, puis **impact grave + tampon** à 01:08.0. La relance commence à 01:09.0.
 - **Temps forts** : 01:06.5 / 01:07.0 / 01:07.5 coches · **01:08.0 VALIDÉ** · 01:08.5 Publié.
@@ -368,18 +368,18 @@ Principe : **l'app est recréée, pas filmée**. Les écrans sont reconstruits e
 
 | Écran | Contenu | Geste animé | Plan |
 |---|---|---|---|
-| Recherche | Salut Junior, « Qu'est-ce qu'on fait ce soir ? », champ + bouton orange, filtres (Tout, Tradition, Grand-Bassam, Août), 3 résultats avec vignette, catégorie, ville, date, « dès … F », barre de navigation (accueil, recherche, billets, boutique) | Saisie, filtres, cartes par temps, tap | D1 |
+| Recherche | Salut Awa, « Qu'est-ce qu'on fait ce soir ? », champ + bouton orange, filtres (Tout, Tradition, Grand-Bassam, Août), 3 résultats avec vignette, catégorie, ville, date, « dès … F », barre de navigation (accueil, recherche, billets, boutique) | Saisie, filtres, cartes par temps, tap | D1 |
 | Fiche événement | Visuel plein écran, retour, favori, étiquettes, titre, date/heure, lieu, organisateur, jauge vendues/capacité, places restantes, barre prix + « Réserver » | Poussée, jauge qui se remplit, bouton qui pulse | D2 |
 | Paiement | Feuille « Ton paiement », quantité (− 2 +), total, « Payer avec » (Wave, Orange Money, Moov Money), bouton payer, message d'attente | +1, sélection, bouton → pastille → coche | D3 |
 | Confirmation | Coche verte, « Paiement reçu », montant et moyen, nombre de billets, « Voir mes billets », notification système | Coche tracée, notification | D3 |
 | Billet | Billet papier : visuel, catégorie, titre, date, lieu, titulaire, paiement, perforation à encoches, talon QR + `FC-DEMO-2026` | QR construit, code tapé, scan, tampon | D4 |
-| Boutique *(à produire)* | 3 produits, prix, « Ajouter », panier avec badge | Ajouts sur les temps, pastille qui vole | E1 |
-| Tableau de bord organisateur *(à produire)* | Formulaire de création, compteurs billets/recettes, histogramme, fil de ventes, retrait | Remplissage, compteurs, histogramme, retrait | F1–F3 |
-| Administration *(à produire)* | File de modération, liste de contrôle, statut | Coches, scan, tampon, statut Publié | G1 |
+| Boutique | 3 produits, prix, « Ajouter », panier avec badge | Ajouts sur les temps, pastille qui vole | E1 |
+| Tableau de bord organisateur (ordinateur) | Formulaire de création, compteurs billets/recettes, histogramme, fil de ventes, retrait | Remplissage, compteurs, histogramme, retrait | F1–F3 |
+| Administration (ordinateur) | File de modération, liste de contrôle, statut | Coches, scan, tampon, statut Publié | G1 |
 
 **Moyens de paiement** : on affiche les **noms** Wave, Orange Money et Moov Money (comme dans l'app), avec une pastille de couleur neutre et une icône de portefeuille générique. **Aucun logo officiel n'est reproduit.** Pour montrer les vrais logos, il faut l'accord écrit de chaque opérateur et leurs chartes.
 
-**Le QR code** actuel est un motif visuel déterministe (non scannable). S'il doit être scannable (par exemple pour mener à festiconnect.ci), on remplacera le générateur par un vrai encodeur : c'est une modification d'une fonction dans `stage/lib/motifs.js`.
+**Le QR code** du billet est un vrai QR (bibliothèque locale `qrcode-generator`, correction d'erreur M, 21 × 21 modules) qui encode le code du billet `FC-DEMO-2026` (`content.json`). Ses trois repères gardent un cœur orange et il est posé sur une plaque blanche pour le contraste. `npm run qc:qr` rend le plan D4, recadre sur le QR et vérifie qu'il se décode. Pour qu'il mène à une page (par exemple festiconnect.ci), il suffit de changer le texte encodé.
 
 ---
 
@@ -567,12 +567,12 @@ Tous les temps du film sont dans **un seul fichier** par version (`video/timelin
 | B Affiches | `stage/scenes/affiches.js` | Animée |
 | C Logo | `stage/scenes/logo.js` | Animée |
 | D Parcours client | `stage/scenes/parcours.js` | Animée (recherche, fiche, paiement, confirmation, billet, scan) |
-| E Boutique | `boutique` (à écrire) | Animatic : carton automatique avec plan, écran décrit, voix off et temps |
-| F Organisateur | `organisateur` (à écrire) | Animatic |
-| G Validation | `validation` (à écrire) | Animatic |
+| E Boutique | `stage/scenes/boutique.js` | Animée (bande de trame, produits, ajouts au panier) |
+| F Organisateur | `stage/scenes/organisateur.js` | Animée (création, ventes, retrait) ; gère aussi le plan F2 seul de la version courte |
+| G Validation | `stage/scenes/validation.js` | Animée (contrôles, scan, tampon, publication) |
 | H Final | `stage/scenes/final.js` | Animé (triptyque + carton final, et variante courte) |
 
-L'animatic est un vrai outil de synchronisation : le film complet se rend et se cale sur l'audio dès maintenant ; chaque carton sera remplacé par sa scène sans toucher aux timecodes.
+Le module `carton.js` (animatic) reste le repli automatique de toute séquence déclarée dans la timeline sans module : on peut ainsi ajouter un plan, le caler sur l'audio, puis l'animer sans toucher aux timecodes. Les composants partagés des séquences E, F et G (légende, fenêtre de navigateur, indicateur de tap) sont dans `stage/lib/ui.js`.
 
 ## Annexe B — Chaîne de rendu
 
@@ -582,7 +582,7 @@ L'animatic est un vrai outil de synchronisation : le film complet se rend et se 
 
 ```bash
 cd video
-npm install              # playwright-core, ffmpeg-static (binaire ffmpeg), polices @fontsource
+npm install              # playwright-core, ffmpeg-static (binaire ffmpeg), polices @fontsource, qrcode-generator
 ```
 
 Chromium n'est pas téléchargé par `npm install`. Les scripts cherchent `PLAYWRIGHT_BROWSERS_PATH` (par défaut `/opt/pw-browsers`, où `chromium_headless_shell-1194` correspond à playwright 1.56.1) ; ailleurs, définir `CHROMIUM_PATH=/chemin/vers/chrome`. Pour utiliser un autre ffmpeg : `FFMPEG_PATH=/chemin/ffmpeg`.
@@ -600,6 +600,7 @@ Chromium n'est pas téléchargé par `npm install`. Les scripts cherchent `PLAYW
 | `npm run render` | Master 1920 × 1080, 30 i/s, CRF 18, avec audio si déclaré |
 | `npm run render:60fps` | Master à 60 i/s |
 | `npm run render:30s` | Version courte |
+| `npm run qc:qr` | Vérifie que le QR du billet se décode (plan D4) |
 
 Options de `render` : `--width`, `--fps`, `--crf`, `--preset`, `--workers` (rendu parallèle par segments, 3 par défaut), `--from`/`--to`, `--audio`, `--mute`, `--hud 0|1|2`, `--frames` (conserve les PNG dans `frames/`), `--timeline`. Temps mesurés dans ce conteneur (4 cœurs) : environ 20 i/s en 960 × 540 et 4,5 i/s en 1920 × 1080 preset `slow`, soit une dizaine de minutes pour le master 80 s.
 
@@ -630,6 +631,6 @@ Toutes les données sont issues de `src/db/seed.js` :
 
 - **Événements** : Festival Abissa Experience (Grand-Bassam, Place Abissa, 15 000 F, 384 / 1 200) ; Maquis Electronic Night (Abidjan, Sofitel Ivoire, 25 000 F, 621 / 900) ; Salon Mode Sahel (Bouaké, Palais de la Culture, 8 000 F, 147 / 600) ; Nuit Mandingue Premium (Yamoussoukro, Fondation FHB, en attente).
 - **Produits** : Casquette Kente Edition 12 000 F, Tote Bag Baoulé 9 000 F, Affiche Collector Abissa 15 000 F.
-- **Personnes et billet** : client Junior Ehui ; organisateur Collectif Nouchi Live ; billet `FC-DEMO-2026`, 2 places, 30 000 F, payé par Wave.
+- **Personnes et billet** : client fictif Awa Yao (remplace le compte de démo Junior Ehui du seed, pour ne pas afficher un nom de compte réel) ; organisateur Collectif Nouchi Live ; billet `FC-DEMO-2026`, 2 places, 30 000 F, payé par Wave.
 
 Elles se modifient dans `video/content.json` sans toucher au code.

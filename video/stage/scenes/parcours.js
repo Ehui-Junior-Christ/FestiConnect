@@ -132,7 +132,7 @@ const css = `
 .tk-rows .row { color: rgba(13,11,10,.72); font-size:17px; height:26px; }
 .tk-perf { position:absolute; left:702px; top:30px; bottom:30px; border-left:3px dashed rgba(13,11,10,.22); }
 .tk-stub { position:absolute; left:704px; right:0; top:0; bottom:0; display:flex; flex-direction:column; align-items:center; padding-top:52px; }
-.tk-qr { position:relative; width:220px; height:220px; }
+.tk-qr { position:relative; width:210px; height:210px; padding:14px; box-sizing:content-box; background:#fff; border-radius:16px; margin-top:-4px; }
 .tk-code { margin-top:24px; font: 700 26px/1 var(--f-mono); letter-spacing:.06em; }
 .tk-hint { margin-top:10px; font-size:13px; color: rgba(13,11,10,.55); }
 .scanl { position:absolute; left:-18px; right:-18px; height:4px; border-radius:2px; background: var(--vert); box-shadow: 0 0 24px 6px rgba(46,224,122,.55); }
@@ -154,7 +154,7 @@ function phoneMarkup(c) {
     <div class="pc-notch"></div>
     ${statusBar}
     <div class="scr" data-k="s1">
-      <div class="pad s1-hi"><span class="muted">Salut ${c.client.firstName}</span><span class="av">JE</span></div>
+      <div class="pad s1-hi"><span class="muted">Salut ${c.client.firstName}</span><span class="av">${c.client.name.split(" ").map((w) => w[0]).join("")}</span></div>
       <div class="pad s1-h">Qu'est-ce qu'on fait<br>ce soir ?</div>
       <div class="pad srch"><span class="muted">${icon('search', 22)}</span><span class="txt" data-k="typed"></span><span class="sbtn" data-k="sbtn">${icon('search', 22, 'currentColor', 2.6)}</span></div>
       <div class="pad chips" data-k="chips"><span class="chip" data-k="ch0">Tout</span><span class="chip" data-k="ch1">Tradition</span><span class="chip" data-k="ch2">${icon('pin', 15)}Grand-Bassam</span><span class="chip" data-k="ch3">Août</span></div>
@@ -218,7 +218,7 @@ function ticketMarkup(c) {
     </div>
     <div class="tk-perf"></div>
     <div class="tk-stub">
-      <div class="tk-qr" data-k="qr">${qrSVG(t.code, 220)}<div class="scanl" data-k="scanl"></div></div>
+      <div class="tk-qr" data-k="qr">${qrSVG(t.code, 210)}<div class="scanl" data-k="scanl"></div></div>
       <div class="tk-code" data-k="code"></div>
       <div class="tk-hint">Présente ce code à l'entrée</div>
     </div>
@@ -460,7 +460,7 @@ export default {
     r.code.textContent = code.slice(0, nc) + (nc < code.length && lt >= tCode ? '_' : '');
     const tScan = cue('D4.scan');
     const sc = prog(lt, tScan, tScan + 0.5);
-    r.scanl.style.top = `${lerp(-6, 222, E.glisse(sc))}px`;
+    r.scanl.style.top = `${lerp(6, 222, E.glisse(sc))}px`;
     show(r.scanl, sc > 0 && sc < 1 ? 1 : 0);
     const tVal = cue('D4.valid');
     const st = lt >= tVal ? spring(lt, tVal, 2.6, 8) : 0;
