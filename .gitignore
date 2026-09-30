@@ -12,3 +12,5 @@ video/frames
 video/out
 video/audio/*
 !video/audio/.gitkeep
+__pycache__/
+.tts-models/

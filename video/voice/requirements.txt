@@ -1,0 +1,6 @@
+# Chaine audio (voix TTS, musique synthetisee, mixage). Python 3.10+.
+sherpa-onnx==1.13.8
+numpy
+scipy
+soundfile
+pyloudnorm

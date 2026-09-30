@@ -134,13 +134,20 @@ for (let bpm = bpmMin; bpm <= bpmMax; bpm += 0.25) {
 }
 
 // 6. Phase : decalage du premier temps maximisant l'energie d'attaque sur la grille ; temps fort = accent basse frequence
-const period = (60 / best.bpm) * fr;
+// Recherche fine periode x phase (peigne sur toute la duree) autour du tempo d'autocorrelation :
+// l'autocorrelation seule derive de 1 a 2 % sur une musique chargee ou swinguee.
+const envS = Float32Array.from(env, (_, i) => Math.max(env[i] || 0, 0.7 * (env[i - 1] || 0), 0.7 * (env[i + 1] || 0)));
+let period = (60 / best.bpm) * fr;
 let phase = 0, phaseScore = -1;
-for (let p = 0; p < period; p += 0.5) {
-  let s = 0;
-  for (let x = p; x < nFrames; x += period) s += env[Math.round(x)] || 0;
-  if (s > phaseScore) { phaseScore = s; phase = p; }
+for (let b = best.bpm * 0.97; b <= best.bpm * 1.03; b += 0.02) {
+  const per = (60 / b) * fr;
+  for (let p = 0; p < per; p += 0.5) {
+    let s = 0;
+    for (let x = p; x < nFrames; x += per) s += envS[Math.round(x)] || 0;
+    if (s > phaseScore) { phaseScore = s; phase = p; period = per; }
+  }
 }
+best.bpm = 60 * fr / period;
 // Affinage : regression lineaire des attaques proches de la grille (t = a + b * k) -> tempo et phase precis
 let beatPeriod = period / fr, beat0 = phase / fr + LAT;
 let coverage = 0;
