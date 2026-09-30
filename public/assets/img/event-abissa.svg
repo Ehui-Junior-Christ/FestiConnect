@@ -1,8 +1,18 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560">
-  <rect width="900" height="560" fill="#21130d"/>
-  <circle cx="680" cy="130" r="110" fill="#ff5f1f" opacity=".75"/>
-  <path d="M0 380c126-70 227-48 345 0s222 55 395-38c75-40 126-53 160-46v264H0z" fill="#131313"/>
-  <path d="M120 120h420v62H120zm0 96h310v42H120zm0 74h500v26H120z" fill="#f7f2ea" opacity=".9"/>
-  <path d="M120 410h660" stroke="#ffd08a" stroke-width="24" stroke-dasharray="28 22"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 600" role="img" aria-label="Affiche Abissa : masque stylisé et motifs de tissu">
+<rect width="960" height="600" fill="#2a170c"/>
+<defs><pattern id="z" width="60" height="40" patternUnits="userSpaceOnUse"><path d="M0 40 30 0l30 40" fill="none" stroke="#f4b400" stroke-width="8"/></pattern>
+<pattern id="d" width="24" height="24" patternUnits="userSpaceOnUse"><circle cx="12" cy="12" r="4" fill="#fbf4ea" opacity=".5"/></pattern></defs>
+<rect x="0" y="0" width="960" height="600" fill="url(#d)"/>
+<circle cx="700" cy="300" r="250" fill="#f26a1b"/>
+<rect x="0" y="470" width="960" height="130" fill="#0a7a4a"/>
+<rect x="0" y="470" width="960" height="40" fill="url(#z)"/>
+<g transform="translate(700 300)">
+<path d="M0-210c86 0 130 80 130 190 0 120-60 200-130 240-70-40-130-120-130-240C-130-130-86-210 0-210z" fill="#fbf4ea"/>
+<path d="M-70-40c20-18 46-18 60 0M10-40c14-18 40-18 60 0" fill="none" stroke="#1b120c" stroke-width="14" stroke-linecap="round"/>
+<path d="M0-10v90" stroke="#1b120c" stroke-width="12" stroke-linecap="round"/>
+<path d="M-34 130h68" stroke="#c2410c" stroke-width="16" stroke-linecap="round"/>
+<path d="M-90-140h180M-100-110h200" stroke="#c2410c" stroke-width="10"/>
+<circle cx="-70" cy="60" r="10" fill="#f4b400"/><circle cx="70" cy="60" r="10" fill="#f4b400"/>
+</g>
+<g fill="#f4b400"><rect x="80" y="110" width="220" height="16"/><rect x="80" y="140" width="150" height="16" fill="#f26a1b"/></g>
 </svg>
-
