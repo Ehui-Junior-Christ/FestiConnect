@@ -14,7 +14,9 @@
     "render:60fps": "node scripts/render.mjs --fps 60",
     "render:30s": "node scripts/render.mjs --timeline timeline-30s.json --out out/festiconnect_30s_1920x1080.mp4",
     "preview:30s": "node scripts/render.mjs --preview --timeline timeline-30s.json",
-    "qc:qr": "node scripts/check-qr.mjs"
+    "qc:qr": "node scripts/check-qr.mjs",
+    "audio": "node scripts/build-audio.mjs",
+    "verify": "node scripts/verify-final.mjs"
   },
   "dependencies": {
     "@fontsource-variable/bricolage-grotesque": "5.3.0",

@@ -17,11 +17,12 @@
     "beatsPerBar": 4
   },
   "audio": {
-    "file": null,
+    "file": "audio/mix_80s.wav",
     "offset": 0,
     "gainDb": 0,
     "fadeIn": 0,
-    "fadeOut": 1.5
+    "fadeOut": 0.3,
+    "_note": "Mix maître généré par npm run audio (voix TTS + musique originale + sound design, -14 LUFS / -1 dBTP). Remplacer par le mix définitif le moment venu."
   },
   "duration": 80,
   "sequences": [
@@ -113,7 +114,7 @@
             "tag3": 3
           },
           "vo": "FestiConnect. Billetterie, boutique, paiement mobile :",
-          "voAt": 0.9
+          "voAt": 0.65
         },
         {
           "id": "C2",

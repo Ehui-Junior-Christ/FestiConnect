@@ -10,7 +10,7 @@ Version 1.0 — 30 septembre 2026 — statut : script validable, en attente de l
 | Déclinaison | **30 s** réseaux sociaux (15 mesures), même univers, mêmes scènes resserrées |
 | Langue | Français, voix off en tutoiement, sous-titrage recommandé pour la diffusion sans le son |
 | Fichier maître des temps | `video/timeline.json` (80 s) et `video/timeline-30s.json` (30 s) |
-| Prévisualisation actuelle | Toutes les séquences (A à H) animées, dans les deux versions |
+| Version actuelle | Toutes les séquences (A à H) animées ; audio provisoire généré (voix de synthèse + musique originale, 7.4) |
 
 Notation des temps dans ce document : `mm:ss.d` (minutes, secondes, dixièmes). À 120 BPM, un temps = 0,5 s, une mesure = 2 s ; la mesure *n* commence à (n − 1) × 2 s. Les timecodes seront recalés sur l'audio réel (section 7.3) : ce qui compte ici, c'est l'ordre, les durées relatives et les temps forts.
 
@@ -227,7 +227,7 @@ Pour chaque plan : visuel, animation, texte à l'écran, voix off (heure de dép
 - **Visuel** : l'aplat orange plein cadre se contracte et **devient le point du i** de FestiConnect. Fond nuit, anneaux concentriques pointillés très discrets qui tournent lentement, halo orange.
 - **Animation** : contraction en 0,62 s (courbe `glisse`), rebond en ressort, deux ondes (orange, crème). Les lettres montent depuis le i vers l'extérieur. Puis la pastille sautille sur chaque temps. Les trois promesses apparaissent une par temps, séparées par de petites pastilles.
 - **Texte à l'écran** : **FestiConnect** — `Billetterie · Boutique · Paiement mobile`.
-- **Voix off** (00:16.9) : « FestiConnect. Billetterie, boutique, paiement mobile : »
+- **Voix off** (00:16.65, sur l'atterrissage de la pastille) : « FestiConnect. Billetterie, boutique, paiement mobile : »
 - **Musique / SD** : **drop à 00:16.0**, impact grave avec une courte queue de réverbération. Le logo est accompagné d'un son de marque court (voir 7.1.4, « sonal »).
 - **Temps forts** : **00:16.0 drop, contraction** · 00:16.6 atterrissage sur le i · 00:18.0 Billetterie · 00:18.5 Boutique · 00:19.0 Paiement mobile.
 
@@ -398,7 +398,7 @@ Même univers, mêmes modules. Grille 120 BPM, 15 mesures. Fichier : `video/time
 | D3 | 00:17.0 → 00:21.5 | Paiement Wave, pastille d'attente, coche verte | (00:17.2) « tu paies avec Wave, Orange Money ou Moov Money… » |
 | D4 | 00:21.5 → 00:25.0 | Billet, QR, scan, ACCÈS VALIDÉ (00:23.8) | (00:22.0) « et tu entres en un scan. » |
 | F2 | 00:25.0 → 00:27.0 | Tableau de bord en accéléré : 621 / 900, 15 525 000 F, « Retirer vers Wave » | (00:25.1) « Tu organises ? Crée, vends, encaisse. » |
-| H2 | 00:27.0 → 00:30.0 | La pastille tombe sur le i, signature, URL, point final | (00:27.3) « FestiConnect. On est ensemble. » |
+| H2 | 00:27.0 → 00:30.0 | La pastille tombe sur le i, signature, URL, point final | (00:27.15) « FestiConnect. On est ensemble. » |
 
 Pour les réseaux, prévoir des sous-titres incrustés (une grande partie des vidéos y est regardée sans le son) : les textes ci-dessus servent de fichier de sous-titres ; la zone basse des plans est libre à partir de y = 900 px, sauf en D4.
 
@@ -468,7 +468,7 @@ Options acceptées :
 | A2 | 00:04.3 | 3,6 s | Au Plateau, à Grand-Bassam, à Bouaké… ce soir, tout le monde sort. |
 | B1 | 00:08.1 | 3,6 s | Concert, festival, soirée maquis, défilé. |
 | B2 | 00:12.2 | 3,6 s | Et toujours la même question : où, quand… et comment avoir sa place ? |
-| C1 | 00:16.9 | 3,0 s | FestiConnect. Billetterie, boutique, paiement mobile : |
+| C1 | 00:16.65 | 3,2 s | FestiConnect. Billetterie, boutique, paiement mobile : |
 | C2 | 00:20.0 | 1,8 s | tout au même endroit. |
 | D1 | 00:22.3 | 5,5 s | Tu cherches un artiste, une ville, une date ? L'événement est là, en quelques secondes. |
 | D2 | 00:28.3 | 5,5 s | Date, lieu, prix, places restantes : tout est clair avant même de payer. |
@@ -494,7 +494,7 @@ Options acceptées :
 | D3 | 00:17.2 | tu paies avec Wave, Orange Money ou Moov Money… |
 | D4 | 00:22.0 | et tu entres en un scan. |
 | F2 | 00:25.1 | Tu organises ? Crée, vends, encaisse. |
-| H2 | 00:27.3 | FestiConnect. On est ensemble. |
+| H2 | 00:27.15 | FestiConnect. On est ensemble. |
 
 Les fenêtres indiquent la durée disponible avant la phrase suivante ; ce qui compte le plus est le **début** de chaque phrase (c'est lui qui déclenche le plan). Une fin de phrase peut déborder de quelques dixièmes sur le plan suivant.
 
@@ -533,6 +533,23 @@ Tous les temps du film sont dans **un seul fichier** par version (`video/timelin
 6. **Rendre** : `npm run render` produit le master 1920 × 1080 avec l'audio mixé.
 
 ---
+
+### 7.4 Audio de la version actuelle (généré, provisoire)
+
+À la demande du propriétaire, la version livrée embarque une voix off et une musique **produites par nos soins**, en attendant (ou à la place de) l'enregistrement décrit en 7.1. `npm run audio` les régénère à partir des timelines.
+
+- **Voix off** : synthèse vocale locale sherpa-onnx, modèle **Kokoro-82M v1.0, voix française `ff_siwis`**. Le modèle est sous licence Apache-2.0, la voix est entraînée sur le corpus SIWIS (CC-BY 4.0) ; l'usage promotionnel est permis, **avec la mention « Voix de synthèse : Kokoro-82M (Apache-2.0), corpus SIWIS (CC-BY 4.0) »** dans la description de la vidéo ou le générique.
+  - Choix objectivé sur 7 voix testées : même phrase, puis aller-retour par reconnaissance vocale (Whisper) pour mesurer le taux d'erreur par mot, ainsi que l'étendue de la hauteur (prosodie) et le débit. Kokoro obtient 22 % contre 39 à 94 % pour les voix Piper. Deux voix « low » perdent les voyelles nasales ; la voix « tom » est sous AGPLv3 et a été écartée.
+  - Limite assumée : **aucune voix de synthèse disponible n'a l'accent ivoirien**. C'est une voix française standard, féminine et claire. Pour une diffusion publique, une vraie voix ivoirienne (7.1.4) reste recommandée.
+  - Prononciation : le texte envoyé au moteur est adapté sans changer l'écran (`voice/prononciation.json`) : « Festi Connecte », « Ouève » pour Wave, « Orange Monni », « Mouv Monni », énumérations séparées par des points pour une diction nette.
+  - Calage : chaque ligne démarre à son temps prévu (`voAt`) et sa vitesse est ajustée pour tenir dans sa fenêtre (×0,94 à ×1,18).
+  - Traitement : passe-haut 80 Hz, chaleur, présence, de-esser, compression douce, saturation légère, 48 kHz.
+- **Musique** : composition originale entièrement synthétisée par code (`music/compose.py`, aucun échantillon externe), donc libre de droits.
+  - Afro-house à 120 BPM en la mineur : kick, clap, shaker, clave 3-2, djembé, log drum, basse, nappes, riff boisé en E, arpège en F.
+  - Break de 01:06 à 01:10, impacts à 00:16, 00:46, 01:08 et 01:14, son de marque (cloche et lame boisée, la–mi–la) sur l'atterrissage du logo.
+  - Sound design synchronisé sur les cues (taps, carillon de paiement, bip de scan, tampons, notifications).
+- **Mix** (`music/mix.py`) : la musique baisse de 7 dB sous la voix (anticipation de 60 ms), le master est à **-14 LUFS intégrés, crête vraie ≤ -1 dBTP**.
+- **Remplacer par une vraie voix** : déposer la voix enregistrée (48 kHz), déjà calée sur le film, dans `audio/voix_80s/voix.wav`, puis lancer `npm run audio -- --version 80 --skip-voice` et `npm run render`. On peut aussi la découper en une ligne par plan et recaler avec `npm run analyze` / `npm run sync -- --mode phrases` (7.3). La musique se remplace de la même façon (`audio/musique_80s/musique.wav`, option `--skip-music`).
 
 ## 8. Livrables, spécifications d'export, contrôle qualité
 
@@ -595,6 +612,7 @@ Chromium n'est pas téléchargé par `npm install`. Les scripts cherchent `PLAYW
 | `npm run preview:30s` | Idem pour la version courte |
 | `npm run still -- 17.5 46.2` | Images PNG 1920 × 1080 aux temps donnés (`out/stills/`) |
 | `npm run serve` | Serveur local pour relire en temps réel dans un navigateur (espace, flèches) |
+| `npm run audio` | Régénère voix off TTS, musique, sound design et mix maître des deux versions (7.4) |
 | `npm run analyze -- audio/x.wav` | Analyse audio vers `audio/analysis.json` |
 | `npm run sync -- --mode grid` | Recalage de la timeline (voir 7.3) |
 | `npm run render` | Master 1920 × 1080, 30 i/s, CRF 18, avec audio si déclaré |
