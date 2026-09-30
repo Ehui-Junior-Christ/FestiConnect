@@ -30,6 +30,12 @@ Merci de **ne pas ouvrir d'issue publique** pour une vulnérabilité.
 | Login, échecs par compte (toutes IP) | 20 / 15 min |
 | Inscription, par IP | 10 / heure |
 | Achats (billets + commandes), par utilisateur | 30 / 10 min |
+| Vérification de code promo, par utilisateur / par IP | 20 / 10 min, 40 / 10 min |
+| Création de codes promo, par utilisateur | 60 / heure |
+| Contrôle d'entrée (check-in), par utilisateur | 120 / minute |
+| Demandes de retrait, par organisateur | 10 / heure |
+| Avis, par utilisateur | 10 / heure |
+| Inscriptions en liste d'attente, par utilisateur | 30 / 10 min |
 | Création d'événements, par utilisateur | 20 / heure |
 | `logout-all`, par utilisateur | 10 / 15 min |
 
@@ -67,7 +73,7 @@ Pour toute requête `POST/PUT/PATCH/DELETE` sur l'API :
 - `Content-Security-Policy: default-src 'self'; script-src 'self'; style-src 'self' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https:; connect-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'`
   (mode observation possible via `CSP_REPORT_ONLY=true`, uniquement pour une transition).
 - `Strict-Transport-Security: max-age=31536000; includeSubDomains` (production).
-- `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy` restrictive, `Cross-Origin-Opener-Policy: same-origin`, `Cross-Origin-Resource-Policy: same-origin`, `Cache-Control: no-store` sur l'API. Aucun `X-Powered-By`.
+- `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy` restrictive (seule la caméra est autorisée, `camera=(self)`, pour le scanner de billets ; micro, géolocalisation, paiement... restent bloqués), `Cross-Origin-Opener-Policy: same-origin`, `Cross-Origin-Resource-Policy: same-origin`, `Cache-Control: no-store` sur l'API. Aucun `X-Powered-By`.
 
 ### Robustesse
 - Corps JSON limité à **100 Ko** (`413`), JSON invalide → `400`, mauvais `Content-Type` → `415`, méthode non supportée → `405` avec `Allow`.
@@ -91,13 +97,27 @@ Pour toute requête `POST/PUT/PATCH/DELETE` sur l'API :
 | `APP_ORIGIN` | Origine(s) autorisée(s) pour les requêtes mutantes, séparées par des virgules. |
 | `CSP_REPORT_ONLY` | `true` = CSP en mode observation (transition). |
 | `SEED_ALLOW_PRODUCTION`, `SEED_ADMIN_PASSWORD`, `SEED_ORGANIZER_PASSWORD`, `SEED_CLIENT_PASSWORD` | Contrôle du seed de démonstration. |
+| `PLATFORM_COMMISSION_PERCENT` | Commission de la plateforme (0 à 50 %, deux décimales, `0` par défaut) déduite du solde retirable. Valeur invalide = refus de démarrer. |
 
 ## Tests
 
 `npm test` exécute les tests unitaires et d'intégration (`tests/*.test.js`) : le serveur réel est démarré sur une base SQLite locale temporaire (`file:`), migrée et seedée, puis attaqué avec `fetch` (en-têtes, traversal, taille des corps, CSRF, brute force, IDOR, validation, survente concurrente, configuration de production).
+
+### Fonctionnalités V1 : garde-fous
+- **Montants** : prix des catégories, remises des codes promo, commission et solde retirable sont toujours calculés côté serveur ; les montants envoyés par le client sont ignorés.
+- **Atomicité** : places par catégorie puis par événement, utilisations de code promo, check-in, annulation de billet, alerte de liste d'attente, traitement d'un retrait et demande de retrait (`INSERT ... SELECT` conditionnel sur le solde) reposent sur des écritures conditionnelles uniques en base ; une étape refusée restitue les précédentes. Contraintes `CHECK` en base (quota de code promo, note 1 à 5, ventes positives).
+- **Propriété** : codes promo, statistiques, export CSV, duplication, édition, annulation de billet et check-in ne concernent que les événements de l'organisateur connecté (réponse « introuvable » sinon, identique à un identifiant inexistant) ; favoris, notifications, listes d'attente et avis ne concernent que leur auteur.
+- **Check-in** : un billet ne passe qu'une fois ; un code d'un autre organisateur reçoit la même réponse qu'un code inconnu.
+- **Export CSV** : cellules commençant par `=`, `+`, `-`, `@`, tabulation ou retour chariot préfixées d'une apostrophe (injection de formules), guillemets échappés.
+- **Export `.ics`** : textes échappés selon la RFC 5545 (aucune injection de composant), lignes pliées à 75 octets.
+- **Avis** : réservés aux détenteurs d'un billet payé après l'événement ; nom affiché abrégé (« Prénom I. »), jamais l'email ; modération par l'administration.
+- **Numéros Mobile Money** : format ivoirien validé et normalisé (`+225` puis 10 chiffres en 01, 05 ou 07).
+- **Bibliothèques tierces** : servies localement (`public/assets/js/vendor/`, licences jointes) : qrcode-generator (MIT) et jsQR (Apache-2.0, chargé uniquement sur le scanner). Aucun CDN, CSP inchangée.
 
 ## Limites connues
 
 - La limitation de débit est **en mémoire** : elle est propre à chaque instance et remise à zéro au redémarrage.
 - Aucun paiement réel n'est vérifié : les billets et commandes sont marqués `paid` immédiatement. Une intégration de paiement (Wave, Orange Money, Moov Money) devra valider les montants et les notifications côté serveur (signature des webhooks).
 - Le frontend conserve le jeton de session dans `localStorage` (exposé en cas de XSS) ; à terme, s'appuyer uniquement sur le cookie `HttpOnly`.
+- Les retraits sont validés manuellement par l'administration après un transfert Mobile Money effectué hors de l'application ; aucun remboursement automatique n'est déclenché lors de l'annulation d'un billet.
+- Le QR code contient le code du billet : une capture d'écran partagée donne accès à l'entrée, une seule fois (premier scanné, premier entré).

@@ -25,14 +25,14 @@ function eventRow(event) {
       <td class="cell-main" data-label="Événement">
         <div class="cell-title">${event.status === 'approved' ? `<a href="${eventUrl(event)}">${escapeHtml(event.title)}</a>` : escapeHtml(event.title)}</div>
         <div class="cell-sub small">${escapeHtml(event.category)} · ${escapeHtml(event.city)}</div>
+        <div class="mt-2">${statusBadge(event.status)}</div>
       </td>
       <td data-label="Date">${escapeHtml(formatDateShort(event.starts_at))}</td>
       <td class="num" data-label="Prix">${escapeHtml(cardPrice({ ...event, categories_count: event.categories_count, min_available_price_xof: event.min_available_price_xof }).label)}</td>
       <td class="num" data-label="Ventes">${escapeHtml(formatNumber(sold))}${capacity ? ` / ${escapeHtml(formatNumber(capacity))}` : ''}${Number(event.waitlist_count) ? `<div class="small waitlist-hint">${escapeHtml(plural(event.waitlist_count, 'personne en attente', 'personnes en attente'))}</div>` : ''}</td>
-      <td data-label="Statut">${statusBadge(event.status)}</td>
       <td class="actions-cell">
-        <div class="actions">
-          <button class="btn btn-sm" type="button" data-edit-event="${escapeHtml(event.id)}">${icon('edit')}<span>Modifier</span></button>
+        <div class="actions actions-compact">
+          <button class="btn btn-sm btn-icon" type="button" data-edit-event="${escapeHtml(event.id)}" aria-label="Modifier « ${escapeHtml(event.title)} »" title="Modifier">${icon('edit')}<span class="actions-label">Modifier</span></button>
           <button class="btn btn-sm btn-icon" type="button" data-duplicate-event="${escapeHtml(event.id)}" data-title="${escapeHtml(event.title)}" aria-label="Dupliquer « ${escapeHtml(event.title)} »" title="Dupliquer">${icon('copy')}<span class="actions-label">Dupliquer</span></button>
           ${sold ? `<a class="btn btn-sm btn-icon" href="/api/organizer/events/${encodeURIComponent(event.id)}/attendees.csv" download aria-label="Télécharger les participants de « ${escapeHtml(event.title)} » (CSV)" title="Participants (CSV)">${icon('download')}<span class="actions-label">Participants</span></a>` : ''}
         </div>
@@ -56,6 +56,27 @@ function ticketRow(ticket) {
       </td>
     </tr>`;
 }
+
+// Les 15 réservations les plus récentes, le reste à la demande.
+const TICKETS_PREVIEW = 15;
+const moreTicketsButton = document.querySelector('#tickets-more');
+let soldTickets = [];
+let showAllTickets = false;
+
+function renderSoldTickets() {
+  const visible = showAllTickets ? soldTickets : soldTickets.slice(0, TICKETS_PREVIEW);
+  organizerTickets.innerHTML = soldTickets.length
+    ? visible.map(ticketRow).join('')
+    : emptyRow(7, 'Aucun billet vendu pour le moment.');
+  const hidden = soldTickets.length - visible.length;
+  moreTicketsButton.hidden = hidden <= 0;
+  moreTicketsButton.querySelector('span:last-child').textContent = `Voir les ${formatNumber(hidden)} autres réservations`;
+}
+
+moreTicketsButton.addEventListener('click', () => {
+  showAllTickets = true;
+  renderSoldTickets();
+});
 
 function renderRevenue(tickets) {
   const byEvent = new Map();
@@ -81,7 +102,7 @@ function renderRevenue(tickets) {
 
 async function loadOrganizer() {
   organizerMetrics.innerHTML = skeletonStats(4);
-  organizerEvents.innerHTML = skeletonRows(3, 6);
+  organizerEvents.innerHTML = skeletonRows(3, 5);
   organizerTickets.innerHTML = skeletonRows(3, 7);
   [organizerMetrics, organizerEvents, organizerTickets].forEach((node) => setLoading(node, true));
   try {
@@ -99,10 +120,9 @@ async function loadOrganizer() {
     ].join('');
     organizerEvents.innerHTML = events.length
       ? events.map(eventRow).join('')
-      : emptyRow(6, 'Tu n\'as encore publié aucun événement.', '<a class="btn btn-primary btn-sm" href="#creation">Créer mon premier événement</a>');
-    organizerTickets.innerHTML = tickets.length
-      ? tickets.map(ticketRow).join('')
-      : emptyRow(7, 'Aucun billet vendu pour le moment.');
+      : emptyRow(5, 'Tu n\'as encore publié aucun événement.', '<a class="btn btn-primary btn-sm" href="#creation">Créer mon premier événement</a>');
+    soldTickets = tickets;
+    renderSoldTickets();
     renderRevenue(tickets);
   } catch (error) {
     if (error.status === 401) {

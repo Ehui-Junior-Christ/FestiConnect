@@ -1,10 +1,9 @@
-import crypto from 'node:crypto';
 import http from 'node:http';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { config } from './src/config/env.js';
-import { NOT_STARTED_SQL, db, eventTimeMs, limiters, randomId, requireUser, safely } from './src/app/context.js';
-import { matchRoute, pathId, route, routes, searchParam } from './src/app/router.js';
+import { db, limiters, randomId, requireUser, safely } from './src/app/context.js';
+import { matchRoute, pathId, route, routes } from './src/app/router.js';
 import { buildInsert, insertByExistingColumns, tableColumns } from './src/db/schema.js';
 import './src/features/notifications.js';
 import { PAYMENT_METHODS } from './src/features/events.js';

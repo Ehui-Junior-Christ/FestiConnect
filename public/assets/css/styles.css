@@ -4247,7 +4247,7 @@ a.notif-body:hover {
 .waitlist-hint {
   color: var(--warning);
   font-weight: 600;
-  white-space: nowrap;
+  white-space: normal;
 }
 
 /* 28. Retraits Mobile Money
@@ -4636,7 +4636,11 @@ a.notif-body:hover {
   }
 
   .table td.cell-main {
-    min-width: 190px;
+    min-width: 170px;
+  }
+
+  .table .actions-compact {
+    flex-wrap: nowrap;
   }
 }
 
@@ -4654,6 +4658,19 @@ a.notif-body:hover {
 
 .fill-title {
   margin-bottom: var(--space-3);
+}
+
+/* 31. Indicateurs : les montants (espaces insécables) s'adaptent à leur tuile
+   ----------------------------------------------------------------------- */
+.stat {
+  container-type: inline-size;
+}
+
+@supports (font-size: 1cqi) {
+  .stat-value {
+    font-size: clamp(1.0625rem, 10.5cqi, 1.75rem);
+    overflow-wrap: normal;
+  }
 }
 
 /* 20. Mouvement réduit
