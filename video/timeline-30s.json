@@ -1,0 +1,233 @@
+{
+  "meta": {
+    "title": "FestiConnect - Le point de rendez-vous (version courte réseaux sociaux)",
+    "version": "court-30s",
+    "notes": "Même modules que la version longue, plans resserrés. Grille 120 BPM : 15 mesures. Cues relatives au début du plan."
+  },
+  "output": {
+    "width": 1920,
+    "height": 1080,
+    "fps": 30,
+    "crf": 18,
+    "preset": "slow"
+  },
+  "music": {
+    "bpm": 120,
+    "offset": 0,
+    "beatsPerBar": 4
+  },
+  "audio": {
+    "file": "audio/mix_30s.wav",
+    "offset": 0,
+    "gainDb": 0,
+    "fadeIn": 0,
+    "fadeOut": 0.3,
+    "_note": "Mix maître généré par npm run audio : voix du propriétaire (prise montée, voice/vo_edit_*.json) + musique originale + sound design, -14 LUFS / -1 dBTP."
+  },
+  "duration": 30,
+  "sequences": [
+    {
+      "id": "A",
+      "module": "ouverture",
+      "title": "Ouverture",
+      "plans": [
+        {
+          "id": "A1",
+          "start": 0,
+          "end": 1.5,
+          "cues": {
+            "dot": 0.1,
+            "clock": 0.1,
+            "title1": 0.3,
+            "title2": 0.8
+          }
+        },
+        {
+          "id": "A2",
+          "start": 1.5,
+          "end": 4,
+          "cues": {
+            "pullback": 0,
+            "cities": 0.25,
+            "cityStep": 0.25,
+            "title3": 0.2,
+            "title4": 0.7,
+            "out": 2.1
+          },
+          "vo": "Vendredi soir… tout le monde sort.",
+          "voAt": 0.2
+        }
+      ]
+    },
+    {
+      "id": "B",
+      "module": "affiches",
+      "title": "La fête sous toutes ses formes",
+      "plans": [
+        {
+          "id": "B1",
+          "start": 4,
+          "end": 6,
+          "cues": {
+            "w1": 0,
+            "w2": 0.5,
+            "w3": 1,
+            "w4": 1.5
+          },
+          "vo": "Concerts, festivals, soirées maquis, défilés : les idées ne manquent pas.",
+          "voAt": 0
+        },
+        {
+          "id": "B2",
+          "start": 6,
+          "end": 8,
+          "cues": {
+            "p1": 0,
+            "p2": 0.2,
+            "p3": 0.4,
+            "question": 0.5,
+            "iris": 1.4
+          }
+        }
+      ]
+    },
+    {
+      "id": "C",
+      "module": "logo",
+      "title": "Logo",
+      "plans": [
+        {
+          "id": "C1",
+          "start": 8,
+          "end": 10.5,
+          "cues": {
+            "contract": 0,
+            "word": 0.55,
+            "tag1": 1.25,
+            "tag2": 1.5,
+            "tag3": 1.75
+          },
+          "vo": "Voici FestiConnect : billetterie, boutique et paiement mobile.",
+          "voAt": 0.65
+        },
+        {
+          "id": "C2",
+          "start": 10.5,
+          "end": 12,
+          "cues": {
+            "promise": 0,
+            "dive": 0.9
+          }
+        }
+      ]
+    },
+    {
+      "id": "D",
+      "module": "parcours",
+      "title": "Parcours client",
+      "plans": [
+        {
+          "id": "D1",
+          "start": 12,
+          "end": 14.5,
+          "cues": {
+            "phoneIn": 0,
+            "typeStart": 0.6,
+            "typeEnd": 1.1,
+            "chips": 1,
+            "results": 1.2,
+            "tap": 2
+          },
+          "vo": "Tout commence par une recherche.",
+          "voAt": 0.3
+        },
+        {
+          "id": "D2",
+          "start": 14.5,
+          "end": 17,
+          "cues": {
+            "push": -0.3,
+            "info": 0.1,
+            "gauge": 0.4,
+            "cta": 1.4,
+            "tap": 2.1
+          },
+          "vo": "Tu réserves, puis tu paies avec Wave, Orange Money et Moov Money, directement depuis ton téléphone.",
+          "voAt": 0.2
+        },
+        {
+          "id": "D3",
+          "start": 17,
+          "end": 21.5,
+          "cues": {
+            "sheet": -0.3,
+            "qty": 0.4,
+            "methods": 0.6,
+            "select": 1.4,
+            "pay": 1.9,
+            "wait": 2.1,
+            "success": 3.1,
+            "toast": 3.5
+          }
+        },
+        {
+          "id": "D4",
+          "start": 21.5,
+          "end": 25,
+          "cues": {
+            "ticket": -0.2,
+            "qr": 0.5,
+            "code": 1,
+            "scan": 1.9,
+            "valid": 2.3,
+            "out": 3.1
+          },
+          "vo": "Le jour J, un scan à l'entrée, et c'est parti.",
+          "voAt": 0.2
+        }
+      ]
+    },
+    {
+      "id": "F",
+      "module": "organisateur",
+      "title": "Organisateurs",
+      "plans": [
+        {
+          "id": "F2",
+          "start": 25,
+          "end": 27,
+          "screen": "Tableau de bord en accéléré : 621 / 900 billets, 15 525 000 F, bouton Retirer vers Wave.",
+          "vo": "Et si c'est toi qui organises ?",
+          "voAt": 0.1,
+          "cues": {
+            "push": 0,
+            "count": 0,
+            "n1": 0.5,
+            "n2": 1,
+            "n3": 1.5
+          }
+        }
+      ]
+    },
+    {
+      "id": "H",
+      "module": "final",
+      "title": "Final",
+      "plans": [
+        {
+          "id": "H2",
+          "start": 27,
+          "end": 30,
+          "cues": {
+            "logo": 0,
+            "url": 0.9,
+            "sign": 1.3,
+            "fade": 2.2
+          },
+          "vo": "FestiConnect… On est ensemble !",
+          "voAt": 0.15
+        }
+      ]
+    }
+  ]
+}

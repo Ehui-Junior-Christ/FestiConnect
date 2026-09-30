@@ -2,28 +2,38 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Boutique culturelle - FestiConnect</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Boutique · FestiConnect</title>
+  <meta name="description" content="Merch officiel des événements et créations locales : casquettes, sacs, affiches. Paiement Mobile Money, livraison à l'adresse de ton choix.">
+  <meta name="theme-color" content="#fcf8f2">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&amp;display=swap">
   <link rel="stylesheet" href="/assets/css/styles.css">
 </head>
-<body>
-  <nav class="nav" data-nav></nav>
-  <main class="section">
+<body data-nav="shop">
+  <a class="skip-link" href="#main">Aller au contenu</a>
+  <header class="site-header" data-header></header>
+
+  <main id="main" tabindex="-1">
     <div class="container">
-      <div class="section-head">
+      <div class="page-head section-head">
         <div>
-          <span class="eyebrow">Boutique culturelle</span>
-          <h1>Produits dérivés et créations locales</h1>
-          <p class="lead">Articles officiels, éditions limitées et objets culturels livrés après paiement mobile.</p>
+          <span class="kicker">Boutique</span>
+          <h1 class="mt-2">Merch et créations locales</h1>
+          <p class="lead">Articles officiels des événements et séries limitées d'ateliers ivoiriens. Paiement Mobile Money, livraison à l'adresse de ton choix.</p>
         </div>
-        <a class="btn btn-primary" href="/panier.html"><i data-lucide="shopping-cart"></i>Panier</a>
+        <a class="btn" href="/panier.html"><span data-icon="cart"></span><span>Mon panier</span><span class="badge badge-brand" data-cart-count hidden></span></a>
       </div>
-      <div id="products-list" class="grid grid-3"></div>
+
+      <div class="chips" id="category-chips" role="group" aria-label="Filtrer par catégorie"></div>
+      <div id="products-list" class="grid-cards grid-products mt-6" aria-busy="true"></div>
     </div>
   </main>
-  <footer class="footer" data-footer></footer>
-  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <footer class="site-footer" data-footer></footer>
+  <nav class="tabbar" data-tabbar></nav>
   <script src="/assets/js/api.js"></script>
   <script src="/assets/js/ui.js"></script>
   <script src="/assets/js/shop.js"></script>

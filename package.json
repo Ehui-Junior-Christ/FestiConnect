@@ -3,12 +3,15 @@
   "version": "1.0.0",
   "description": "Plateforme SaaS evenementielle responsive pour le marche ivoirien et africain.",
   "type": "module",
+  "private": true,
   "scripts": {
     "dev": "node --watch server.js",
     "start": "node server.js",
-    "test": "node tests/register.test.js",
+    "start:prod": "node scripts/start-prod.js",
+    "test": "node tests/run-all.js",
     "db:migrate": "node src/db/migrate.js",
-    "db:seed": "node src/db/seed.js"
+    "db:seed": "node src/db/seed.js",
+    "db:setup": "npm run db:migrate && npm run db:seed"
   },
   "dependencies": {
     "@libsql/client": "^0.15.15"

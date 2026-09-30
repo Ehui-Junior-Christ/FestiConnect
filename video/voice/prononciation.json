@@ -1,0 +1,21 @@
+{
+  "_note": "Appliqué au texte envoyé au TTS uniquement (le texte à l'écran et SCRIPT.md ne changent pas). 'overrides' remplace une ligne entière (clé = texte vo exact de la timeline) ; 'rules' = expressions régulières Python appliquées ensuite, dans l'ordre. Choix validés par aller-retour ASR (voice/asr_check.py).",
+  "overrides": {
+    "FestiConnect. Billetterie, boutique, paiement mobile :": "Festi Connecte. Billetterie. Boutique. Paiement mobile.",
+    "Concert, festival, soirée maquis, défilé.": "Concert. Festival. Soirée maquis. Défilé.",
+    "Trouve ta sortie. Paie en un geste. Entre en un scan.": "Trouve ta sortie. Paie en un geste. Entre en un scanne."
+  },
+  "rules": [
+    ["festiconnect point c i", "festi connecte point cé i"],
+    ["FestiConnect", "Festi Connecte"],
+    ["\\bWave\\b", "Ouève"],
+    ["Orange Money", "Orange Monni"],
+    ["Moov Money", "Mouv Monni"],
+    ["mobile money", "mobile monni"],
+    ["tote bags", "tôte bagues"],
+    ["collector", "collèctor"],
+    ["\\bun scan\\b", "un scanne"],
+    ["…", ","],
+    ["\\s*:\\s*", ", "]
+  ]
+}

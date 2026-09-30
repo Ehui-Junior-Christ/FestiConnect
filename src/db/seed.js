@@ -1,6 +1,31 @@
 import crypto from 'node:crypto';
+import { config } from '../config/env.js';
 import { getDb } from './client.js';
-import { hashPassword } from '../shared/passwords.js';
+import { assertIdentifier, assertTable } from './schema.js';
+import { hashPassword, passwordPolicyError } from '../shared/passwords.js';
+
+// En production, le seed de demonstration est refuse par defaut : il cree des
+// comptes (dont un admin) aux mots de passe publics. Pour l'autoriser il faut
+// SEED_ALLOW_PRODUCTION=true ET des mots de passe fournis par l'environnement.
+function demoPassword(envName, fallback) {
+  const provided = process.env[envName];
+  if (config.isProduction) {
+    if (process.env.SEED_ALLOW_PRODUCTION !== 'true') {
+      throw new Error('Seed de démonstration refusé en production (SEED_ALLOW_PRODUCTION=true requis).');
+    }
+    if (!provided) throw new Error(`${envName} est obligatoire pour seeder en production.`);
+  }
+  const password = provided || fallback;
+  const policyError = passwordPolicyError(password);
+  if (policyError) throw new Error(`${envName}: ${policyError}`);
+  return password;
+}
+
+const demoPasswords = {
+  admin: demoPassword('SEED_ADMIN_PASSWORD', 'Admin123!'),
+  organizer: demoPassword('SEED_ORGANIZER_PASSWORD', 'Orga123!'),
+  client: demoPassword('SEED_CLIENT_PASSWORD', 'Client123!')
+};
 
 const db = getDb();
 
@@ -9,13 +34,14 @@ function id(prefix) {
 }
 
 async function tableColumns(table) {
+  assertTable(table);
   const info = await db.execute(`pragma table_info(${table})`);
   return new Set(info.rows.map((row) => row.name));
 }
 
 async function insertOrUpdateById(table, record) {
   const columns = await tableColumns(table);
-  const entries = Object.entries(record).filter(([key]) => columns.has(key));
+  const entries = Object.entries(record).filter(([key]) => columns.has(key) && assertIdentifier(key));
   const updateColumns = entries
     .map(([key]) => key)
     .filter((key) => key !== 'id')
@@ -30,7 +56,7 @@ async function insertOrUpdateById(table, record) {
 }
 
 async function upsertUser(user) {
-  const password = hashPassword(user.password);
+  const password = await hashPassword(user.password);
   const columns = await tableColumns('users');
   const record = {
     id: user.id,
@@ -46,7 +72,7 @@ async function upsertUser(user) {
     created_at: new Date().toISOString()
   };
   if (columns.has('password')) record.password = password.hash;
-  const entries = Object.entries(record).filter(([key]) => columns.has(key));
+  const entries = Object.entries(record).filter(([key]) => columns.has(key) && assertIdentifier(key));
   const existing = await db.execute({ sql: 'select id from users where email = ?', args: [user.email] });
   if (existing.rows[0]) {
     const updateEntries = entries.filter(([key]) => key !== 'id' && key !== 'email');
@@ -62,19 +88,30 @@ async function upsertUser(user) {
   });
 }
 
-const admin = { id: 'usr_admin_demo', name: 'Aminata Kouassi', email: 'admin@festiconnect.ci', password: 'Admin123!', role: 'admin', phone: '+225 07 00 00 00 01', city: 'Abidjan' };
-const organizer = { id: 'usr_orga_demo', name: 'Collectif Nouchi Live', email: 'organisateur@festiconnect.ci', password: 'Orga123!', role: 'organisateur', phone: '+225 05 00 00 00 02', city: 'Abidjan' };
-const client = { id: 'usr_client_demo', name: 'Junior Ehui', email: 'client@festiconnect.ci', password: 'Client123!', role: 'client', phone: '+225 01 00 00 00 03', city: 'Yamoussoukro' };
+const admin = { id: 'usr_admin_demo', name: 'Aminata Kouassi', email: 'admin@festiconnect.ci', password: demoPasswords.admin, role: 'admin', phone: '+225 07 00 00 00 01', city: 'Abidjan' };
+const organizer = { id: 'usr_orga_demo', name: 'Collectif Nouchi Live', email: 'organisateur@festiconnect.ci', password: demoPasswords.organizer, role: 'organisateur', phone: '+225 05 00 00 00 02', city: 'Abidjan' };
+const client = { id: 'usr_client_demo', name: 'Junior Ehui', email: 'client@festiconnect.ci', password: demoPasswords.client, role: 'client', phone: '+225 01 00 00 00 03', city: 'Yamoussoukro' };
 
 await upsertUser(admin);
 await upsertUser(organizer);
 await upsertUser(client);
 
+// Dates relatives au jour du seed, en heure d'Abidjan (UTC) : les evenements de
+// demonstration restent toujours a venir (sauf un evenement passe, pour les avis).
+const DAY_MS = 24 * 60 * 60 * 1000;
+function at(days, time) {
+  return `${new Date(Date.now() + days * DAY_MS).toISOString().slice(0, 10)}T${time}`;
+}
+function ago(days, hours = 0) {
+  return new Date(Date.now() - days * DAY_MS - hours * 60 * 60 * 1000).toISOString();
+}
+
 const events = [
-  ['evt_abissa_2026', 'Festival Abissa Experience', 'Tradition', 'Grand-Bassam', 'Place Abissa', '2026-08-14T18:00', '2026-08-15T02:00', 15000, 1200, 384, 'approved', '/assets/img/event-abissa.svg', 'Une celebration immersive du patrimoine Nzima avec concerts, defiles et gastronomie locale.'],
-  ['evt_maquis_night', 'Maquis Electronic Night', 'Concert', 'Abidjan', 'Sofitel Ivoire', '2026-06-21T20:00', '2026-06-22T03:00', 25000, 900, 621, 'approved', '/assets/img/event-maquis.svg', 'La rencontre des DJs afro-electro, des createurs visuels et des marques culturelles urbaines.'],
-  ['evt_mode_sahel', 'Salon Mode Sahel', 'Mode', 'Bouake', 'Palais de la Culture', '2026-07-05T10:00', '2026-07-05T20:00', 8000, 600, 147, 'approved', '/assets/img/event-mode.svg', 'Defiles, pop-up stores et panels autour des textiles africains contemporains.'],
-  ['evt_pending_yakro', 'Nuit Mandingue Premium', 'Concert', 'Yamoussoukro', 'Fondation FHB', '2026-09-12T19:30', '2026-09-13T01:00', 18000, 700, 0, 'pending', '/assets/img/event-default.svg', 'Projet soumis a validation administrative.']
+  ['evt_maquis_night', 'Maquis Electronic Night', 'Concert', 'Abidjan', 'Sofitel Hôtel Ivoire, Cocody', at(1, '21:00'), at(2, '03:00'), 25000, 900, 621, 'approved', '/assets/img/event-maquis.svg', 'La rencontre des DJ afro-électro, des créateurs visuels et des marques culturelles urbaines. Ouverture des portes à 20h30, dress code chic décontracté.'],
+  ['evt_mode_sahel', 'Salon Mode Sahel', 'Mode', 'Bouaké', 'Palais de la Culture', at(16, '10:00'), at(16, '20:00'), 8000, 600, 147, 'approved', '/assets/img/event-mode.svg', 'Défilés, pop-up stores et tables rondes autour des textiles africains contemporains : pagne tissé baoulé, bogolan, indigo.'],
+  ['evt_abissa_2026', 'Festival Abissa Experience', 'Tradition', 'Grand-Bassam', 'Place Abissa, quartier France', at(24, '18:00'), at(25, '02:00'), 15000, 1200, 384, 'approved', '/assets/img/event-abissa.svg', 'Une célébration du patrimoine N\'zima avec concerts, défilés en tenue traditionnelle et gastronomie locale au bord de la lagune.'],
+  ['evt_pending_yakro', 'Nuit Mandingue Premium', 'Concert', 'Yamoussoukro', 'Fondation Félix Houphouët-Boigny', at(40, '19:30'), at(41, '01:00'), 18000, 700, 0, 'pending', '/assets/img/event-default.svg', 'Kora, balafon et griots invités pour une soirée mandingue. Projet soumis à validation.'],
+  ['evt_zouglou_past', 'Nuit du Zouglou', 'Concert', 'Abidjan', 'Palais de la Culture, Treichville', at(-10, '20:00'), at(-9, '02:00'), 5000, 800, 2, 'approved', '/assets/img/event-default.svg', 'Les groupes de la nouvelle scène zouglou sur une même scène, avec animation ambiance facile entre les passages.']
 ];
 
 for (const event of events) {
@@ -100,14 +137,49 @@ for (const event of events) {
     cover_url: cover,
     image: cover,
     description,
-    created_at: new Date().toISOString()
+    created_at: ago(30)
+  });
+}
+
+// Categories de billets (Salon Mode Sahel garde volontairement son tarif unique).
+const ticketCategories = [
+  ['cat_abissa_early', 'evt_abissa_2026', 'Early bird', 7500, 200, 200],
+  ['cat_abissa_std', 'evt_abissa_2026', 'Standard', 15000, 800, 150],
+  ['cat_abissa_vip', 'evt_abissa_2026', 'VIP', 35000, 200, 34],
+  ['cat_maquis_std', 'evt_maquis_night', 'Standard', 25000, 700, 540],
+  ['cat_maquis_vip', 'evt_maquis_night', 'VIP carré', 50000, 200, 81]
+];
+for (const [position, [categoryId, eventId, name, price, capacity, sold]] of ticketCategories.entries()) {
+  await insertOrUpdateById('ticket_categories', { id: categoryId, event_id: eventId, name, price_xof: price, capacity, sold, position, created_at: ago(30) });
+}
+// Jauge, prix d'appel et ventes de l'evenement = agregats de ses categories.
+for (const eventId of new Set(ticketCategories.map(([, eventId]) => eventId))) {
+  await db.execute({
+    sql: `update events set
+            capacity = (select sum(capacity) from ticket_categories where event_id = ?),
+            price_xof = (select min(price_xof) from ticket_categories where event_id = ?),
+            tickets_sold = (select sum(sold) from ticket_categories where event_id = ?)
+          where id = ?`,
+    args: [eventId, eventId, eventId, eventId]
+  });
+}
+
+// Codes promo : un actif en pourcentage, un en montant fixe, un expire.
+const promoCodes = [
+  ['prm_demo_bassam10', 'evt_abissa_2026', 'BASSAM10', 'percent', 10, 100, 12, at(20, '23:59')],
+  ['prm_demo_maquis2000', 'evt_maquis_night', 'MAQUIS2000', 'fixed', 2000, 50, 7, ''],
+  ['prm_demo_zouglou', 'evt_zouglou_past', 'ZOUGLOU500', 'fixed', 500, 0, 3, at(-12, '23:59')]
+];
+for (const [promoId, eventId, code, kind, value, maxUses, used, expiresAt] of promoCodes) {
+  await insertOrUpdateById('promo_codes', {
+    id: promoId, event_id: eventId, organizer_id: organizer.id, code, kind, value, max_uses: maxUses, used, expires_at: expiresAt, active: 1, created_at: ago(25)
   });
 }
 
 const products = [
-  ['prd_kente_cap', 'Casquette Kente Edition', 'Accessoire', 12000, 80, '/assets/img/product-cap.svg', 'Casquette brodee en serie limitee, inspiree des motifs Akan.'],
-  ['prd_baule_tote', 'Tote Bag Baoule', 'Lifestyle', 9000, 120, '/assets/img/product-tote.svg', 'Sac epais imprime localement, ideal pour festivals et marches creatifs.'],
-  ['prd_affiche_abissa', 'Affiche Collector Abissa', 'Art', 15000, 40, '/assets/img/product-poster.svg', 'Tirage numerote sur papier mat premium.']
+  ['prd_kente_cap', 'Casquette Kente Édition', 'Accessoire', 12000, 80, '/assets/img/product-cap.svg', 'Casquette brodée en série limitée, inspirée des motifs akan.'],
+  ['prd_baule_tote', 'Tote bag Baoulé', 'Lifestyle', 9000, 120, '/assets/img/product-tote.svg', 'Sac épais imprimé à Abidjan, idéal pour les festivals et les marchés créatifs.'],
+  ['prd_affiche_abissa', 'Affiche collector Abissa', 'Art', 15000, 40, '/assets/img/product-poster.svg', 'Tirage numéroté sur papier mat 250 g.']
 ];
 
 for (const product of products) {
@@ -127,25 +199,119 @@ for (const product of products) {
   });
 }
 
-await insertOrUpdateById('tickets', {
-  id: 'tkt_demo_client',
-  event_id: 'evt_abissa_2026',
-  eventId: 'evt_abissa_2026',
-  eventTitle: 'Festival Abissa Experience',
-  eventDate: '2026-08-14T18:00',
-  eventLocation: 'Place Abissa',
-  eventImage: '/assets/img/event-abissa.svg',
-  user_id: client.id,
-  userId: client.id,
-  code: 'FC-DEMO-2026',
-  qrcode: 'FC-DEMO-2026',
-  quantity: 2,
-  amount_xof: 30000,
-  price: 30000,
-  status: 'paid',
-  payment_method: 'Wave',
-  created_at: new Date().toISOString(),
-  createdAt: new Date().toISOString()
+async function seedTicket(ticket) {
+  const event = events.find(([eventId]) => eventId === ticket.event_id);
+  await insertOrUpdateById('tickets', {
+    ...ticket,
+    eventId: ticket.event_id,
+    eventTitle: event[1],
+    eventDate: event[5],
+    eventLocation: event[4],
+    eventImage: event[11],
+    userId: ticket.user_id,
+    qrcode: ticket.code,
+    price: ticket.amount_xof,
+    status: ticket.status || 'paid',
+    createdAt: ticket.created_at
+  });
+}
+
+// Billets du client de demonstration : un evenement a venir, un evenement
+// demain (rappel J-1) et un evenement passe (avis).
+await seedTicket({ id: 'tkt_demo_client', event_id: 'evt_abissa_2026', category_id: 'cat_abissa_std', category_name: 'Standard', user_id: client.id, code: 'FC-DEMO-2026', quantity: 2, amount_xof: 30000, payment_method: 'Wave', created_at: ago(6) });
+await seedTicket({ id: 'tkt_demo_maquis', event_id: 'evt_maquis_night', category_id: 'cat_maquis_std', category_name: 'Standard', user_id: client.id, code: 'FC-DEMO-MAQUIS', quantity: 1, amount_xof: 25000, payment_method: 'Orange Money', created_at: ago(3) });
+await seedTicket({ id: 'tkt_demo_zouglou', event_id: 'evt_zouglou_past', user_id: client.id, code: 'FC-DEMO-ZOUGLOU', quantity: 2, amount_xof: 10000, payment_method: 'Moov Money', created_at: ago(15), checked_in_at: ago(10, -20), checked_in_by: organizer.id });
+
+// Favoris du client de demonstration.
+for (const [favoriteId, eventId] of [['fav_demo_mode', 'evt_mode_sahel'], ['fav_demo_abissa', 'evt_abissa_2026']]) {
+  await db.execute({
+    sql: 'insert or ignore into favorites (id, user_id, event_id, created_at) values (?, ?, ?, ?)',
+    args: [favoriteId, client.id, eventId, ago(4)]
+  });
+}
+
+// Liste d'attente : le client attend une place Early bird (complete) sur Abissa.
+await db.execute({
+  sql: `insert or ignore into waitlist (id, event_id, category_id, user_id, created_at, notified_at)
+        values ('wai_demo_abissa', 'evt_abissa_2026', 'cat_abissa_early', ?, ?, '')`,
+  args: [client.id, ago(2)]
 });
 
-console.log('Donnees de demonstration inserees.');
+// Retraits Mobile Money de l'organisateur : un deja verse, un en attente.
+for (const [withdrawalId, amount, method, phone, status, createdDaysAgo] of [
+  ['wdr_demo_paid', 20000, 'Wave', '+225 05 00 00 00 02', 'approved', 9],
+  ['wdr_demo_pending', 15000, 'Orange Money', '+225 07 00 00 00 02', 'pending', 1]
+]) {
+  await insertOrUpdateById('withdrawals', {
+    id: withdrawalId, organizer_id: organizer.id, amount_xof: amount, status, method, phone,
+    admin_note: '', processed_at: status === 'approved' ? ago(createdDaysAgo - 1) : '', processed_by: status === 'approved' ? admin.id : '',
+    created_at: ago(createdDaysAgo)
+  });
+}
+
+// Participants de demonstration (mot de passe aleatoire jamais communique :
+// ces comptes ne servent qu'a peupler les avis et les ventes).
+const participants = [
+  ['usr_demo_awa', 'Awa Koné', 'awa.kone@demo.festiconnect.ci', 'Abidjan'],
+  ['usr_demo_yao', 'Yao Kouadio', 'yao.kouadio@demo.festiconnect.ci', 'Bouaké'],
+  ['usr_demo_fatou', 'Fatou Traoré', 'fatou.traore@demo.festiconnect.ci', 'Abidjan'],
+  ['usr_demo_serge', 'Serge Bamba', 'serge.bamba@demo.festiconnect.ci', 'Grand-Bassam']
+];
+for (const [userId, name, email, city] of participants) {
+  await upsertUser({ id: userId, name, email, password: `${crypto.randomBytes(18).toString('base64url')}9a`, role: 'client', phone: '', city });
+}
+
+// Avis sur l'evenement passe (le client de demonstration n'a pas encore donne le sien).
+const pastReviews = [
+  ['usr_demo_awa', 5, 'Son propre du début à la fin et entrée rapide avec le QR code. Le dernier groupe a fait chanter toute la salle jusqu\'à 2h.', 0],
+  ['usr_demo_yao', 4, 'Très bonne soirée. Il faisait chaud à l\'intérieur, il faudrait plus de ventilateurs près de la scène.', 0],
+  ['usr_demo_fatou', 4, 'Programmation au top. Les premiers passages ont commencé avec 40 minutes de retard.', 0],
+  ['usr_demo_serge', 1, 'Billets moins chers sur mon WhatsApp, écris-moi.', 1]
+];
+for (const [index, [userId, rating, comment, hidden]] of pastReviews.entries()) {
+  await seedTicket({ id: `tkt_seed_zouglou_${index}`, event_id: 'evt_zouglou_past', user_id: userId, code: `FC-SEED-ZOUGLOU-${index}`, quantity: 1, amount_xof: 5000, payment_method: 'Wave', created_at: ago(14 - index), checked_in_at: ago(10, -21), checked_in_by: organizer.id });
+  await insertOrUpdateById('reviews', { id: `rev_demo_${index}`, event_id: 'evt_zouglou_past', user_id: userId, rating, comment, hidden, created_at: ago(9 - index * 0.5), updated_at: ago(9 - index * 0.5) });
+}
+await db.execute({ sql: "update events set tickets_sold = (select coalesce(sum(quantity), 0) from tickets where event_id = 'evt_zouglou_past' and status = 'paid') where id = 'evt_zouglou_past'", args: [] });
+
+// Historique de ventes sur les 28 derniers jours (courbe du tableau de bord).
+// Generation deterministe : le seed donne toujours la meme courbe.
+const salesPlan = [
+  ['evt_abissa_2026', 'cat_abissa_std', 'Standard', 15000],
+  ['evt_abissa_2026', 'cat_abissa_vip', 'VIP', 35000],
+  ['evt_maquis_night', 'cat_maquis_std', 'Standard', 25000],
+  ['evt_maquis_night', 'cat_maquis_vip', 'VIP carré', 50000],
+  ['evt_mode_sahel', '', '', 8000]
+];
+const methods = ['Wave', 'Orange Money', 'Moov Money'];
+for (let index = 0; index < 48; index += 1) {
+  const [eventId, categoryId, categoryName, price] = salesPlan[(index * 7) % salesPlan.length];
+  const quantity = 1 + ((index * 5) % 4);
+  const daysAgo = 27 - Math.floor((index * index) % 28 * 0.6 + index * 0.4) % 28;
+  await seedTicket({
+    id: `tkt_seed_sale_${String(index).padStart(2, '0')}`,
+    event_id: eventId,
+    category_id: categoryId,
+    category_name: categoryName,
+    user_id: participants[index % participants.length][0],
+    code: `FC-SEED-${String(index).padStart(3, '0')}-${eventId.slice(4, 10).toUpperCase()}`,
+    quantity,
+    amount_xof: quantity * price,
+    payment_method: methods[index % methods.length],
+    created_at: ago(Math.max(0, daysAgo), (index * 3) % 20)
+  });
+}
+
+// Notifications de demonstration (le rappel J-1 du client est calcule a la lecture).
+await insertOrUpdateById('notifications', {
+  id: 'ntf_demo_abissa_ok',
+  user_id: organizer.id,
+  type: 'event_status',
+  title: '« Festival Abissa Experience » est en ligne',
+  body: 'Ton événement est visible dans le catalogue et la billetterie est ouverte.',
+  link: '/evenement.html?id=evt_abissa_2026',
+  read_at: null,
+  created_at: ago(20)
+});
+
+console.log('Données de démonstration insérées.');

@@ -2,39 +2,65 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Événements - FestiConnect</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Événements · FestiConnect</title>
+  <meta name="description" content="Tous les concerts, festivals traditionnels et défilés de mode en Côte d'Ivoire. Filtre par ville ou catégorie et réserve en Mobile Money.">
+  <meta name="theme-color" content="#fcf8f2">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&amp;display=swap">
   <link rel="stylesheet" href="/assets/css/styles.css">
 </head>
-<body>
-  <nav class="nav" data-nav></nav>
-  <main class="section">
+<body data-nav="events">
+  <a class="skip-link" href="#main">Aller au contenu</a>
+  <header class="site-header" data-header></header>
+
+  <main id="main" tabindex="-1">
     <div class="container">
-      <span class="eyebrow">Recherche & filtres</span>
-      <h1>Découvrir les événements</h1>
-      <form id="filters" class="glass form-grid mt-8 p-4 rounded-[28px]">
-        <input class="input" name="q" placeholder="Nom, lieu, ambiance">
-        <select class="select" name="category">
-          <option value="">Toutes catégories</option>
-          <option>Concert</option>
-          <option>Tradition</option>
-          <option>Mode</option>
-        </select>
-        <select class="select" name="city">
-          <option value="">Toutes les villes</option>
-          <option>Abidjan</option>
-          <option>Grand-Bassam</option>
-          <option>Bouake</option>
-          <option>Yamoussoukro</option>
-        </select>
-        <button class="btn btn-primary"><i data-lucide="sliders-horizontal"></i>Filtrer</button>
+      <div class="page-head">
+        <span class="kicker">Agenda</span>
+        <h1 class="mt-2">Événements</h1>
+        <p class="lead">Concerts, festivals traditionnels et défilés, relus par l'équipe FestiConnect avant publication.</p>
+      </div>
+
+      <form id="filters" class="filters" action="/evenements.html" method="get" role="search" aria-label="Filtrer les événements">
+        <div class="field">
+          <label class="field-label" for="f-q">Recherche</label>
+          <div class="input-icon">
+            <span data-icon="search"></span>
+            <input class="input" id="f-q" name="q" type="search" placeholder="Artiste, événement, lieu…" autocomplete="off" enterkeyhint="search">
+          </div>
+        </div>
+        <div class="field">
+          <label class="field-label" for="f-category">Catégorie</label>
+          <select class="select" id="f-category" name="category">
+            <option value="">Toutes</option>
+            <option value="Concert">Concert</option>
+            <option value="Tradition">Tradition</option>
+            <option value="Mode">Mode</option>
+          </select>
+        </div>
+        <div class="field">
+          <label class="field-label" for="f-city">Ville</label>
+          <select class="select" id="f-city" name="city">
+            <option value="">Toutes</option>
+            <option value="Abidjan">Abidjan</option>
+            <option value="Grand-Bassam">Grand-Bassam</option>
+            <option value="Bouaké">Bouaké</option>
+            <option value="Yamoussoukro">Yamoussoukro</option>
+          </select>
+        </div>
+        <button class="btn btn-primary" type="submit"><span data-icon="sliders"></span><span>Filtrer</span></button>
       </form>
-      <div id="events-list" class="grid grid-3 mt-8"></div>
+
+      <div class="results-bar" id="results-bar" aria-live="polite"></div>
+      <div id="events-list" class="grid-cards" aria-busy="true"></div>
     </div>
   </main>
-  <footer class="footer" data-footer></footer>
-  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <footer class="site-footer" data-footer></footer>
+  <nav class="tabbar" data-tabbar></nav>
   <script src="/assets/js/api.js"></script>
   <script src="/assets/js/ui.js"></script>
   <script src="/assets/js/events.js"></script>

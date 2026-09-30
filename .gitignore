@@ -1,7 +1,26 @@
 node_modules/
 .env
+.env.*
+!.env.example
 *.db
 *.db-shm
 *.db-wal
+*.db-journal
+*.sqlite
+*.sqlite3
+*.pem
+*.key
+*.p12
 npm-debug.log*
 *.log
+coverage/
+.DS_Store
+
+# Video pipeline (video/)
+video/node_modules
+video/frames
+video/out
+video/audio/*
+!video/audio/.gitkeep
+__pycache__/
+.tts-models/

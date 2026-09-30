@@ -1,0 +1,26 @@
+{
+  "brand": { "name": "FestiConnect", "url": "festiconnect.ci", "signoff": "On est ensemble." },
+  "client": { "name": "Awa Yao", "firstName": "Awa", "city": "Yamoussoukro" },
+  "organizer": { "name": "Collectif Nouchi Live" },
+  "events": [
+    { "id": "abissa", "title": "Festival Abissa Experience", "category": "Tradition", "city": "Grand-Bassam", "venue": "Place Abissa", "dateLong": "Ven. 14 août 2026", "dateShort": "14 août", "time": "18:00", "price": 15000, "capacity": 1200, "sold": 384, "art": "abissa" },
+    { "id": "maquis", "title": "Maquis Electronic Night", "category": "Concert", "city": "Abidjan", "venue": "Sofitel Ivoire", "dateLong": "Dim. 21 juin 2026", "dateShort": "21 juin", "time": "20:00", "price": 25000, "capacity": 900, "sold": 621, "art": "maquis" },
+    { "id": "mode", "title": "Salon Mode Sahel", "category": "Mode", "city": "Bouaké", "venue": "Palais de la Culture", "dateLong": "Dim. 5 juil. 2026", "dateShort": "5 juil.", "time": "10:00", "price": 8000, "capacity": 600, "sold": 147, "art": "mode" },
+    { "id": "mandingue", "title": "Nuit Mandingue Premium", "category": "Concert", "city": "Yamoussoukro", "venue": "Fondation FHB", "dateLong": "Sam. 12 sept. 2026", "dateShort": "12 sept.", "time": "19:30", "price": 18000, "capacity": 700, "sold": 0, "art": "default" }
+  ],
+  "products": [
+    { "id": "cap", "name": "Casquette Kente Edition", "category": "Accessoire", "price": 12000 },
+    { "id": "tote", "name": "Tote Bag Baoulé", "category": "Lifestyle", "price": 9000 },
+    { "id": "poster", "name": "Affiche Collector Abissa", "category": "Art", "price": 15000 }
+  ],
+  "ticket": { "event": "abissa", "code": "FC-DEMO-2026", "quantity": 2, "amount": 30000, "method": "Wave" },
+  "payments": ["Wave", "Orange Money", "Moov Money"],
+  "cities": [
+    { "name": "Abidjan", "x": 0.60, "y": 0.72, "main": true },
+    { "name": "Grand-Bassam", "x": 0.74, "y": 0.78 },
+    { "name": "Yamoussoukro", "x": 0.52, "y": 0.47 },
+    { "name": "Bouaké", "x": 0.60, "y": 0.30 },
+    { "name": "San-Pédro", "x": 0.30, "y": 0.86 },
+    { "name": "Korhogo", "x": 0.48, "y": 0.10 }
+  ]
+}

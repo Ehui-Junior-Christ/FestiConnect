@@ -1,7 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800">
-  <rect width="800" height="800" fill="#151515"/>
-  <path d="M180 440c28-150 160-240 322-184 86 30 134 96 152 184z" fill="#ff5f1f"/>
-  <path d="M130 456c160-48 348-54 540-6 34 9 47 54 16 74-130 82-364 72-536-8-31-14-51-50-20-60z" fill="#f7f2ea"/>
-  <path d="M275 296c48 58 90 96 150 122 48-42 90-82 122-144" fill="none" stroke="#ffd08a" stroke-width="28" stroke-linecap="round"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 800" role="img" aria-label="Casquette brodée motif kente">
+<rect width="800" height="800" fill="#f6eee2"/>
+<ellipse cx="400" cy="690" rx="260" ry="26" fill="#1b120c" opacity=".12"/>
+<path d="M170 470c10-190 130-290 250-290s220 90 230 290z" fill="#1b120c"/>
+<clipPath id="c"><path d="M170 470c10-190 130-290 250-290s220 90 230 290z"/></clipPath>
+<g clip-path="url(#c)"><rect x="150" y="380" width="28" height="50" fill="#f26a1b"/><rect x="178" y="380" width="10" height="50" fill="#f4b400"/><rect x="188" y="380" width="6" height="50" fill="#1b120c"/><rect x="194" y="380" width="20" height="50" fill="#0a7a4a"/><rect x="214" y="380" width="6" height="50" fill="#f4b400"/><rect x="220" y="380" width="22" height="50" fill="#c2410c"/><rect x="242" y="380" width="28" height="50" fill="#f26a1b"/><rect x="270" y="380" width="10" height="50" fill="#f4b400"/><rect x="280" y="380" width="6" height="50" fill="#1b120c"/><rect x="286" y="380" width="20" height="50" fill="#0a7a4a"/><rect x="306" y="380" width="6" height="50" fill="#f4b400"/><rect x="312" y="380" width="22" height="50" fill="#c2410c"/><rect x="334" y="380" width="28" height="50" fill="#f26a1b"/><rect x="362" y="380" width="10" height="50" fill="#f4b400"/><rect x="372" y="380" width="6" height="50" fill="#1b120c"/><rect x="378" y="380" width="20" height="50" fill="#0a7a4a"/><rect x="398" y="380" width="6" height="50" fill="#f4b400"/><rect x="404" y="380" width="22" height="50" fill="#c2410c"/><rect x="426" y="380" width="28" height="50" fill="#f26a1b"/><rect x="454" y="380" width="10" height="50" fill="#f4b400"/><rect x="464" y="380" width="6" height="50" fill="#1b120c"/><rect x="470" y="380" width="20" height="50" fill="#0a7a4a"/><rect x="490" y="380" width="6" height="50" fill="#f4b400"/><rect x="496" y="380" width="22" height="50" fill="#c2410c"/><rect x="518" y="380" width="28" height="50" fill="#f26a1b"/><rect x="546" y="380" width="10" height="50" fill="#f4b400"/><rect x="556" y="380" width="6" height="50" fill="#1b120c"/><rect x="562" y="380" width="20" height="50" fill="#0a7a4a"/><rect x="582" y="380" width="6" height="50" fill="#f4b400"/><rect x="588" y="380" width="22" height="50" fill="#c2410c"/><rect x="610" y="380" width="28" height="50" fill="#f26a1b"/><rect x="638" y="380" width="10" height="50" fill="#f4b400"/><rect x="648" y="380" width="6" height="50" fill="#1b120c"/><rect x="654" y="380" width="16" height="50" fill="#0a7a4a"/></g>
+<path d="M420 180v290" stroke="#3d2e24" stroke-width="6"/>
+<circle cx="420" cy="184" r="16" fill="#f26a1b"/>
+<path d="M120 480c150-40 400-40 560 0 40 12 40 60 0 70-190 46-380 40-560-6-36-10-36-54 0-64z" fill="#c2410c"/>
 </svg>
-

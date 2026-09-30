@@ -1,0 +1,41 @@
+# Blueprint Render pour FestiConnect (plan gratuit).
+# Doc : https://render.com/docs/blueprint-spec
+#
+# Dans Render : New > Blueprint > choisir le repo GitHub > Render lit ce fichier.
+# Les variables marquees `sync: false` sont demandees une seule fois a la creation
+# (elles ne sont JAMAIS commitees dans Git).
+services:
+  - type: web
+    name: festiconnect
+    runtime: node
+    plan: free
+    # Seule region europeenne de Render : la plus proche de l'Afrique de l'Ouest.
+    region: frankfurt
+    branch: main
+    # Le plan gratuit n'a pas de "preDeployCommand" : les migrations (idempotentes,
+    # `create table if not exists` + ajout de colonnes manquantes) tournent donc
+    # pendant le build. Si la base est injoignable, le build echoue et l'ancienne
+    # version reste en ligne.
+    buildCommand: npm ci && npm run db:migrate
+    startCommand: npm start
+    healthCheckPath: /api/health
+    # Redeploiement automatique a chaque push sur `main`.
+    autoDeployTrigger: commit
+    envVars:
+      - key: NODE_ENV
+        value: production
+      # Version de Node utilisee pour le build et l'execution.
+      - key: NODE_VERSION
+        value: "22"
+      # Cle secrete generee aleatoirement par Render a la creation.
+      - key: APP_SECRET
+        generateValue: true
+      # Render place un proxy devant l'app : necessaire pour la limitation de debit par IP.
+      - key: TRUST_PROXY
+        value: "1"
+      # Secrets Turso : a saisir dans le dashboard Render (jamais dans Git).
+      - key: TURSO_DATABASE_URL
+        sync: false
+      - key: TURSO_AUTH_TOKEN
+        sync: false
+      # PORT est fourni automatiquement par Render (10000 par defaut) : ne pas le definir.

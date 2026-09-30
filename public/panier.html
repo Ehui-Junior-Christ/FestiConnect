@@ -2,36 +2,78 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Panier et paiement - FestiConnect</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Panier · FestiConnect</title>
+  <meta name="description" content="Ton panier FestiConnect : vérifie tes articles, choisis ton moyen de paiement Mobile Money et ton adresse de livraison.">
+  <meta name="theme-color" content="#fcf8f2">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&amp;display=swap">
   <link rel="stylesheet" href="/assets/css/styles.css">
 </head>
-<body>
-  <nav class="nav" data-nav></nav>
-  <main class="section">
-    <div class="container grid grid-2">
-      <section>
-        <span class="eyebrow">Tunnel d'achat</span>
-        <h1>Panier</h1>
-        <div id="cart-items" class="grid mt-8"></div>
-      </section>
-      <aside class="panel glass">
-        <h2>Checkout</h2>
-        <p class="lead text-base">Total: <strong id="cart-total">0 FCFA</strong></p>
-        <form id="checkout-form" class="grid mt-6">
-          <label class="label">Moyen de paiement
-            <select class="select" name="payment_method"><option>Wave</option><option>Orange Money</option><option>Moov Money</option></select>
-          </label>
-          <label class="label">Ville de livraison<input class="input" name="delivery_city" placeholder="Abidjan"></label>
-          <label class="label">Adresse<textarea class="textarea" name="delivery_address" placeholder="Commune, quartier, repère"></textarea></label>
-          <button class="btn btn-primary" type="submit"><i data-lucide="credit-card"></i>Payer et suivre</button>
-        </form>
-      </aside>
+<body data-nav="cart">
+  <a class="skip-link" href="#main">Aller au contenu</a>
+  <header class="site-header" data-header></header>
+
+  <main id="main" tabindex="-1">
+    <div class="container">
+      <div class="page-head">
+        <span class="kicker">Boutique</span>
+        <h1 class="mt-2">Ton panier</h1>
+      </div>
+
+      <div class="checkout" id="checkout">
+        <section aria-labelledby="items-title">
+          <h2 id="items-title" class="sr-only">Articles du panier</h2>
+          <ul id="cart-items" class="cart-list" aria-live="polite"></ul>
+          <a class="link-arrow mt-4" href="/boutique.html"><span data-icon="arrow-left"></span>Continuer mes achats</a>
+        </section>
+
+        <aside class="panel" aria-labelledby="checkout-title" id="checkout-panel">
+          <h2 id="checkout-title">Paiement et livraison</h2>
+          <form id="checkout-form" class="form mt-6" novalidate>
+            <fieldset class="choices choices-3">
+              <legend class="field-label">Moyen de paiement</legend>
+              <label class="choice"><input type="radio" name="payment_method" value="Wave" checked><span class="pay-dot pay-wave" aria-hidden="true"></span>Wave</label>
+              <label class="choice"><input type="radio" name="payment_method" value="Orange Money"><span class="pay-dot pay-orange" aria-hidden="true"></span>Orange Money</label>
+              <label class="choice"><input type="radio" name="payment_method" value="Moov Money"><span class="pay-dot pay-moov" aria-hidden="true"></span>Moov Money</label>
+            </fieldset>
+
+            <div class="field">
+              <label class="field-label" for="delivery_city">Ville de livraison</label>
+              <input class="input" id="delivery_city" name="delivery_city" list="city-list" autocomplete="address-level2" placeholder="Abidjan" required data-msg-required="Indique la ville où livrer ta commande.">
+              <datalist id="city-list">
+                <option value="Abidjan"></option>
+                <option value="Grand-Bassam"></option>
+                <option value="Bouaké"></option>
+                <option value="Yamoussoukro"></option>
+                <option value="San-Pédro"></option>
+                <option value="Korhogo"></option>
+                <option value="Daloa"></option>
+              </datalist>
+            </div>
+
+            <div class="field">
+              <label class="field-label" for="delivery_address">Adresse de livraison</label>
+              <textarea class="textarea" id="delivery_address" name="delivery_address" autocomplete="street-address" placeholder="Ex. Cocody Angré 8e tranche, près de la pharmacie des Jardins" required minlength="8" aria-describedby="address-hint" data-msg-required="Indique ta commune, ton quartier et un repère pour le livreur."></textarea>
+              <p class="field-hint" id="address-hint">Commune, quartier et un repère connu : c'est ce qui aide le plus le livreur.</p>
+            </div>
+
+            <dl class="summary-lines">
+              <div><dt data-items-label>Articles</dt><dd data-subtotal>0 FCFA</dd></div>
+            </dl>
+            <div class="total-row"><span>Total</span><strong id="cart-total">0 FCFA</strong></div>
+            <button class="btn btn-primary btn-lg btn-block" type="submit" data-submit><span data-submit-label>Payer</span></button>
+            <p class="small muted" data-guest-note hidden>Tu te connecteras à l'étape suivante. Ton panier est conservé sur cet appareil.</p>
+          </form>
+        </aside>
+      </div>
     </div>
   </main>
-  <footer class="footer" data-footer></footer>
-  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <footer class="site-footer" data-footer></footer>
+  <nav class="tabbar" data-tabbar></nav>
   <script src="/assets/js/api.js"></script>
   <script src="/assets/js/ui.js"></script>
   <script src="/assets/js/cart.js"></script>

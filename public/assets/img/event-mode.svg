@@ -1,8 +1,16 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560">
-  <rect width="900" height="560" fill="#171717"/>
-  <path d="M170 80h560v400H170z" fill="#2a1a12"/>
-  <path d="M275 450 448 90l177 360z" fill="#ff5f1f"/>
-  <path d="M348 450 448 172l103 278z" fill="#ffd08a"/>
-  <path d="M140 485h620" stroke="#f7f2ea" stroke-width="18" stroke-linecap="round" opacity=".82"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 600" role="img" aria-label="Affiche défilé de mode : silhouette et tissu wax">
+<rect width="960" height="600" fill="#f6eee2"/>
+<defs><pattern id="w" width="80" height="80" patternUnits="userSpaceOnUse">
+<rect width="80" height="80" fill="#c2410c"/><circle cx="40" cy="40" r="26" fill="#f4b400"/><circle cx="40" cy="40" r="12" fill="#1b120c"/>
+<path d="M0 0h20L0 20zM80 80H60l20-20z" fill="#0a7a4a"/></pattern></defs>
+<rect x="520" y="0" width="440" height="600" fill="url(#w)"/>
+<rect x="0" y="520" width="520" height="80" fill="#1b120c"/>
+<g fill="#1b120c">
+<circle cx="300" cy="120" r="44"/>
+<path d="M270 90c0-40 60-60 80-20 30-10 40 30 10 40z" fill="#1b120c"/>
+<path d="M300 170c50 0 70 40 70 90l30 200h-200l30-200c0-50 20-90 70-90z" fill="#f26a1b"/>
+<path d="M230 300h140" stroke="#f4b400" stroke-width="18"/>
+<path d="M270 460l-10 60M330 460l10 60" stroke="#1b120c" stroke-width="16" stroke-linecap="round"/>
+</g>
+<path d="M60 560h400" stroke="#f4b400" stroke-width="6" stroke-dasharray="20 14"/>
 </svg>
-

@@ -2,18 +2,40 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Détail événement - FestiConnect</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Événement · FestiConnect</title>
+  <meta name="description" content="Détails de l'événement et réservation de billets en Mobile Money.">
+  <meta name="theme-color" content="#fcf8f2">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&amp;display=swap">
   <link rel="stylesheet" href="/assets/css/styles.css">
 </head>
-<body>
-  <nav class="nav" data-nav></nav>
-  <main class="section">
-    <div id="event-detail" class="container"></div>
+<body data-nav="events">
+  <a class="skip-link" href="#main">Aller au contenu</a>
+  <header class="site-header" data-header></header>
+
+  <main id="main" tabindex="-1">
+    <div id="event-detail" class="container" aria-busy="true">
+      <div class="breadcrumb"><div class="skeleton sk-line sk-w40"></div></div>
+      <div class="skeleton sk-hero mt-4" aria-hidden="true"></div>
+      <div class="detail" aria-hidden="true">
+        <div class="detail-info">
+          <div class="skeleton sk-title"></div>
+          <div class="skeleton sk-line sk-w80 mt-4"></div>
+          <div class="skeleton sk-line sk-w60"></div>
+        </div>
+        <div class="detail-buy"><div class="skeleton sk-block"></div></div>
+      </div>
+      <p class="sr-only" role="status">Chargement de l'événement…</p>
+    </div>
   </main>
-  <footer class="footer" data-footer></footer>
-  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <div class="buy-bar is-hidden" id="buy-bar" hidden></div>
+
+  <footer class="site-footer" data-footer></footer>
+  <nav class="tabbar" data-tabbar></nav>
   <script src="/assets/js/api.js"></script>
   <script src="/assets/js/ui.js"></script>
   <script src="/assets/js/event-detail.js"></script>

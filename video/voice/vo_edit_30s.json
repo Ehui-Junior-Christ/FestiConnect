@@ -1,0 +1,17 @@
+{
+  "_note": "Version 30 s montée à partir de fragments de la prise 80 s du propriétaire (il n'a pas enregistré la version courte). Temps en secondes dans audio/voix_proprietaire/source.wav ; 'gap' = silence entre deux fragments d'un même plan. Frontières de mots repérées par transcription des segments entre pauses.",
+  "source": "audio/voix_proprietaire/source.wav",
+  "timeline": "timeline-30s.json",
+  "pre": 0.06, "post": 0.08, "fade": 0.04,
+  "max_pause": 0.55, "pause_to": 0.45,
+  "lines": [
+    { "plan": "A2", "pieces": [[1.82, 2.66], [6.33, 6.94]], "gap": 0.25, "_why": "« Vendredi soir… » + « tout le monde sort »" },
+    { "plan": "B1", "pieces": [[7.50, 12.42]], "remove": [[8.00, 8.90]] },
+    { "plan": "C1", "pieces": [[15.76, 19.10]], "_why": "« Voici FestiConnect : billetterie, boutique et paiement mobile »" },
+    { "plan": "D1", "pieces": [[21.02, 22.29]], "_why": "« Tout commence par une recherche »" },
+    { "plan": "D2", "pieces": [[30.28, 35.62]], "_why": "L07 sans l'ajout final" },
+    { "plan": "D4", "pieces": [[38.33, 41.34]], "_why": "« Le jour J, un scan à l'entrée, et c'est parti »" },
+    { "plan": "F2", "pieces": [[47.12, 48.20]] },
+    { "plan": "H2", "pieces": [[62.30, 62.95], [66.00, 66.56]], "gap": 0.35, "_why": "« FestiConnect… » + « On est ensemble ! »" }
+  ]
+}

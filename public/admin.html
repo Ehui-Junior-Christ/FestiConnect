@@ -2,28 +2,94 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Administration - FestiConnect</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Administration · FestiConnect</title>
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#fcf8f2">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&amp;display=swap">
   <link rel="stylesheet" href="/assets/css/styles.css">
 </head>
-<body>
-  <nav class="nav" data-nav></nav>
-  <main class="container dashboard">
-    <aside class="sidebar glass">
-      <a class="side-link active" href="#master"><i data-lucide="shield-check"></i>Dashboard master</a>
-      <a class="side-link" href="#validation"><i data-lucide="badge-check"></i>Validation</a>
-    </aside>
-    <section class="grid">
-      <div><span class="eyebrow">Administration</span><h1>Contrôle plateforme</h1></div>
-      <div id="admin-metrics" class="metric-strip"></div>
-      <section id="validation" class="panel glass">
-        <h2>Validation événements</h2>
-        <div class="table-wrap mt-5"><table class="table"><thead><tr><th>Événement</th><th>Ville</th><th>Date</th><th>Statut</th><th>Actions</th></tr></thead><tbody id="admin-events"></tbody></table></div>
-      </section>
-    </section>
+<body data-nav="account">
+  <a class="skip-link" href="#main">Aller au contenu</a>
+  <header class="site-header" data-header></header>
+
+  <main id="main" tabindex="-1">
+    <div class="container dash">
+      <nav class="dash-nav" aria-label="Administration">
+        <div class="dash-user"><span class="avatar avatar-lg" data-user-initials></span><div><strong data-user-name></strong><span>Administration</span></div></div>
+        <ul>
+          <li><a href="#master" aria-current="true"><span data-icon="dashboard"></span>Vue d'ensemble</a></li>
+          <li><a href="#validation"><span data-icon="shield"></span>Validation</a></li>
+          <li><a href="#retraits"><span data-icon="wallet"></span>Retraits</a></li>
+          <li><a href="#avis"><span data-icon="star"></span>Avis</a></li>
+          <li><a href="/organisateur.html"><span data-icon="plus-circle"></span>Publier un événement</a></li>
+          <li class="nav-sep" role="presentation"></li>
+          <li><button type="button" data-logout><span data-icon="logout"></span>Déconnexion</button></li>
+        </ul>
+      </nav>
+
+      <div class="dash-main">
+        <section id="master" class="stack" aria-labelledby="admin-title">
+          <div class="dash-head">
+            <div>
+              <h1 id="admin-title">Administration</h1>
+              <p>État de la plateforme et événements à relire.</p>
+            </div>
+          </div>
+          <div id="admin-metrics" class="stats" aria-busy="true"></div>
+        </section>
+
+        <section id="validation" class="panel" aria-labelledby="validation-title">
+          <div class="panel-title">
+            <div>
+              <h2 id="validation-title">Validation des événements</h2>
+              <p>Vérifie le titre, la date, le lieu et la description avant de publier.</p>
+            </div>
+            <div class="segmented" id="status-filter" role="group" aria-label="Filtrer par statut"></div>
+          </div>
+          <div class="table-wrap">
+            <table class="table table-stack">
+              <caption class="sr-only">Événements à valider</caption>
+              <thead><tr><th scope="col">Événement</th><th scope="col">Ville</th><th scope="col">Date</th><th scope="col">Statut</th><th scope="col" class="text-right">Actions</th></tr></thead>
+              <tbody id="admin-events"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="retraits" class="panel" aria-labelledby="withdrawals-title">
+          <div class="panel-title">
+            <div>
+              <h2 id="withdrawals-title">Retraits des organisateurs</h2>
+              <p>Effectue le transfert Mobile Money, puis valide la demande : l'organisateur est notifié. En cas de refus, indique le motif.</p>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table class="table table-stack">
+              <caption class="sr-only">Demandes de retrait</caption>
+              <thead><tr><th scope="col">Organisateur</th><th scope="col" class="num">Montant</th><th scope="col">Moyen</th><th scope="col">Numéro</th><th scope="col">Statut</th><th scope="col" class="text-right">Actions</th></tr></thead>
+              <tbody id="admin-withdrawals"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="avis" class="panel" aria-labelledby="reviews-title">
+          <div class="panel-title">
+            <div>
+              <h2 id="reviews-title">Modération des avis</h2>
+              <p>Masque les avis hors sujet, insultants ou publicitaires (numéros, revente de billets). Un avis masqué sort de la moyenne affichée.</p>
+            </div>
+          </div>
+          <ul id="admin-reviews" class="review-list review-list-admin"></ul>
+        </section>
+      </div>
+    </div>
   </main>
-  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <footer class="site-footer" data-footer></footer>
+  <nav class="tabbar" data-tabbar></nav>
   <script src="/assets/js/api.js"></script>
   <script src="/assets/js/ui.js"></script>
   <script src="/assets/js/admin.js"></script>
