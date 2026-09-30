@@ -2,62 +2,84 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Contact - FestiConnect</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Contact · FestiConnect</title>
+  <meta name="description" content="Contacter FestiConnect : billetterie, boutique, organisateurs.">
+  <meta name="theme-color" content="#fcf8f2">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&amp;display=swap">
   <link rel="stylesheet" href="/assets/css/styles.css">
 </head>
-<body>
-  <nav class="nav" data-nav></nav>
-  <main class="section">
-    <div class="container">
-      <div class="page-header">
-        <div class="stack">
-          <span class="eyebrow">Support</span>
-          <h1>Contact et assistance</h1>
-          <p class="lead">Pour les questions de billetterie, de boutique ou de validation organisateur, passe par le canal le plus rapide ci-dessous.</p>
-        </div>
-        <div class="header-actions">
-          <a class="btn btn-primary" href="mailto:hello@festiconnect.ci"><i data-lucide="mail"></i>Envoyer un email</a>
-          <a class="btn btn-secondary" href="tel:+22500000000"><i data-lucide="phone"></i>Appeler</a>
-        </div>
+<body data-nav="support">
+  <a class="skip-link" href="#main">Aller au contenu</a>
+  <header class="site-header" data-header></header>
+
+  <main id="main" tabindex="-1">
+    <div class="container container-narrow">
+      <div class="page-head">
+        <span class="kicker">Support</span>
+        <h1 class="mt-2">Nous contacter</h1>
+        <p class="lead">Choisis le bon interlocuteur, tu auras une réponse plus vite. Beaucoup de questions ont déjà leur réponse dans le <a href="/aide.html">centre d'aide</a>.</p>
       </div>
 
-      <div class="support-grid">
-        <article class="panel glass support-card">
-          <span class="tag">Billetterie</span>
-          <h3 class="mt-4">Achat et validation</h3>
-          <p class="muted mt-3">Questions sur un billet, un paiement ou un remboursement.</p>
-          <div class="footer-links mt-4">
-            <a href="mailto:billetterie@festiconnect.ci">billetterie@festiconnect.ci</a>
-            <a href="tel:+2250102030405">+225 01 02 03 04 05</a>
-          </div>
-        </article>
-        <article class="panel glass support-card">
-          <span class="tag">Boutique</span>
-          <h3 class="mt-4">Commande et livraison</h3>
-          <p class="muted mt-3">Suivi d’une commande, adresse de livraison ou assistance paiement.</p>
-          <div class="footer-links mt-4">
-            <a href="mailto:boutique@festiconnect.ci">boutique@festiconnect.ci</a>
-            <a href="/confirmation.html">Confirmation de commande</a>
-          </div>
-        </article>
-        <article class="panel glass support-card">
-          <span class="tag">Organisateurs</span>
-          <h3 class="mt-4">Publication d'événements</h3>
-          <p class="muted mt-3">Aide sur la mise en ligne, la validation et le suivi des ventes.</p>
-          <div class="footer-links mt-4">
-            <a href="mailto:partners@festiconnect.ci">partners@festiconnect.ci</a>
-            <a href="/organisateur.html">Espace organisateur</a>
-          </div>
-        </article>
+      <div class="alert alert-info">
+        <span data-icon="info"></span>
+        <div><strong>Pour aller plus vite</strong><span>Indique toujours le code de ton billet (FC-…) ou la référence de ta commande (ord_…) dans ton message.</span></div>
       </div>
+
+      <ul class="channel-list mt-6">
+        <li class="channel">
+          <div><span class="badge badge-brand">Billetterie</span></div>
+          <div>
+            <h2 class="h3">Achat, billet, remboursement</h2>
+            <p>Un souci avec un billet, un paiement ou un accès à un événement.</p>
+          </div>
+          <div class="channel-actions">
+            <a class="btn btn-primary btn-sm" href="mailto:billetterie@festiconnect.ci"><span data-icon="mail"></span><span>billetterie@festiconnect.ci</span></a>
+            <a class="btn btn-sm" href="tel:+2250102030405"><span data-icon="phone"></span><span>+225 01 02 03 04 05</span></a>
+          </div>
+        </li>
+        <li class="channel">
+          <div><span class="badge badge-brand">Boutique</span></div>
+          <div>
+            <h2 class="h3">Commande et livraison</h2>
+            <p>Suivi d'une commande, changement d'adresse, article reçu abîmé.</p>
+          </div>
+          <div class="channel-actions">
+            <a class="btn btn-sm" href="mailto:boutique@festiconnect.ci"><span data-icon="mail"></span><span>boutique@festiconnect.ci</span></a>
+          </div>
+        </li>
+        <li class="channel">
+          <div><span class="badge badge-brand">Organisateurs</span></div>
+          <div>
+            <h2 class="h3">Publier et vendre</h2>
+            <p>Mise en ligne, validation d'un événement, suivi des ventes et retraits.</p>
+          </div>
+          <div class="channel-actions">
+            <a class="btn btn-sm" href="mailto:partners@festiconnect.ci"><span data-icon="mail"></span><span>partners@festiconnect.ci</span></a>
+            <a class="btn btn-sm btn-ghost" href="/organisateur.html">Espace organisateur</a>
+          </div>
+        </li>
+        <li class="channel">
+          <div><span class="badge">Autre</span></div>
+          <div>
+            <h2 class="h3">Presse, partenariats, autre demande</h2>
+            <p>Pour tout le reste, l'équipe te répond depuis l'adresse générale.</p>
+          </div>
+          <div class="channel-actions">
+            <a class="btn btn-sm" href="mailto:hello@festiconnect.ci"><span data-icon="mail"></span><span>hello@festiconnect.ci</span></a>
+            <a class="btn btn-sm btn-ghost" href="tel:+22500000000"><span data-icon="phone"></span><span>Appeler</span></a>
+          </div>
+        </li>
+      </ul>
     </div>
   </main>
-  <footer class="footer" data-footer></footer>
-  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <footer class="site-footer" data-footer></footer>
+  <nav class="tabbar" data-tabbar></nav>
   <script src="/assets/js/api.js"></script>
   <script src="/assets/js/ui.js"></script>
-  <script>mountLayout('support');</script>
 </body>
 </html>

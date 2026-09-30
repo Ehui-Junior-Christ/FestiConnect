@@ -2,44 +2,54 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Conditions - FestiConnect</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Conditions d'utilisation · FestiConnect</title>
+  <meta name="description" content="Règles d'utilisation de FestiConnect : comptes, billetterie, boutique et suspension.">
+  <meta name="theme-color" content="#fcf8f2">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&amp;display=swap">
   <link rel="stylesheet" href="/assets/css/styles.css">
 </head>
-<body>
-  <nav class="nav" data-nav></nav>
-  <main class="section">
-    <div class="container page-grid">
-      <div class="stack">
-        <span class="eyebrow">Usage</span>
-        <h1>Conditions d'utilisation</h1>
-        <p class="lead">Les règles d’usage du site sont simples: comptes vérifiés, achats authentifiés, respect des événements et des politiques de paiement.</p>
+<body data-nav="support">
+  <a class="skip-link" href="#main">Aller au contenu</a>
+  <header class="site-header" data-header></header>
+
+  <main id="main" tabindex="-1">
+    <div class="container">
+      <div class="page-head">
+        <span class="kicker">Informations légales</span>
+        <h1 class="mt-2">Conditions d'utilisation</h1>
+        <p class="lead">Les règles sont simples : comptes vérifiés, achats authentifiés, respect des événements et des politiques de paiement.</p>
       </div>
-      <div class="page-grid page-grid-2">
-        <article class="panel glass">
-          <h3>Comptes</h3>
-          <p class="muted mt-3">Chaque utilisateur est responsable de ses identifiants et des actions effectuées depuis son compte.</p>
-        </article>
-        <article class="panel glass">
-          <h3>Billetterie</h3>
-          <p class="muted mt-3">Les billets sont émis pour les événements validés. Les tarifs et disponibilités peuvent évoluer avant confirmation.</p>
-        </article>
-        <article class="panel glass">
-          <h3>Boutique</h3>
-          <p class="muted mt-3">Les produits dépendent du stock disponible et des informations de livraison saisies au moment de l’achat.</p>
-        </article>
-        <article class="panel glass">
-          <h3>Suspension</h3>
-          <p class="muted mt-3">Un usage abusif, frauduleux ou contraire au fonctionnement de la plateforme peut entraîner une suspension du compte.</p>
+      <div class="help-layout">
+        <nav class="toc" aria-label="Sommaire">
+          <p>Sommaire</p>
+          <a href="#comptes">Comptes</a>
+          <a href="#billetterie">Billetterie</a>
+          <a href="#boutique">Boutique</a>
+          <a href="#suspension">Suspension</a>
+        </nav>
+        <article class="prose">
+          <h2 id="comptes">1. Comptes</h2>
+          <p>Chaque utilisateur est responsable de ses identifiants et des actions effectuées depuis son compte. En cas de doute sur la sécurité de ton compte, déconnecte toutes tes sessions depuis ton espace et <a href="/contact.html">préviens-nous</a>.</p>
+          <h2 id="billetterie">2. Billetterie</h2>
+          <p>Les billets sont émis uniquement pour les événements validés par l'équipe FestiConnect. Les tarifs et les disponibilités peuvent évoluer jusqu'à la confirmation de la réservation.</p>
+          <p>Chaque réservation reçoit un code d'entrée unique, rattaché au compte qui l'a effectuée.</p>
+          <h2 id="boutique">3. Boutique</h2>
+          <p>Les commandes dépendent du stock disponible et des informations de livraison saisies au moment de l'achat. Vérifie ta ville et ton adresse avant de payer.</p>
+          <h2 id="suspension">4. Suspension</h2>
+          <p>Un usage abusif, frauduleux ou contraire au fonctionnement de la plateforme peut entraîner la suspension du compte concerné.</p>
+          <p class="legal-meta">Voir aussi : <a href="/confidentialite.html">politique de confidentialité</a> · <a href="/mentions-legales.html">mentions légales</a></p>
         </article>
       </div>
     </div>
   </main>
-  <footer class="footer" data-footer></footer>
-  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <footer class="site-footer" data-footer></footer>
+  <nav class="tabbar" data-tabbar></nav>
   <script src="/assets/js/api.js"></script>
   <script src="/assets/js/ui.js"></script>
-  <script>mountLayout('support');</script>
 </body>
 </html>

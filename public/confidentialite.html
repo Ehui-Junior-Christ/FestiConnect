@@ -2,48 +2,58 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Confidentialité - FestiConnect</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Confidentialité · FestiConnect</title>
+  <meta name="description" content="Quelles données FestiConnect collecte, pourquoi, et avec qui elles sont partagées.">
+  <meta name="theme-color" content="#fcf8f2">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&amp;display=swap">
   <link rel="stylesheet" href="/assets/css/styles.css">
 </head>
-<body>
-  <nav class="nav" data-nav></nav>
-  <main class="section">
-    <div class="container page-grid">
-      <div class="stack">
-        <span class="eyebrow">Confidentialité</span>
-        <h1>Politique de confidentialité</h1>
+<body data-nav="support">
+  <a class="skip-link" href="#main">Aller au contenu</a>
+  <header class="site-header" data-header></header>
+
+  <main id="main" tabindex="-1">
+    <div class="container">
+      <div class="page-head">
+        <span class="kicker">Informations légales</span>
+        <h1 class="mt-2">Politique de confidentialité</h1>
         <p class="lead">FestiConnect collecte uniquement les données nécessaires au compte, aux paiements et au suivi des commandes ou des billets.</p>
       </div>
-      <div class="page-grid page-grid-2">
-        <article class="panel glass">
-          <h3>Données utilisées</h3>
-          <ul class="feature-list mt-4">
-            <li>Nom, email et téléphone pour le compte.</li>
-            <li>Détails de livraison pour la boutique.</li>
-            <li>Historique des billets et commandes pour le suivi.</li>
+      <div class="help-layout">
+        <nav class="toc" aria-label="Sommaire">
+          <p>Sommaire</p>
+          <a href="#donnees">Données collectées</a>
+          <a href="#usage">Utilisation</a>
+          <a href="#partage">Partage</a>
+          <a href="#droits">Tes droits</a>
+        </nav>
+        <article class="prose">
+          <h2 id="donnees">1. Données collectées</h2>
+          <ul>
+            <li>Nom, adresse email et téléphone pour ton compte.</li>
+            <li>Ville et adresse de livraison pour les commandes de la boutique.</li>
+            <li>Historique de tes billets et commandes pour leur suivi.</li>
           </ul>
-        </article>
-        <article class="panel glass">
-          <h3>Utilisation</h3>
-          <p class="muted mt-3">Les données servent à gérer les réservations, valider les accès, confirmer les paiements et améliorer l’expérience utilisateur.</p>
-        </article>
-        <article class="panel glass">
-          <h3>Partage</h3>
-          <p class="muted mt-3">Les informations ne sont partagées qu’avec les services nécessaires au traitement des paiements, à la logistique ou à la gestion interne.</p>
-        </article>
-        <article class="panel glass">
-          <h3>Contact confidentialité</h3>
-          <p class="muted mt-3">Pour exercer un droit ou poser une question sur la gestion des données, passe par la page contact.</p>
+          <p>Aucun code secret Mobile Money n'est demandé ni conservé par FestiConnect.</p>
+          <h2 id="usage">2. Utilisation</h2>
+          <p>Ces données servent à gérer les réservations, valider les accès aux événements, confirmer les paiements et améliorer le service.</p>
+          <h2 id="partage">3. Partage</h2>
+          <p>Les informations ne sont partagées qu'avec les services nécessaires au traitement des paiements, à la livraison ou à la gestion interne. L'organisateur d'un événement voit le nom et le code des billets vendus pour son événement, afin de contrôler les entrées.</p>
+          <h2 id="droits">4. Tes droits</h2>
+          <p>Pour consulter, corriger ou supprimer tes données, ou pour toute question sur leur gestion, écris-nous depuis la <a href="/contact.html">page contact</a>.</p>
+          <p class="legal-meta">Voir aussi : <a href="/conditions.html">conditions d'utilisation</a> · <a href="/mentions-legales.html">mentions légales</a></p>
         </article>
       </div>
     </div>
   </main>
-  <footer class="footer" data-footer></footer>
-  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <footer class="site-footer" data-footer></footer>
+  <nav class="tabbar" data-tabbar></nav>
   <script src="/assets/js/api.js"></script>
   <script src="/assets/js/ui.js"></script>
-  <script>mountLayout('support');</script>
 </body>
 </html>
