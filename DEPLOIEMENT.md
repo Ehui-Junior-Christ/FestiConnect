@@ -34,14 +34,14 @@ FestiConnect est un **serveur HTTP Node.js qui tourne en continu** (`server.js`)
 
 | Hébergeur | Gratuit aujourd'hui ? | Carte bancaire | Mise en veille | Europe | Verdict |
 |---|---|---|---|---|---|
-| **Render** (Free web service) | Oui : 750 h/mois par espace de travail, 512 Mo RAM | **Non** | Après 15 min sans visite, réveil en ~1 min | Frankfurt | ✅ **Choix principal** |
-| **Zeabur** (Free) | Oui, avec mise en veille | **Non** | Oui (réveil en quelques secondes) | Frankfurt (AWS) | ✅ **Alternative** |
+| **Render** (Free web service) | Oui : 750 h/mois par espace de travail, 512 Mo RAM | **Non** | Après 15 min sans visite, réveil en ~1 min | Frankfurt | **Choix principal** |
+| **Zeabur** (Free) | Oui, avec mise en veille | **Non** | Oui (réveil en quelques secondes) | Frankfurt (AWS) | **Alternative** |
 | Northflank (Sandbox) | Oui : 2 services toujours actifs | Demandée à l'inscription (anti-abus) | Non | Oui | Possible si tu as une carte |
-| Koyeb | Une instance gratuite reste possible | **Oui** (pré-autorisation de 29 $), plan Hobby sans carte supprimé en février 2026 | Après 1 h | Frankfurt | ❌ carte obligatoire |
-| Fly.io | Non : essai de 2 h de VM ou 7 jours | **Oui** | — | Oui | ❌ plus d'offre gratuite |
-| Railway | Essai de 5 $ pendant 30 jours, puis 1 $/mois de crédit | Non pour l'essai | — | Oui | ❌ pas viable dans la durée |
-| Vercel / Netlify | Oui, mais en *serverless* | Non | — | Oui | ❌ il faudrait réécrire le serveur en fonctions |
-| Glitch | Hébergement fermé le 8 juillet 2025 | — | — | — | ❌ n'existe plus |
+| Koyeb | Une instance gratuite reste possible | **Oui** (pré-autorisation de 29 $), plan Hobby sans carte supprimé en février 2026 | Après 1 h | Frankfurt | Écarté : carte obligatoire |
+| Fly.io | Non : essai de 2 h de VM ou 7 jours | **Oui** | — | Oui | Écarté : plus d'offre gratuite |
+| Railway | Essai de 5 $ pendant 30 jours, puis 1 $/mois de crédit | Non pour l'essai | — | Oui | Écarté : pas viable dans la durée |
+| Vercel / Netlify | Oui, mais en *serverless* | Non | — | Oui | Écarté : il faudrait réécrire le serveur en fonctions |
+| Glitch | Hébergement fermé le 8 juillet 2025 | — | — | — | Écarté : n'existe plus |
 
 **Pourquoi Render ?** C'est gratuit sans carte, l'app se déploie depuis GitHub, le HTTPS et une adresse `*.onrender.com` sont fournis, et le projet contient un fichier `render.yaml` qui fait presque toute la configuration à ta place. Frankfurt est la seule région européenne de Render, donc la plus proche d'Abidjan.
 
@@ -62,11 +62,11 @@ FestiConnect est un **serveur HTTP Node.js qui tourne en continu** (`server.js`)
 
 Il te faut deux valeurs : **l'URL de la base** (`libsql://…`) et **un jeton d'accès** (token).
 
-### ⚠️ Conseil important : mets la base en Europe
+### Conseil important : mets la base en Europe
 
 Dans `.env.example`, la base actuelle est à **Tokyo** (`aws-ap-northeast-1`). Or le serveur Render sera à **Frankfurt**. Chaque requête SQL ferait alors l'aller-retour Europe ↔ Japon (environ 250 ms à chaque fois), et une page qui lance plusieurs requêtes deviendrait lente.
 
-👉 Crée plutôt une nouvelle base en **AWS EU West (Irlande), `aws-eu-west-1`**, à environ 25 ms de Frankfurt. Comme la base actuelle ne contient que des données de démonstration, il suffit de relancer les migrations (automatiques) et le seed (étape 5).
+Crée plutôt une nouvelle base en **AWS EU West (Irlande), `aws-eu-west-1`**, à environ 25 ms de Frankfurt. Comme la base actuelle ne contient que des données de démonstration, il suffit de relancer les migrations (automatiques) et le seed (étape 5).
 
 ### Option A : avec le site Turso (le plus simple, marche sous Windows)
 
@@ -94,7 +94,7 @@ turso db tokens create festiconnect
 
 > Si la CLI refuse `--location aws-eu-west-1`, tape `turso db locations` pour voir les régions proposées, ou crée la base avec l'option A.
 
-🔒 **Ne commite jamais le token.** Le fichier `.env` est déjà ignoré par Git (`.gitignore`), et sur Render le token se saisit uniquement dans le tableau de bord.
+**Ne commite jamais le token.** Le fichier `.env` est déjà ignoré par Git (`.gitignore`), et sur Render le token se saisit uniquement dans le tableau de bord.
 
 ---
 
@@ -107,7 +107,8 @@ Le fichier [`render.yaml`](render.yaml) décrit tout le service :
 - démarrage : `npm start` ;
 - vérification de santé (health check) sur `/api/health` ;
 - `NODE_ENV=production` et Node 22 ;
-- `APP_SECRET` **générée automatiquement** par Render.
+- `APP_SECRET` **générée automatiquement** par Render (elle signe les sessions : ne la régénère pas sans raison, sinon tout le monde est déconnecté) ;
+- `TRUST_PROXY=1` (Render place un proxy devant l'app : nécessaire pour limiter les tentatives de connexion par adresse IP).
 
 Étapes :
 
@@ -144,7 +145,8 @@ Ensuite, dans **Environment**, ajoute ces variables :
 |---|---|
 | `NODE_ENV` | `production` |
 | `NODE_VERSION` | `22` |
-| `APP_SECRET` | clique sur **Generate** ou colle une longue chaîne aléatoire (voir ci-dessous) |
+| `APP_SECRET` | clique sur **Generate** ou colle une longue chaîne aléatoire d'au moins 32 caractères (voir ci-dessous) |
+| `TRUST_PROXY` | `1` |
 | `TURSO_DATABASE_URL` | `libsql://…` |
 | `TURSO_AUTH_TOKEN` | ton jeton |
 
@@ -178,7 +180,15 @@ Les **tables** sont créées automatiquement à chaque déploiement (`npm run db
 
    Tu dois voir `Migrations appliquees.` puis `Donnees de demonstration inserees.`
 
-> 🔐 **Sécurité :** le seed crée des comptes aux mots de passe **publics** (ils sont écrits dans le README). Par exemple `admin@festiconnect.ci` / `Admin123!`. C'est très bien pour une démo, mais si le site est ouvert à de vrais utilisateurs : ne lance pas le seed, ou change tout de suite le mot de passe du compte admin.
+> **Sécurité :** par défaut, le seed crée des comptes aux mots de passe **publics** (ils sont écrits dans le README), par exemple `admin@festiconnect.ci` / `Admin123!`. Pour une base en ligne, choisis tes propres mots de passe en les ajoutant dans `.env` **avant** de lancer `npm run db:setup` :
+>
+> ```env
+> SEED_ADMIN_PASSWORD=un-mot-de-passe-long-et-unique
+> SEED_ORGANIZER_PASSWORD=un-autre-mot-de-passe
+> SEED_CLIENT_PASSWORD=encore-un-autre
+> ```
+>
+> Au démarrage en production, le serveur affiche une ALERTE dans les logs Render si un compte de démo utilise encore son mot de passe public.
 
 ---
 
@@ -205,7 +215,7 @@ Il n'y a rien à faire de plus. Chaque `git push` sur `main` déclenche automati
 1. **GitHub Actions** ([`.github/workflows/ci.yml`](.github/workflows/ci.yml)), qui lance `npm ci` puis `npm test` avec Node 22 (onglet **Actions** du dépôt). Aucun secret n'est nécessaire : les tests utilisent une base SQLite locale temporaire.
 2. **Render**, qui reconstruit, applique les migrations et redéploie. Si le build échoue (erreur de code, base injoignable…), **l'ancienne version reste en ligne**.
 
-💡 Pour que Render ne déploie que si les tests passent : dans le service Render, **Settings → Build & Deploy → Auto-Deploy**, choisis **« After CI Checks Pass »** (si l'option est proposée). Dans `render.yaml`, cela correspond à `autoDeployTrigger: checksPass`.
+Astuce : pour que Render ne déploie que si les tests passent : dans le service Render, **Settings → Build & Deploy → Auto-Deploy**, choisis **« After CI Checks Pass »** (si l'option est proposée). Dans `render.yaml`, cela correspond à `autoDeployTrigger: checksPass`.
 
 ---
 
@@ -253,9 +263,9 @@ Avec **[cron-job.org](https://cron-job.org)** (gratuit, permet de choisir des ho
 | Heures | 750 h/mois pour tout l'espace de travail |
 | Mise en veille | après 15 min sans trafic, réveil en ~1 min |
 | Bande passante | **5 Go/mois** pour les espaces créés depuis le 23 avril 2026 (avant : 100 Go) |
-| Pre-deploy / Shell | ❌ non disponibles : c'est pour ça que les migrations tournent pendant le build |
+| Pre-deploy / Shell | Non disponibles : c'est pour ça que les migrations tournent pendant le build |
 | Disque | éphémère : tout fichier écrit sur le serveur est perdu au redémarrage. Ce n'est pas un problème ici, car toutes les données sont dans Turso |
-| HTTPS / domaine perso | ✅ inclus |
+| HTTPS / domaine perso | Inclus |
 
 **Turso Free** (sept. 2026) : 5 Go de stockage, 100 bases, 500 millions de lignes lues et 10 millions de lignes écrites par mois. C'est largement suffisant pour un projet étudiant.
 
@@ -276,7 +286,8 @@ Si Render ne convient pas (quota épuisé, compte suspendu, conditions modifiée
    |---|---|
    | `TURSO_DATABASE_URL` | `libsql://…` |
    | `TURSO_AUTH_TOKEN` | ton jeton |
-   | `APP_SECRET` | une longue chaîne aléatoire (voir la section 4) |
+   | `APP_SECRET` | une longue chaîne aléatoire d'au moins 32 caractères (voir la section 4) |
+   | `TRUST_PROXY` | `1` |
    | `PORT` | `3000` |
 
    `NODE_ENV=production` est déjà défini dans l'image.
@@ -307,7 +318,7 @@ docker run --rm -p 3000:3000 --env-file .env festiconnect
 | Site très lent à chaque clic | Base Turso loin du serveur (Tokyo ↔ Frankfurt) | Crée la base en `aws-eu-west-1` (section 3) |
 | Première page très lente (~1 min), puis normale | Réveil après la mise en veille | Normal en gratuit. Voir la section 8 |
 | `Service suspended` / plus d'heures gratuites | Quota de 750 h épuisé | Attends le mois suivant, réduis le ping (section 8), ou utilise Zeabur |
-| Les utilisateurs sont déconnectés ou les comptes ont disparu après un redéploiement | `TURSO_DATABASE_URL` pointe vers une autre base, ou `APP_SECRET` a été régénérée (si elle sert à signer les sessions) | Garde la même base, et ne régénère pas `APP_SECRET` sans raison |
+| Les utilisateurs sont déconnectés ou les comptes ont disparu après un redéploiement | `TURSO_DATABASE_URL` pointe vers une autre base, ou `APP_SECRET` a été régénérée (elle signe les sessions) | Garde la même base, et ne régénère pas `APP_SECRET` sans raison |
 | Échec dans l'onglet **Actions** de GitHub | Un test ne passe plus | Lance `npm test` sur ton PC pour voir l'erreur exacte |
 
 Pour relancer un déploiement à la main, va dans **Manual Deploy → Deploy latest commit**. En cas de doute après un changement de cache, utilise **Clear build cache & deploy**.

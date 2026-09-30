@@ -30,6 +30,9 @@ services:
       # Cle secrete generee aleatoirement par Render a la creation.
       - key: APP_SECRET
         generateValue: true
+      # Render place un proxy devant l'app : necessaire pour la limitation de debit par IP.
+      - key: TRUST_PROXY
+        value: "1"
       # Secrets Turso : a saisir dans le dashboard Render (jamais dans Git).
       - key: TURSO_DATABASE_URL
         sync: false

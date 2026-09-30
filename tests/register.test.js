@@ -1,13 +1,17 @@
 import { spawn, spawnSync } from 'node:child_process';
 import fs from 'node:fs';
+import os from 'node:os';
 import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 
-const root = process.cwd();
-const dbPath = path.join(root, 'register-test.db');
+const root = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
+const dbPath = path.join(fs.mkdtempSync(path.join(os.tmpdir(), 'festiconnect-register-')), 'register-test.db');
 const port = 3299;
 const env = {
   ...process.env,
+  NODE_ENV: 'test',
   PORT: String(port),
+  TRUST_PROXY: '0',
   TURSO_DATABASE_URL: `file:${dbPath}`,
   TURSO_AUTH_TOKEN: 'dev'
 };

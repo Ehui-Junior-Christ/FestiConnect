@@ -10,7 +10,13 @@ npm install
 copy .env.example .env
 ```
 
-Renseigne ensuite `TURSO_AUTH_TOKEN` dans `.env`.
+Renseigne ensuite `TURSO_AUTH_TOKEN` et `APP_SECRET` dans `.env`.
+
+Pour developper sans Turso, une base SQLite locale suffit (refusee en production) :
+
+```bash
+TURSO_DATABASE_URL=file:./festiconnect-dev.db
+```
 
 ## Base de donnees
 
@@ -39,7 +45,7 @@ Les tests utilisent une base SQLite locale temporaire (`file:`) : aucun token Tu
 
 FestiConnect se deploie gratuitement et sans carte bancaire sur **Render** (plan Free, region Frankfurt), avec la base **Turso** (plan Free). **Zeabur** sert d'alternative grace au `Dockerfile`.
 
-👉 Guide complet pas a pas : **[DEPLOIEMENT.md](DEPLOIEMENT.md)**
+Guide complet pas a pas : **[DEPLOIEMENT.md](DEPLOIEMENT.md)**
 
 Fichiers utiles :
 
@@ -48,9 +54,15 @@ Fichiers utiles :
 - `npm run start:prod` : applique les migrations (idempotentes) puis demarre le serveur ;
 - `npm run db:setup` : migrations puis donnees de demonstration.
 
-Variables d'environnement en production : `TURSO_DATABASE_URL`, `TURSO_AUTH_TOKEN`, `APP_SECRET`, `NODE_ENV=production` (`PORT` est fourni par l'hebergeur).
+Variables d'environnement en production : `TURSO_DATABASE_URL`, `TURSO_AUTH_TOKEN`, `APP_SECRET` (>= 32 caracteres aleatoires), `NODE_ENV=production`, `TRUST_PROXY=1` (`PORT` est fourni par l'hebergeur).
 
-## Comptes de demonstration
+### Securite en production
+
+- Ne pas lancer `npm run db:seed` en production (refuse par defaut) et changer/supprimer les comptes de demonstration.
+
+Voir [SECURITY.md](SECURITY.md) pour les protections en place et le signalement des failles.
+
+## Comptes de demonstration (developpement uniquement)
 
 - Admin: `admin@festiconnect.ci` / `Admin123!`
 - Organisateur: `organisateur@festiconnect.ci` / `Orga123!`
