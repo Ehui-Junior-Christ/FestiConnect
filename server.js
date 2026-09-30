@@ -6,7 +6,8 @@ import { config } from './src/config/env.js';
 import { NOT_STARTED_SQL, db, eventTimeMs, limiters, randomId, requireUser, safely } from './src/app/context.js';
 import { matchRoute, pathId, route, routes, searchParam } from './src/app/router.js';
 import { buildInsert, insertByExistingColumns, tableColumns } from './src/db/schema.js';
-import { notify } from './src/features/notifications.js';
+import './src/features/notifications.js';
+import { PAYMENT_METHODS } from './src/features/events.js';
 import { AppError, errorResponse, notFound } from './src/shared/errors.js';
 import { parseBody, sendJson, serveStatic } from './src/shared/http.js';
 import { dummyVerify, hashPassword, needsRehash, passwordPolicyError, verifyPassword } from './src/shared/passwords.js';
@@ -29,10 +30,8 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const publicDir = path.join(__dirname, 'public');
 
-const PAYMENT_METHODS = ['Wave', 'Orange Money', 'Moov Money'];
 const EVENT_STATUSES = ['approved', 'pending', 'rejected'];
 const SELF_SERVICE_ROLES = ['client', 'organisateur'];
-const MAX_TICKETS_PER_PURCHASE = 10;
 const MAX_ORDER_LINES = 50;
 const MAX_QUANTITY_PER_PRODUCT = 50;
 
@@ -84,39 +83,6 @@ async function countOrdersForUser(userId) {
   const userColumn = columns.has('user_id') ? 'user_id' : 'userId';
   const orders = await db.execute({ sql: `select count(*) as count from orders where ${userColumn} = ?`, args: [userId] });
   return orders.rows[0].count;
-}
-
-// Reservation atomique de places : l'UPDATE conditionnel ne passe que s'il
-// reste assez de capacite (capacite <= 0 = historique "illimite") et si
-// l'evenement n'a pas commence.
-async function reserveEventSeats(eventId, quantity) {
-  const columns = await tableColumns(db, 'events');
-  const sets = ['tickets_sold = tickets_sold + ?'];
-  const args = [quantity];
-  if (columns.has('ticketsSold')) {
-    sets.push('ticketsSold = coalesce(ticketsSold, 0) + ?');
-    args.push(quantity);
-  }
-  args.push(eventId, quantity);
-  const result = await db.execute({
-    sql: `update events set ${sets.join(', ')}
-          where id = ? and status = 'approved' and ${NOT_STARTED_SQL}
-            and (coalesce(capacity, 0) <= 0 or coalesce(tickets_sold, 0) + ? <= capacity)`,
-    args
-  });
-  return result.rowsAffected === 1;
-}
-
-async function releaseEventSeats(eventId, quantity) {
-  const columns = await tableColumns(db, 'events');
-  const sets = ['tickets_sold = max(coalesce(tickets_sold, 0) - ?, 0)'];
-  const args = [quantity];
-  if (columns.has('ticketsSold')) {
-    sets.push('ticketsSold = max(coalesce(ticketsSold, 0) - ?, 0)');
-    args.push(quantity);
-  }
-  args.push(eventId);
-  await db.execute({ sql: `update events set ${sets.join(', ')} where id = ?`, args });
 }
 
 async function reserveStock(productId, quantity) {
@@ -226,180 +192,6 @@ route('POST', '/api/auth/logout-all', async ({ req, res }) => {
 });
 
 route('GET', '/api/me', async ({ req, res }) => sendJson(res, 200, { user: await findSessionUser(db, req) }));
-
-route('GET', '/api/events', async ({ res, url }) => {
-  const q = searchParam(url, 'q', 100);
-  const category = searchParam(url, 'category', 40);
-  const city = searchParam(url, 'city', 60);
-  const like = `%${q.replace(/[\\%_]/g, (char) => `\\${char}`)}%`;
-  // Le catalogue public n'expose que les evenements valides (le parametre
-  // `status` n'est plus pris en compte : voir /api/admin/events) et pas encore
-  // termines (une fiche passee reste accessible par son lien, pour les avis).
-  const result = await db.execute({
-    sql: `select events.*, users.name as organizer_name
-          from events join users on users.id = events.organizer_id
-          where events.status = 'approved'
-            and datetime(coalesce(nullif(events.ends_at, ''), events.starts_at)) > datetime('now')
-            and (events.title like ? escape '\\' or events.description like ? escape '\\' or events.city like ? escape '\\')
-            and (? = '' or events.category = ?)
-            and (? = '' or events.city = ?)
-          order by datetime(events.starts_at) asc
-          limit 500`,
-    args: [like, like, like, category, category, city, city]
-  });
-  return sendJson(res, 200, { events: result.rows });
-});
-
-route('GET', /^\/api\/events\/([^/]+)$/, async ({ req, res, params }) => {
-  const eventId = pathId(params[0]);
-  if (!eventId) return notFound(res);
-  const result = await db.execute({
-    sql: `select events.*, users.name as organizer_name
-          from events join users on users.id = events.organizer_id
-          where events.id = ?`,
-    args: [eventId]
-  });
-  const event = result.rows[0];
-  if (!event) return notFound(res);
-  if (event.status !== 'approved') {
-    // Evenement non publie : visible uniquement par son organisateur ou un admin.
-    const user = await findSessionUser(db, req);
-    if (!user || (user.role !== 'admin' && user.id !== event.organizer_id)) return notFound(res);
-  }
-  return sendJson(res, 200, { event });
-});
-
-route('POST', '/api/events', async ({ req, res }) => {
-  const user = await requireUser(req, ['organisateur', 'admin']);
-  enforce(limiters.eventCreateUser, user.id);
-  const body = await parseBody(req);
-  if (!body.title || !body.category || !body.city || !body.starts_at) {
-    throw new AppError(422, 'VALIDATION_ERROR', 'Titre, catégorie, ville et date sont obligatoires.');
-  }
-  const title = v.text(body.title, { label: 'Titre', min: 3, max: 120, required: true });
-  const category = v.text(body.category, { label: 'Catégorie', min: 2, max: 40, required: true });
-  const city = v.text(body.city, { label: 'Ville', min: 2, max: 60, required: true });
-  const location = v.text(body.location, { label: 'Lieu', max: 120, fallback: city });
-  const startsAt = v.dateTime(body.starts_at, { label: 'Date de début', required: true });
-  const endsAt = v.dateTime(body.ends_at, { label: 'Date de fin' }) || startsAt;
-  if (Date.parse(endsAt) < Date.parse(startsAt)) {
-    throw new AppError(422, 'VALIDATION_ERROR', 'La date de fin doit être postérieure à la date de début.');
-  }
-  if (eventTimeMs(startsAt) <= Date.now()) {
-    throw new AppError(422, 'VALIDATION_ERROR', 'La date de début doit être dans le futur.');
-  }
-  const price = v.integer(body.price_xof, { label: 'Prix', min: 0, max: 10_000_000, fallback: 0 });
-  const capacity = v.integer(body.capacity, { label: 'Capacité', min: 1, max: 200_000, fallback: 100 });
-  const cover = v.imageUrl(body.cover_url, { label: 'Image', fallback: '/assets/img/event-default.svg' });
-  const description = v.text(body.description, { label: 'Description', max: 5000, multiline: true });
-
-  const id = randomId('evt');
-  await insertByExistingColumns(db, 'events', {
-    id,
-    organizer_id: user.id,
-    organizerId: user.id,
-    title,
-    category,
-    city,
-    location,
-    starts_at: startsAt,
-    ends_at: endsAt,
-    date: startsAt,
-    price_xof: price,
-    price,
-    capacity,
-    ticketsCapacity: capacity,
-    tickets_sold: 0,
-    ticketsSold: 0,
-    status: user.role === 'admin' ? 'approved' : 'pending',
-    cover_url: cover,
-    image: cover,
-    description,
-    created_at: new Date().toISOString()
-  });
-  return sendJson(res, 201, { id });
-});
-
-route('PATCH', /^\/api\/events\/([^/]+)\/status$/, async ({ req, res, params }) => {
-  await requireUser(req, ['admin']);
-  const eventId = pathId(params[0]);
-  if (!eventId) return notFound(res);
-  const body = await parseBody(req);
-  const status = v.oneOf(body.status, EVENT_STATUSES, { label: 'Statut' });
-  const found = await db.execute({ sql: 'select id, title, status, organizer_id from events where id = ?', args: [eventId] });
-  const event = found.rows[0];
-  if (!event) return notFound(res);
-  await db.execute({ sql: 'update events set status = ? where id = ?', args: [status, eventId] });
-  if (event.status !== status && status !== 'pending') {
-    const approved = status === 'approved';
-    await notify(event.organizer_id, {
-      type: 'event_status',
-      title: approved ? `« ${event.title} » est en ligne` : `« ${event.title} » n'a pas été validé`,
-      body: approved
-        ? 'Ton événement est visible dans le catalogue et la billetterie est ouverte.'
-        : 'L\'équipe FestiConnect ne l\'a pas publié. Vérifie le titre, la date, le lieu et la description, puis écris au support si besoin.',
-      link: approved ? `/evenement.html?id=${encodeURIComponent(event.id)}` : '/organisateur.html#analytics'
-    });
-  }
-  return sendJson(res, 200, { ok: true });
-});
-
-route('POST', '/api/tickets', async ({ req, res }) => {
-  const user = await requireUser(req, ['client', 'admin']);
-  enforce(limiters.purchaseUser, user.id);
-  const body = await parseBody(req);
-  const eventId = v.id(body.event_id, { label: 'Événement' });
-  const quantity = v.integer(body.quantity, { label: 'Quantité', min: 1, max: MAX_TICKETS_PER_PURCHASE, fallback: 1 });
-  const paymentMethod = v.oneOf(body.payment_method, PAYMENT_METHODS, { label: 'Moyen de paiement', fallback: 'Wave' });
-
-  const event = await db.execute({ sql: 'select * from events where id = ? and status = ?', args: [eventId, 'approved'] });
-  const row = event.rows[0];
-  if (!row) throw new AppError(404, 'EVENT_NOT_FOUND', 'Événement introuvable.');
-  if (!(eventTimeMs(row.starts_at) > Date.now())) {
-    throw new AppError(409, 'EVENT_STARTED', 'Cet événement a déjà commencé : la billetterie est fermée.');
-  }
-  // Prix toujours calcule cote serveur a partir de la base.
-  const unitPrice = Number(row.price_xof ?? row.price ?? 0);
-  if (!Number.isSafeInteger(unitPrice) || unitPrice < 0) throw new Error(`Prix invalide pour l'evenement ${row.id}`);
-  const amount = quantity * unitPrice;
-
-  if (!(await reserveEventSeats(row.id, quantity))) {
-    const fresh = await db.execute({ sql: `select ${NOT_STARTED_SQL} as open from events where id = ?`, args: [row.id] });
-    if (!Number(fresh.rows[0]?.open)) {
-      throw new AppError(409, 'EVENT_STARTED', 'Cet événement a déjà commencé : la billetterie est fermée.');
-    }
-    throw new AppError(409, 'SOLD_OUT', 'Plus assez de places disponibles pour cet événement.');
-  }
-  const id = randomId('tkt');
-  const code = `FC-${crypto.randomBytes(8).toString('hex').toUpperCase()}`;
-  const now = new Date().toISOString();
-  try {
-    await insertByExistingColumns(db, 'tickets', {
-      id,
-      event_id: row.id,
-      eventId: row.id,
-      eventTitle: row.title,
-      eventDate: row.starts_at || row.date,
-      eventLocation: row.location,
-      eventImage: row.cover_url || row.image,
-      user_id: user.id,
-      userId: user.id,
-      code,
-      qrcode: code,
-      quantity,
-      amount_xof: amount,
-      price: amount,
-      status: 'paid',
-      payment_method: paymentMethod,
-      created_at: now,
-      createdAt: now
-    });
-  } catch (error) {
-    await safely('liberation places', () => releaseEventSeats(row.id, quantity));
-    throw error;
-  }
-  return sendJson(res, 201, { id, amount_xof: amount });
-});
 
 route('GET', '/api/products', async ({ res }) => {
   const products = await db.execute({ sql: 'select * from products order by created_at desc limit 500', args: [] });

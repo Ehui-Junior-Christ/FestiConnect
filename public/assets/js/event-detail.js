@@ -32,11 +32,45 @@ function notFoundView() {
     </div>`;
 }
 
+function categoryLeft(category) {
+  return Math.max(0, Number(category.capacity || 0) - Number(category.sold || 0));
+}
+
+// Prix d'appel : le moins cher des tarifs encore disponibles.
+function startingPrice(event) {
+  const open = (event.categories || []).filter((category) => categoryLeft(category) > 0);
+  if (!open.length) return Number(event.price_xof || 0);
+  return Math.min(...open.map((category) => Number(category.price_xof || 0)));
+}
+
+function categoryChoices(event, selectedId) {
+  return `
+    <fieldset class="choices cat-choices">
+      <legend class="field-label">Catégorie de billet</legend>
+      ${event.categories.map((category) => {
+        const left = categoryLeft(category);
+        const scarce = left > 0 && left <= Math.max(10, category.capacity * 0.15);
+        const state = left === 0 ? '<span class="badge badge-danger">Complet</span>'
+          : scarce ? `<span class="badge badge-warning badge-dot">Plus que ${formatNumber(left)}</span>` : '';
+        return `
+          <label class="choice cat-choice${left === 0 ? ' is-disabled' : ''}">
+            <input type="radio" name="category_id" value="${escapeHtml(category.id)}" data-price="${Number(category.price_xof)}" data-left="${left}"${category.id === selectedId ? ' checked' : ''}${left === 0 ? ' disabled' : ''}>
+            <span class="cat-name">${escapeHtml(category.name)}</span>
+            <span class="cat-price">${escapeHtml(formatPrice(category.price_xof))}</span>
+            ${state}
+          </label>`;
+      }).join('')}
+    </fieldset>`;
+}
+
 function bookingBlock(event, user) {
-  const left = seatsLeft(event);
-  const soldOut = left === 0;
+  const hasCategories = Boolean(event.categories?.length);
+  const firstOpen = hasCategories ? event.categories.find((category) => categoryLeft(category) > 0) : null;
+  const left = hasCategories ? (firstOpen ? categoryLeft(firstOpen) : 0) : seatsLeft(event);
+  const soldOut = hasCategories ? !firstOpen : left === 0;
   const approved = event.status === 'approved';
   const maxQty = left === null ? MAX_TICKETS : Math.max(1, Math.min(MAX_TICKETS, left));
+  const unitPrice = hasCategories && firstOpen ? Number(firstOpen.price_xof) : Number(event.price_xof || 0);
   const phase = eventPhase(event);
   let blocker = '';
   if (!approved) blocker = alertBox('warning', 'Cet événement n\'est pas encore ouvert à la réservation : il est en cours de validation.');
@@ -46,29 +80,32 @@ function bookingBlock(event, user) {
   else if (user && user.role === 'organisateur') blocker = alertBox('info', 'Les billets se réservent avec un compte client. Déconnecte-toi puis connecte-toi avec ton compte client.');
 
   const capacity = Number(event.capacity || 0);
+  const eventLeft = seatsLeft(event);
+  const price = hasCategories ? startingPrice(event) : Number(event.price_xof || 0);
   return `
     <form class="buy-card" id="ticket-form" novalidate aria-labelledby="buy-title">
       <div class="buy-row">
         <div>
-          <h2 id="buy-title" class="small muted">Prix par billet</h2>
-          <span class="price${Number(event.price_xof) === 0 ? ' price-free' : ''}">${escapeHtml(formatPrice(event.price_xof))}</span>
+          <h2 id="buy-title" class="small muted">${hasCategories && event.categories.length > 1 ? 'À partir de' : 'Prix par billet'}</h2>
+          <span class="price${price === 0 ? ' price-free' : ''}">${escapeHtml(formatPrice(price))}</span>
         </div>
-        ${left !== null && !soldOut && phase === 'upcoming' ? `<span class="badge ${left <= capacity * 0.15 ? 'badge-warning' : 'badge-success'} badge-dot">${escapeHtml(plural(left, 'place restante', 'places restantes'))}</span>` : ''}
+        ${eventLeft !== null && eventLeft > 0 && phase === 'upcoming' ? `<span class="badge ${eventLeft <= capacity * 0.15 ? 'badge-warning' : 'badge-success'} badge-dot">${escapeHtml(plural(eventLeft, 'place restante', 'places restantes'))}</span>` : ''}
       </div>
-      ${capacity ? `<div><div class="meter" role="img" aria-label="${escapeHtml(`${formatNumber(event.tickets_sold)} billets vendus sur ${formatNumber(capacity)}`)}"><span data-meter="${Math.min(100, Math.round((Number(event.tickets_sold || 0) / capacity) * 100))}"></span></div>
+      ${capacity && phase === 'upcoming' ? `<div><div class="meter" role="img" aria-label="${escapeHtml(`${formatNumber(event.tickets_sold)} billets vendus sur ${formatNumber(capacity)}`)}"><span data-meter="${Math.min(100, Math.round((Number(event.tickets_sold || 0) / capacity) * 100))}"></span></div>
         <p class="small muted mt-2">${escapeHtml(formatNumber(event.tickets_sold))} billets déjà vendus</p></div>` : ''}
       ${blocker || `
+        ${hasCategories ? categoryChoices(event, firstOpen?.id) : ''}
         <div class="field">
           <label class="field-label" for="quantity">Nombre de billets</label>
           ${stepper({ name: 'quantity', value: 1, min: 1, max: maxQty, label: 'Nombre de billets', id: 'quantity' })}
-          <p class="field-hint">${maxQty < MAX_TICKETS ? `${escapeHtml(plural(maxQty, 'place disponible', 'places disponibles'))} au maximum.` : `Jusqu'à ${MAX_TICKETS} billets par réservation.`}</p>
+          <p class="field-hint" data-qty-hint></p>
         </div>
         ${paymentChoices()}
-        <div class="total-row"><span>Total à payer</span><strong data-total>${escapeHtml(formatMoney(event.price_xof))}</strong></div>
+        <div class="total-row"><span>Total à payer</span><strong data-total>${escapeHtml(formatMoney(unitPrice))}</strong></div>
         <button class="btn btn-primary btn-lg btn-block" type="submit" data-submit><span data-submit-label>${user ? 'Confirmer et payer' : 'Continuer'}</span></button>
         ${user ? '' : '<p class="small muted">Tu te connecteras (ou créeras ton compte) à l\'étape suivante. Ta sélection est conservée.</p>'}
         <ul class="reassure">
-          <li>${icon('check')}<span>Billet et code d'entrée disponibles tout de suite dans ton espace client</span></li>
+          <li>${icon('check')}<span>Billet et QR code d'entrée disponibles tout de suite dans ton espace client</span></li>
           <li>${icon('mobile')}<span>Paiement Wave, Orange Money ou Moov Money</span></li>
         </ul>`}
     </form>`;
@@ -136,20 +173,50 @@ function render(event) {
   setupBuyBar(event, Boolean(form.querySelector('[data-submit]')));
 }
 
+function selectedCategory(form) {
+  return form.querySelector('input[name="category_id"]:checked');
+}
+
 function wireBooking(form, event, user) {
   const quantityInput = form.elements.quantity;
   const totalNode = form.querySelector('[data-total]');
   const label = form.querySelector('[data-submit-label]');
   const button = form.querySelector('[data-submit]');
+  const hint = form.querySelector('[data-qty-hint]');
   document.querySelectorAll('[data-stepper]').forEach(syncStepper);
+
+  // Plafond de quantité : places restantes de la catégorie choisie (ou de l'événement).
+  const syncLimits = () => {
+    const chosen = selectedCategory(form);
+    const left = chosen ? Number(chosen.dataset.left) : seatsLeft(event);
+    const max = left === null ? MAX_TICKETS : Math.max(1, Math.min(MAX_TICKETS, left));
+    quantityInput.max = String(max);
+    if (Number(quantityInput.value) > max) quantityInput.value = String(max);
+    syncStepper(quantityInput.closest('[data-stepper]'));
+    hint.textContent = max < MAX_TICKETS
+      ? `${plural(max, 'place disponible', 'places disponibles')} au maximum${chosen ? ' dans cette catégorie' : ''}.`
+      : `Jusqu'à ${MAX_TICKETS} billets par réservation.`;
+  };
+
+  const unitPrice = () => {
+    const chosen = selectedCategory(form);
+    return chosen ? Number(chosen.dataset.price) : Number(event.price_xof || 0);
+  };
 
   const refresh = () => {
     const qty = Math.max(1, Number(quantityInput.value) || 1);
-    const total = qty * Number(event.price_xof || 0);
+    const total = qty * unitPrice();
     totalNode.textContent = formatMoney(total);
     if (user) label.textContent = total > 0 ? `Payer ${formatMoney(total)}` : 'Confirmer la réservation';
   };
   quantityInput.addEventListener('input', refresh);
+  form.addEventListener('change', (changeEvent) => {
+    if (changeEvent.target.name === 'category_id') {
+      syncLimits();
+      refresh();
+    }
+  });
+  syncLimits();
   refresh();
 
   // Si l'utilisateur revient de la connexion, on restaure sa sélection.
@@ -161,7 +228,9 @@ function wireBooking(form, event, user) {
         quantityInput.value = pending.quantity;
         const radio = [...form.elements.payment_method].find((item) => item.value === pending.payment_method);
         if (radio) radio.checked = true;
-        syncStepper(quantityInput.closest('[data-stepper]'));
+        const category = [...form.querySelectorAll('input[name="category_id"]')].find((item) => item.value === pending.category_id && !item.disabled);
+        if (category) category.checked = true;
+        syncLimits();
         refresh();
       }
     } catch { /* sélection illisible : on l'ignore */ }
@@ -189,6 +258,7 @@ function wireBooking(form, event, user) {
         id: ticket.id,
         amount: ticket.amount_xof,
         event: event.title,
+        category: ticket.category_name || '',
         payment: data.payment_method || '',
         qty: data.quantity || '1'
       });
@@ -211,8 +281,9 @@ function wireBooking(form, event, user) {
 // Barre collante sur mobile : prix + accès direct au formulaire, masquée quand il est visible.
 function setupBuyBar(event, canBook) {
   if (!buyBar) return;
+  const several = (event.categories?.length || 0) > 1;
   buyBar.innerHTML = `
-    <div><strong class="price">${escapeHtml(formatPrice(event.price_xof))}</strong><span class="small">par billet</span></div>
+    <div>${several ? '<span class="small">À partir de</span>' : ''}<strong class="price">${escapeHtml(formatPrice(startingPrice(event)))}</strong>${several ? '' : '<span class="small">par billet</span>'}</div>
     <a class="btn btn-primary" href="#reserver">${canBook ? 'Réserver' : 'Voir les détails'}</a>`;
   buyBar.hidden = false;
   document.body.classList.add('has-buy-bar');

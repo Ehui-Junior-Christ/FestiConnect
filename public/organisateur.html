@@ -54,7 +54,7 @@
           <div class="table-wrap">
             <table class="table table-stack">
               <caption class="sr-only">Liste de mes événements</caption>
-              <thead><tr><th scope="col">Événement</th><th scope="col">Ville</th><th scope="col">Date</th><th scope="col" class="num">Prix</th><th scope="col" class="num">Ventes</th><th scope="col">Statut</th></tr></thead>
+              <thead><tr><th scope="col">Événement</th><th scope="col">Ville</th><th scope="col">Date</th><th scope="col" class="num">Prix</th><th scope="col" class="num">Ventes</th><th scope="col">Statut</th><th scope="col" class="text-right">Actions</th></tr></thead>
               <tbody id="organizer-events"></tbody>
             </table>
           </div>
@@ -64,8 +64,9 @@
           <div class="panel-title">
             <div>
               <h2 id="create-title">Créer un événement</h2>
-              <p>Ton événement sera relu par l'équipe FestiConnect avant d'apparaître dans le catalogue.</p>
+              <p id="create-intro">Ton événement sera relu par l'équipe FestiConnect avant d'apparaître dans le catalogue.</p>
             </div>
+            <button class="btn btn-ghost btn-sm" type="button" id="edit-cancel" hidden><span data-icon="x"></span><span>Annuler la modification</span></button>
           </div>
           <form id="event-create-form" class="form" novalidate>
             <div class="field">
@@ -98,7 +99,7 @@
                 <input class="input" id="ev-end" type="datetime-local" name="ends_at">
               </div>
             </div>
-            <div class="form-row">
+            <div class="form-row" id="single-pricing">
               <div class="field">
                 <label class="field-label" for="ev-price">Prix du billet (FCFA)</label>
                 <input class="input" id="ev-price" type="number" name="price_xof" min="0" step="1" inputmode="numeric" placeholder="5000" aria-describedby="ev-price-hint">
@@ -110,12 +111,27 @@
                 <p class="field-hint" id="ev-capacity-hint">100 par défaut.</p>
               </div>
             </div>
+            <div class="cat-editor" role="group" aria-labelledby="cat-editor-title">
+              <div class="cat-editor-head">
+                <div>
+                  <strong id="cat-editor-title">Catégories de billets <span class="optional muted">(facultatif)</span></strong>
+                  <p class="small muted" id="cat-editor-hint">Un seul tarif te suffit ? Laisse vide. Sinon, crée par exemple Early bird, Standard et VIP, chacune avec son prix et ses places.</p>
+                </div>
+              </div>
+              <ul class="cat-rows" id="cat-rows"></ul>
+              <div class="cat-presets" aria-label="Ajouter une catégorie">
+                <button class="btn btn-sm" type="button" data-add-cat="Early bird"><span data-icon="plus"></span><span>Early bird</span></button>
+                <button class="btn btn-sm" type="button" data-add-cat="Standard"><span data-icon="plus"></span><span>Standard</span></button>
+                <button class="btn btn-sm" type="button" data-add-cat="VIP"><span data-icon="plus"></span><span>VIP</span></button>
+                <button class="btn btn-sm btn-ghost" type="button" data-add-cat=""><span data-icon="plus"></span><span>Autre catégorie</span></button>
+              </div>
+            </div>
             <div class="field">
               <label class="field-label" for="ev-description">Description <span class="optional">(facultatif)</span></label>
               <textarea class="textarea" id="ev-description" name="description" maxlength="2000" placeholder="Programme, artistes, dress code, accès…"></textarea>
             </div>
             <div class="cluster">
-              <button class="btn btn-primary" type="submit"><span data-icon="send"></span><span>Soumettre à validation</span></button>
+              <button class="btn btn-primary" type="submit"><span data-icon="send"></span><span data-submit-label>Soumettre à validation</span></button>
             </div>
           </form>
         </section>
@@ -175,5 +191,6 @@
   <script src="/assets/js/api.js"></script>
   <script src="/assets/js/ui.js"></script>
   <script src="/assets/js/organizer.js"></script>
+  <script src="/assets/js/organizer-form.js"></script>
 </body>
 </html>

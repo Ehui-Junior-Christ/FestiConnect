@@ -20,7 +20,7 @@ function ticketCard(ticket) {
         <ul class="meta">
           <li>${icon('calendar')}<span>${escapeHtml(formatDate(ticket.starts_at))}</span></li>
           ${ticket.location ? `<li>${icon('pin')}<span>${escapeHtml(ticket.location)}</span></li>` : ''}
-          <li>${icon('ticket')}<span>${escapeHtml(plural(ticket.quantity, 'billet', 'billets'))} · ${escapeHtml(formatPrice(ticket.amount_xof))}${ticket.payment_method ? ` · ${escapeHtml(ticket.payment_method)}` : ''}</span></li>
+          <li>${icon('ticket')}<span>${escapeHtml(plural(ticket.quantity, 'billet', 'billets'))}${ticket.category_name ? ` ${escapeHtml(ticket.category_name)}` : ''} · ${escapeHtml(formatPrice(ticket.amount_xof))}${ticket.payment_method ? ` · ${escapeHtml(ticket.payment_method)}` : ''}</span></li>
         </ul>
       </div>
       <div class="ticket-stub">

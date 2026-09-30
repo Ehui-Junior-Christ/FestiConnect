@@ -3,7 +3,6 @@ const organizerMetrics = document.querySelector('#organizer-metrics');
 const organizerEvents = document.querySelector('#organizer-events');
 const organizerTickets = document.querySelector('#organizer-tickets');
 const revenueList = document.querySelector('#revenue-list');
-const createForm = document.querySelector('#event-create-form');
 const scanForm = document.querySelector('#scan-form');
 const scanResult = document.querySelector('#scan-result');
 let soldTickets = [];
@@ -35,6 +34,11 @@ function eventRow(event) {
       <td class="num" data-label="Prix">${escapeHtml(formatPrice(event.price_xof))}</td>
       <td class="num" data-label="Ventes">${escapeHtml(formatNumber(sold))}${capacity ? ` / ${escapeHtml(formatNumber(capacity))}` : ''}</td>
       <td data-label="Statut">${statusBadge(event.status)}</td>
+      <td class="actions-cell">
+        <div class="actions">
+          <button class="btn btn-sm" type="button" data-edit-event="${escapeHtml(event.id)}">${icon('edit')}<span>Modifier</span></button>
+        </div>
+      </td>
     </tr>`;
 }
 
@@ -74,7 +78,7 @@ function renderRevenue(tickets) {
 
 async function loadOrganizer() {
   organizerMetrics.innerHTML = skeletonStats(4);
-  organizerEvents.innerHTML = skeletonRows(3, 6);
+  organizerEvents.innerHTML = skeletonRows(3, 7);
   organizerTickets.innerHTML = skeletonRows(3, 6);
   [organizerMetrics, organizerEvents, organizerTickets].forEach((node) => setLoading(node, true));
   try {
@@ -93,7 +97,7 @@ async function loadOrganizer() {
     ].join('');
     organizerEvents.innerHTML = events.length
       ? events.map(eventRow).join('')
-      : emptyRow(6, 'Tu n\'as encore publié aucun événement.', '<a class="btn btn-primary btn-sm" href="#creation">Créer mon premier événement</a>');
+      : emptyRow(7, 'Tu n\'as encore publié aucun événement.', '<a class="btn btn-primary btn-sm" href="#creation">Créer mon premier événement</a>');
     organizerTickets.innerHTML = tickets.length
       ? tickets.map(ticketRow).join('')
       : emptyRow(6, 'Aucun billet vendu pour le moment.');
@@ -111,37 +115,9 @@ async function loadOrganizer() {
   }
 }
 
-/* Création d'événement */
-enhanceForm(createForm);
-createForm.elements.ends_at.addEventListener('change', () => {
-  const start = createForm.elements.starts_at.value;
-  const end = createForm.elements.ends_at.value;
-  createForm.elements.ends_at.setCustomValidity(start && end && end < start ? 'La fin doit être après le début.' : '');
-});
-
-createForm.addEventListener('submit', async (event) => {
-  event.preventDefault();
-  clearFormNotice(createForm);
-  createForm.elements.ends_at.dispatchEvent(new Event('change'));
-  if (!validateForm(createForm)) return;
-  const button = createForm.querySelector('button[type="submit"]');
-  const data = Object.fromEntries(new FormData(createForm));
-  setBusy(button, true);
-  try {
-    await API.post('/api/events', data);
-    createForm.reset();
-    createForm.querySelectorAll('[data-touched]').forEach((field) => delete field.dataset.touched);
-    const message = organizerUser.role === 'admin'
-      ? `« ${data.title} » est publié.`
-      : `« ${data.title} » est envoyé à l'équipe. Il apparaîtra dans le catalogue une fois validé.`;
-    formNotice(createForm, message, 'success');
-    toast('Événement enregistré.', { type: 'success' });
-    loadOrganizer();
-  } catch (error) {
-    formNotice(createForm, error.message);
-  } finally {
-    setBusy(button, false);
-  }
+organizerEvents.addEventListener('click', (event) => {
+  const edit = event.target.closest('[data-edit-event]');
+  if (edit) startEditEvent(edit.dataset.editEvent);
 });
 
 /* Contrôle d'entrée : recherche du code parmi les billets de l'organisateur */

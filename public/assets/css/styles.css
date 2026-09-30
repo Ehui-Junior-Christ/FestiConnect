@@ -3632,6 +3632,115 @@ a.notif-body:hover {
   background: var(--primary-soft);
 }
 
+/* 22. Catégories de billets
+   ----------------------------------------------------------------------- */
+.cat-choices {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+.cat-choice {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: var(--space-1) var(--space-3);
+  min-height: 60px;
+}
+
+.cat-choice .cat-name {
+  font-size: var(--text-base);
+  overflow-wrap: anywhere;
+}
+
+.cat-choice .cat-price {
+  font-variant-numeric: tabular-nums;
+  font-size: var(--text-base);
+  white-space: nowrap;
+}
+
+.cat-choice .badge {
+  grid-column: 1 / -1;
+}
+
+.cat-choice.is-disabled {
+  cursor: not-allowed;
+  background: var(--surface-alt);
+  color: var(--text-muted);
+  border-style: dashed;
+}
+
+.cat-choice.is-disabled .cat-price {
+  text-decoration: line-through;
+}
+
+.cat-choice.is-disabled:hover {
+  border-color: var(--border-strong);
+}
+
+/* Éditeur de catégories (espace organisateur) */
+.cat-editor {
+  display: grid;
+  gap: var(--space-3);
+  padding: var(--space-4);
+  border: 1.5px dashed var(--border-strong);
+  border-radius: var(--radius-lg);
+  background: var(--surface-alt);
+}
+
+.cat-editor-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2);
+}
+
+.cat-rows {
+  display: grid;
+  gap: var(--space-3);
+  list-style: none;
+}
+
+.cat-row {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1fr) auto;
+  gap: var(--space-2) var(--space-3);
+  align-items: end;
+  padding: var(--space-3);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  background: var(--surface);
+}
+
+.cat-row .field:first-child {
+  grid-column: 1 / -1;
+}
+
+.cat-row .field-label {
+  font-size: var(--text-xs);
+}
+
+.cat-row .sold-note {
+  grid-column: 1 / -1;
+  color: var(--text-muted);
+  font-size: var(--text-xs);
+}
+
+@media (min-width: 720px) {
+  .cat-row {
+    grid-template-columns: minmax(0, 2fr) minmax(0, 1fr) minmax(0, 1fr) auto;
+  }
+
+  .cat-row .field:first-child {
+    grid-column: auto;
+  }
+}
+
+.cat-presets {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
 /* 20. Mouvement réduit
    ----------------------------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {

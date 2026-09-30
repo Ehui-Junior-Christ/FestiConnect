@@ -141,6 +141,29 @@ for (const event of events) {
   });
 }
 
+// Categories de billets (Salon Mode Sahel garde volontairement son tarif unique).
+const ticketCategories = [
+  ['cat_abissa_early', 'evt_abissa_2026', 'Early bird', 7500, 200, 200],
+  ['cat_abissa_std', 'evt_abissa_2026', 'Standard', 15000, 800, 150],
+  ['cat_abissa_vip', 'evt_abissa_2026', 'VIP', 35000, 200, 34],
+  ['cat_maquis_std', 'evt_maquis_night', 'Standard', 25000, 700, 540],
+  ['cat_maquis_vip', 'evt_maquis_night', 'VIP carré', 50000, 200, 81]
+];
+for (const [position, [categoryId, eventId, name, price, capacity, sold]] of ticketCategories.entries()) {
+  await insertOrUpdateById('ticket_categories', { id: categoryId, event_id: eventId, name, price_xof: price, capacity, sold, position, created_at: ago(30) });
+}
+// Jauge, prix d'appel et ventes de l'evenement = agregats de ses categories.
+for (const eventId of new Set(ticketCategories.map(([, eventId]) => eventId))) {
+  await db.execute({
+    sql: `update events set
+            capacity = (select sum(capacity) from ticket_categories where event_id = ?),
+            price_xof = (select min(price_xof) from ticket_categories where event_id = ?),
+            tickets_sold = (select sum(sold) from ticket_categories where event_id = ?)
+          where id = ?`,
+    args: [eventId, eventId, eventId, eventId]
+  });
+}
+
 const products = [
   ['prd_kente_cap', 'Casquette Kente Édition', 'Accessoire', 12000, 80, '/assets/img/product-cap.svg', 'Casquette brodée en série limitée, inspirée des motifs akan.'],
   ['prd_baule_tote', 'Tote bag Baoulé', 'Lifestyle', 9000, 120, '/assets/img/product-tote.svg', 'Sac épais imprimé à Abidjan, idéal pour les festivals et les marchés créatifs.'],
@@ -183,8 +206,8 @@ async function seedTicket(ticket) {
 
 // Billets du client de demonstration : un evenement a venir, un evenement
 // demain (rappel J-1) et un evenement passe (avis).
-await seedTicket({ id: 'tkt_demo_client', event_id: 'evt_abissa_2026', user_id: client.id, code: 'FC-DEMO-2026', quantity: 2, amount_xof: 30000, payment_method: 'Wave', created_at: ago(6) });
-await seedTicket({ id: 'tkt_demo_maquis', event_id: 'evt_maquis_night', user_id: client.id, code: 'FC-DEMO-MAQUIS', quantity: 1, amount_xof: 25000, payment_method: 'Orange Money', created_at: ago(3) });
+await seedTicket({ id: 'tkt_demo_client', event_id: 'evt_abissa_2026', category_id: 'cat_abissa_std', category_name: 'Standard', user_id: client.id, code: 'FC-DEMO-2026', quantity: 2, amount_xof: 30000, payment_method: 'Wave', created_at: ago(6) });
+await seedTicket({ id: 'tkt_demo_maquis', event_id: 'evt_maquis_night', category_id: 'cat_maquis_std', category_name: 'Standard', user_id: client.id, code: 'FC-DEMO-MAQUIS', quantity: 1, amount_xof: 25000, payment_method: 'Orange Money', created_at: ago(3) });
 await seedTicket({ id: 'tkt_demo_zouglou', event_id: 'evt_zouglou_past', user_id: client.id, code: 'FC-DEMO-ZOUGLOU', quantity: 2, amount_xof: 10000, payment_method: 'Moov Money', created_at: ago(15) });
 
 // Notifications de demonstration (le rappel J-1 du client est calcule a la lecture).

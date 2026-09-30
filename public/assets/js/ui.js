@@ -590,9 +590,19 @@ function seatsLeft(event) {
   return Math.max(0, capacity - Number(event.tickets_sold || 0));
 }
 
+// Prix affiché sur une carte : tarif unique, ou « Dès » le moins cher des tarifs encore disponibles.
+function cardPrice(event) {
+  const withCategories = Number(event.categories_count || 0) > 0;
+  const price = withCategories && event.min_available_price_xof !== null && event.min_available_price_xof !== undefined
+    ? Number(event.min_available_price_xof)
+    : Number(event.price_xof || 0);
+  return { price, label: `${Number(event.categories_count || 0) > 1 && price > 0 ? 'Dès ' : ''}${formatPrice(price)}` };
+}
+
 function eventCard(event) {
   const parts = dateParts(event.starts_at);
   const left = seatsLeft(event);
+  const shown = cardPrice(event);
   const scarce = left !== null && left > 0 && left <= Math.max(20, Number(event.capacity) * 0.15);
   const place = [event.location, event.city].filter(Boolean).filter((v, i, all) => all.indexOf(v) === i).join(', ');
   return `
@@ -610,7 +620,7 @@ function eventCard(event) {
         </ul>
         ${left === 0 ? '<span class="badge badge-danger">Complet</span>' : scarce ? `<span class="badge badge-warning badge-dot">Plus que ${formatNumber(left)} places</span>` : ''}
         <div class="card-foot">
-          <span class="price${Number(event.price_xof) === 0 ? ' price-free' : ''}">${escapeHtml(formatPrice(event.price_xof))}</span>
+          <span class="price${shown.price === 0 ? ' price-free' : ''}">${escapeHtml(shown.label)}</span>
           <span class="card-cta" aria-hidden="true">Réserver${icon('arrow-right')}</span>
         </div>
       </div>
