@@ -1,0 +1,26 @@
+# Jamais de secrets ni de dependances locales dans l'image
+.env
+.env.*
+!.env.example
+node_modules
+npm-debug.log*
+*.log
+
+# Bases SQLite locales / de test
+*.db
+*.db-shm
+*.db-wal
+
+# Outillage et fichiers inutiles a l'execution
+.git
+.gitignore
+.github
+.claude
+.vscode
+.idea
+memory
+tests
+Dockerfile
+.dockerignore
+render.yaml
+*.md
