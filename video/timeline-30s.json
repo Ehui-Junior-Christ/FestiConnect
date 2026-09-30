@@ -54,7 +54,7 @@
             "title4": 0.7,
             "out": 2.1
           },
-          "vo": "Ce soir, tout le monde sort.",
+          "vo": "Vendredi soir, tout le monde sort.",
           "voAt": 0.2
         }
       ]
@@ -74,7 +74,7 @@
             "w3": 1,
             "w4": 1.5
           },
-          "vo": "Concert, festival, maquis, défilé…",
+          "vo": "Concerts, festivals, maquis… mais où trouver sa place ?",
           "voAt": 0
         },
         {
@@ -199,7 +199,7 @@
           "start": 25,
           "end": 27,
           "screen": "Tableau de bord en accéléré : 621 / 900 billets, 15 525 000 F, bouton Retirer vers Wave.",
-          "vo": "Tu organises ? Crée, vends, encaisse.",
+          "vo": "Tu organises ? Vends ici aussi.",
           "voAt": 0.1,
           "cues": {
             "push": 0,

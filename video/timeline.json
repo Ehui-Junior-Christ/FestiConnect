@@ -41,7 +41,7 @@
             "title1": 1,
             "title2": 2
           },
-          "vo": "Abidjan. Vendredi, vingt et une heures.",
+          "vo": "Vendredi soir à Abidjan. Du Plateau à Grand-Bassam, jusqu'à Bouaké, tout le monde sort.",
           "voAt": 1
         },
         {
@@ -55,9 +55,7 @@
             "title3": 0.5,
             "title4": 1.5,
             "out": 3.6
-          },
-          "vo": "Au Plateau, à Grand-Bassam, à Bouaké… ce soir, tout le monde sort.",
-          "voAt": 0.3
+          }
         }
       ]
     },
@@ -77,7 +75,7 @@
             "w4": 3
           },
           "screen": "Mots-chocs, un par temps fort, chacun sur un panneau de trame : Concerts. / Festivals. / Maquis. / Défilés.",
-          "vo": "Concert, festival, soirée maquis, défilé.",
+          "vo": "Concerts, festivals, soirées maquis, défilés : les idées ne manquent pas.",
           "voAt": 0.1
         },
         {
@@ -92,7 +90,7 @@
             "iris": 3.3
           },
           "screen": "Trois affiches en éventail 3D (Abissa, Maquis Electronic Night, Salon Mode Sahel). Où ? Quand ? Comment ? mot à mot. Iris orange qui couvre l'écran sur le dernier temps.",
-          "vo": "Et toujours la même question : où, quand… et comment avoir sa place ?",
+          "vo": "Mais où, quand, et comment avoir sa place ?",
           "voAt": 0.2
         }
       ]
@@ -113,7 +111,7 @@
             "tag2": 2.5,
             "tag3": 3
           },
-          "vo": "FestiConnect. Billetterie, boutique, paiement mobile :",
+          "vo": "Voici FestiConnect : billetterie, boutique et paiement mobile, réunis au même endroit.",
           "voAt": 0.65
         },
         {
@@ -123,9 +121,7 @@
           "cues": {
             "promise": 0,
             "dive": 1.4
-          },
-          "vo": "tout au même endroit.",
-          "voAt": 0
+          }
         }
       ]
     },
@@ -146,7 +142,7 @@
             "results": 2.5,
             "tap": 5.4
           },
-          "vo": "Tu cherches un artiste, une ville, une date ? L'événement est là, en quelques secondes.",
+          "vo": "Tout commence par une recherche : un artiste, une ville ou une date.",
           "voAt": 0.3
         },
         {
@@ -160,7 +156,7 @@
             "cta": 3.5,
             "tap": 5.4
           },
-          "vo": "Date, lieu, prix, places restantes : tout est clair avant même de payer.",
+          "vo": "Sur la page de l'événement, tout est clair : le lieu, le prix, les places restantes.",
           "voAt": 0.3
         },
         {
@@ -177,7 +173,7 @@
             "success": 6,
             "toast": 6.5
           },
-          "vo": "Tu paies avec Wave, Orange Money ou Moov Money, depuis ton téléphone. Pas de file, pas de monnaie.",
+          "vo": "Tu réserves, puis tu paies avec Wave, Orange Money ou Moov Money, directement depuis ton téléphone.",
           "voAt": 0.3
         },
         {
@@ -192,7 +188,7 @@
             "valid": 4,
             "out": 5.6
           },
-          "vo": "Ton billet arrive avec son code unique. À l'entrée : un scan, et tu es dedans.",
+          "vo": "Ton billet arrive aussitôt. Le jour J, un scan à l'entrée, et c'est parti.",
           "voAt": 0.3
         }
       ]
@@ -207,7 +203,7 @@
           "start": 48,
           "end": 54,
           "screen": "Carrousel produits : Casquette Kente Edition 12 000 F, Tote Bag Baoulé 9 000 F, Affiche Collector Abissa 15 000 F. Badge panier 1, 2, 3 sur les temps.",
-          "vo": "Et pour garder la fête avec toi, la boutique officielle : casquettes, tote bags, affiches collector.",
+          "vo": "Et pour garder un souvenir de la soirée, la boutique officielle est juste à côté.",
           "voAt": 0.3,
           "cues": {
             "band": 0,
@@ -232,7 +228,7 @@
           "start": 54,
           "end": 58,
           "screen": "Tableau de bord Collectif Nouchi Live. Formulaire qui se remplit : Maquis Electronic Night, Sofitel Ivoire, 25 000 F, 900 places. Bouton Soumettre.",
-          "vo": "Tu organises ? Crée ton événement en quelques minutes.",
+          "vo": "Et si c'est toi qui organises ?",
           "voAt": 0.2,
           "cues": {
             "switch": 0,
@@ -250,7 +246,7 @@
           "start": 58,
           "end": 62,
           "screen": "Compteurs en direct : 621 / 900 billets, 15 525 000 F de recettes, histogramme qui pousse sur les temps.",
-          "vo": "Suis tes ventes en direct, billet par billet…",
+          "vo": "Tu crées ton événement, tu suis tes ventes en direct, et tu retires tes recettes sur mobile money.",
           "voAt": 0.2,
           "cues": {
             "push": 0,
@@ -265,8 +261,6 @@
           "start": 62,
           "end": 66,
           "screen": "Retrait : solde disponible, bouton Retirer vers Wave, confirmation verte.",
-          "vo": "… et retire tes recettes sur mobile money.",
-          "voAt": 0.2,
           "cues": {
             "push": 0,
             "tap": 1.5,
@@ -287,7 +281,7 @@
           "start": 66,
           "end": 70,
           "screen": "File de modération : Nuit Mandingue Premium, Yamoussoukro, En attente. Tampon « Validé » sur le premier temps de la mesure 2.",
-          "vo": "Chaque événement est vérifié avant publication. Ton public achète en confiance.",
+          "vo": "Chaque événement est vérifié : ton public achète en confiance.",
           "voAt": 0.2,
           "cues": {
             "in": 0,
@@ -318,7 +312,7 @@
             "iris": 3
           },
           "screen": "Triptyque rythmique : Trouve. / Paie. / Entre. Un mot par temps fort, fonds de trame alternés.",
-          "vo": "Trouve ta sortie. Paie en un geste. Entre en un scan.",
+          "vo": "Trouve, paie, entre. C'est aussi simple que ça.",
           "voAt": 0.1
         },
         {
@@ -332,7 +326,7 @@
             "fade": 4.8
           },
           "screen": "Carton final : la pastille tombe sur le i, logo, festiconnect.ci, « On est ensemble. », extinction, point final.",
-          "vo": "FestiConnect. Rendez-vous sur festiconnect point c i. On est ensemble.",
+          "vo": "FestiConnect. Rendez-vous sur festiconnect point c i. On est ensemble !",
           "voAt": 0.4
         }
       ]

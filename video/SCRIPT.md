@@ -184,7 +184,7 @@ Pour chaque plan : visuel, animation, texte à l'écran, voix off (heure de dép
 - **Visuel** : noir chaud. Cadre serré (zoom × 3,1 → × 3,35) sur un point de la ville. Une pastille orange naît au centre droit, entourée d'ondes. À gauche, grande typographie. En haut à droite, une horloge.
 - **Animation** : la pastille naît en ressort ; une onde part de la pastille à **chaque temps** (crème et fine sur les temps faibles, orange et large sur les premiers temps). La grille de points de la ville se révèle en cercle autour de la pastille. Le titre monte lettre par lettre depuis la ligne de base. L'horloge défile seconde par seconde et bascule sur 21:00:00.
 - **Texte à l'écran** : `CÔTE D'IVOIRE · 05°20′N 04°01′O` (tapé en mono) / **Abidjan.** (le point du titre en orange) / *Vendredi, 21 h* / horloge `VEN. 20:59:58` → `21:00:00`.
-- **Voix off** (00:01.0) : « Abidjan. Vendredi, vingt et une heures. »
+- **Voix off** (00:01.0, se prolonge sur A2) : « Vendredi soir à Abidjan. Du Plateau à Grand-Bassam, jusqu'à Bouaké, tout le monde sort. »
 - **Musique / SD** : nappe grave, ambiance urbaine lointaine (circulation, conversation de maquis très filtrée). Un « pop » sourd à la naissance de la pastille, puis un kick filtré dont chaque coup coïncide avec une onde.
 - **Temps forts** : 00:00.5 naissance de la pastille · 00:01.0 « Abidjan. » · **00:02.0 horloge à 21:00:00, sous-titre, grande onde orange** · puis une onde à chaque temps.
 
@@ -193,7 +193,7 @@ Pour chaque plan : visuel, animation, texte à l'écran, voix off (heure de dép
 - **Visuel** : la caméra recule (× 3,35 → × 1, en 1,65 s, courbe `glisse`). La pastille devient **Abidjan** dans une constellation de villes. Trois lignes de littoral couleur lagune se tracent sous Abidjan et Grand-Bassam.
 - **Animation** : le texte de A1 sort par le haut. Les liaisons partent de la ville source et **atterrissent sur le temps** ; à l'arrivée, la ville apparaît en ressort avec une onde orange et son nom en mono. Une fois tracées, des étincelles sable circulent sur les liaisons (le réseau est vivant).
 - **Texte à l'écran** : **Ce soir, / tout le monde / sort.** — étiquettes `ABIDJAN`, `GRAND-BASSAM`, `YAMOUSSOUKRO`, `BOUAKÉ`, `SAN-PÉDRO`, `KORHOGO`.
-- **Voix off** (00:04.3) : « Au Plateau, à Grand-Bassam, à Bouaké… ce soir, tout le monde sort. »
+- **Voix off** : suite de la phrase de A1.
 - **Musique / SD** : le filtre s'ouvre, hi-hats. Un « tic » léger à chaque arrivée de ville. Riser court à partir de 00:07.0.
 - **Temps forts** : 00:04.0 début du recul · 00:04.5 Grand-Bassam + « Ce soir, » · 00:05.0 Yamoussoukro · 00:05.5 Bouaké + « tout le monde » · 00:06.0 San-Pédro · 00:06.5 Korhogo · 00:07.6 sortie des textes · **00:08.0 coupe franche**.
 
@@ -207,7 +207,7 @@ Pour chaque plan : visuel, animation, texte à l'écran, voix off (heure de dép
   3. **Maquis.** — nuit, module *grille*, texte crème, point orange.
   4. **Défilés.** — crème, module *chevrons*, texte nuit, point orange.
 - **Animation** : transition « Le Pagne » (bord à 12°, 0,2 s avant le temps). Le mot claque avec ses lettres montantes et un léger recul d'échelle (1,07 → 1). La trame dérive lentement en diagonale. Compteur `01 / 04` en mono.
-- **Voix off** (00:08.1) : « Concert, festival, soirée maquis, défilé. »
+- **Voix off** (00:08.1) : « Concerts, festivals, soirées maquis, défilés : les idées ne manquent pas. »
 - **Musique / SD** : le groove entre à 00:08.0. Une frappe (tom grave ou log drum) par panneau, un « swish » de tissu à chaque entrée de panneau.
 - **Temps forts** : **00:08.0 Concerts** · **00:09.0 Festivals** · **00:10.0 Maquis** · **00:11.0 Défilés**.
 
@@ -216,7 +216,7 @@ Pour chaque plan : visuel, animation, texte à l'écran, voix off (heure de dép
 - **Visuel** : fond nuit. Trois affiches en éventail (Festival Abissa Experience, Maquis Electronic Night, Salon Mode Sahel) avec catégorie, ville, date et prix. Au-dessus, une question en trois mots.
 - **Animation** : les affiches montent depuis le bas en ressort, une par temps, et dérivent en s'écartant. Les mots de la question tombent sur les temps. À 00:15.3, **iris orange** depuis le centre qui couvre tout le cadre à 00:16.0, pendant que les affiches reculent.
 - **Texte à l'écran** : **Où ? Quand ? Comment ?** (« Comment ? » en orange) — sur les affiches : `TRADITION · GRAND-BASSAM`, `Ven. 14 août 2026 · dès 15 000 F`, etc.
-- **Voix off** (00:12.2) : « Et toujours la même question : où, quand… et comment avoir sa place ? »
+- **Voix off** (00:12.2) : « Mais où, quand, et comment avoir sa place ? »
 - **Musique / SD** : la montée s'intensifie, roulement de caisse claire ou de percussions sur la mesure 8, coupure d'une demi-mesure (silence ou aspiration inversée) avant le drop.
 - **Temps forts** : 00:12.0 / 00:12.5 / 00:13.0 affiches · 00:13.5 « Où ? » · 00:14.0 « Quand ? » · 00:14.5 « Comment ? » · 00:15.3 début de l'iris · **00:16.0 plein orange**.
 
@@ -227,7 +227,7 @@ Pour chaque plan : visuel, animation, texte à l'écran, voix off (heure de dép
 - **Visuel** : l'aplat orange plein cadre se contracte et **devient le point du i** de FestiConnect. Fond nuit, anneaux concentriques pointillés très discrets qui tournent lentement, halo orange.
 - **Animation** : contraction en 0,62 s (courbe `glisse`), rebond en ressort, deux ondes (orange, crème). Les lettres montent depuis le i vers l'extérieur. Puis la pastille sautille sur chaque temps. Les trois promesses apparaissent une par temps, séparées par de petites pastilles.
 - **Texte à l'écran** : **FestiConnect** — `Billetterie · Boutique · Paiement mobile`.
-- **Voix off** (00:16.65, sur l'atterrissage de la pastille) : « FestiConnect. Billetterie, boutique, paiement mobile : »
+- **Voix off** (00:16.65, sur l'atterrissage de la pastille, se prolonge sur C2) : « Voici FestiConnect : billetterie, boutique et paiement mobile, réunis au même endroit. »
 - **Musique / SD** : **drop à 00:16.0**, impact grave avec une courte queue de réverbération. Le logo est accompagné d'un son de marque court (voir 7.1.4, « sonal »).
 - **Temps forts** : **00:16.0 drop, contraction** · 00:16.6 atterrissage sur le i · 00:18.0 Billetterie · 00:18.5 Boutique · 00:19.0 Paiement mobile.
 
@@ -235,7 +235,7 @@ Pour chaque plan : visuel, animation, texte à l'écran, voix off (heure de dép
 
 - **Visuel** : les trois promesses sont aspirées dans la pastille, qui gonfle à chaque absorption puis pulse. Puis **plongée** dans la pastille : zoom exponentiel jusqu'à ce que l'orange remplisse le cadre.
 - **Texte à l'écran** : FestiConnect seul.
-- **Voix off** (00:20.0) : « tout au même endroit. »
+- **Voix off** : fin de la phrase de C1.
 - **Musique / SD** : trois petits « blips » ascendants (un par promesse absorbée), puis une aspiration (reverse cymbal) pendant la plongée.
 - **Temps forts** : 00:20.0 / 00:20.2 / 00:20.4 absorptions · 00:20.8 pulsation · 00:21.4 début de la plongée · **00:22.0 plein orange**.
 
@@ -255,7 +255,7 @@ Le verbe change sur le premier temps de chaque plan. Derrière le téléphone, d
 - **Visuel** : écran d'accueil de l'app. « Salut Awa », « Qu'est-ce qu'on fait ce soir ? », champ de recherche avec bouton rond orange, filtres, trois résultats.
 - **Animation** : **raccord Pastille**, l'aplat orange se referme exactement sur le bouton de recherche (0,7 s) pendant que le téléphone monte. Saisie lettre par lettre de « Abissa », avec un curseur qui clignote sur les temps. Les filtres « Tradition » puis « Grand-Bassam » s'allument sur deux temps. Les trois cartes de résultat montent une par temps. Tap sur la première carte.
 - **Texte à l'écran** : légende `01 / 04 · RECHERCHE` — **Trouve.** — *Artiste, ville, date.* ; à l'écran du téléphone : `3 résultats`, « Festival Abissa Experience — Grand-Bassam · 14 août — dès 15 000 F », « Maquis Electronic Night — Abidjan · 21 juin — dès 25 000 F », « Salon Mode Sahel — Bouaké · 5 juil. — dès 8 000 F ».
-- **Voix off** (00:22.3) : « Tu cherches un artiste, une ville, une date ? L'événement est là, en quelques secondes. »
+- **Voix off** (00:22.3) : « Tout commence par une recherche : un artiste, une ville ou une date. »
 - **Musique / SD** : groove principal, allégé (ducking de −4 à −6 dB sous la voix). Cliquetis de clavier doux, un « tick » par filtre, un « pop » par carte.
 - **Temps forts** : 00:22.0 raccord pastille · 00:22.8 → 00:24.0 saisie · 00:24.0 Tradition · 00:24.3 Grand-Bassam · 00:24.5 / 00:25.0 / 00:25.5 cartes · 00:27.4 tap.
 
@@ -264,7 +264,7 @@ Le verbe change sur le premier temps de chaque plan. Derrière le téléphone, d
 - **Visuel** : fiche de l'événement. Visuel Abissa en tête, étiquettes « Tradition » et « Officiel », titre, date, lieu, organisateur, jauge de places, barre d'achat en bas avec le prix et le bouton « Réserver ».
 - **Animation** : poussée latérale de l'écran (de 00:27.7 à 00:28.2, atterrit sur le temps). L'image de tête se dézoome (1,18 → 1). Les infos montent en décalé. La jauge se remplit de 0 à 384 / 1 200 en 1,4 s, et le compteur « places restantes » descend jusqu'à 816. Le bouton « Réserver » pulse avec un halo, puis tap.
 - **Texte à l'écran** : `02 / 04 · ÉVÉNEMENT` — **Choisis.** — *Prix, lieu, places restantes.* ; téléphone : « Festival Abissa Experience », « Ven. 14 août 2026 · 18:00 », « Place Abissa, Grand-Bassam », « Collectif Nouchi Live », « Places vendues 384 / 1 200 », « 816 places restantes », « 15 000 F par billet », « Réserver ».
-- **Voix off** (00:28.3) : « Date, lieu, prix, places restantes : tout est clair avant même de payer. »
+- **Voix off** (00:28.3) : « Sur la page de l'événement, tout est clair : le lieu, le prix, les places restantes. »
 - **Musique / SD** : un « whoosh » court pour la poussée, un tic-tic de compteur pendant la jauge, un accord léger sur le halo du bouton.
 - **Temps forts** : **00:28.0 poussée** · 00:28.3 infos · 00:29.5 → 00:30.9 jauge · 00:31.5 halo du bouton · 00:33.4 tap « Réserver ».
 
@@ -273,7 +273,7 @@ Le verbe change sur le premier temps de chaque plan. Derrière le téléphone, d
 - **Visuel** : feuille de paiement qui monte sur la fiche assombrie : quantité, total, choix du moyen de paiement (Wave, Orange Money, Moov Money), bouton de paiement. Puis écran de confirmation vert et notification.
 - **Animation** : la feuille monte (00:33.7 → 00:34.3). Tap sur « + » : le chiffre roule de 1 à 2 et le total passe de 15 000 à 30 000 F. Les trois moyens de paiement entrent en décalé. Tap sur Wave : bouton radio en ressort, cadre orange. Tap sur « Payer 30 000 F avec Wave » : **le bouton se resserre en pastille**, trois points rebondissent sur les temps, et on lit « Confirme le paiement sur ton téléphone ». **La pastille devient la coche verte** : cercle vert, coche tracée, « Paiement reçu ». Une notification descend du haut de l'écran.
 - **Texte à l'écran** : `03 / 04 · PAIEMENT` — **Paie.** — *Wave, Orange Money, Moov Money.* ; téléphone : « Ton paiement », « Billets 2 », « Total 30 000 F », « Payer avec », « Payer 30 000 F avec Wave », « Paiement reçu », « 30 000 F · Wave », « 2 billets · Festival Abissa Experience », « Voir mes billets » ; notification : « Paiement confirmé — 30 000 F via Wave · 2 billets ».
-- **Voix off** (00:34.3) : « Tu paies avec Wave, Orange Money ou Moov Money, depuis ton téléphone. Pas de file, pas de monnaie. »
+- **Voix off** (00:34.3) : « Tu réserves, puis tu paies avec Wave, Orange Money ou Moov Money, directement depuis ton téléphone. »
 - **Musique / SD** : clics d'interface, un roulement de chiffre, un tic d'attente sur les temps pendant la confirmation, puis un **carillon de succès** à deux notes (la pièce maîtresse du sound design produit) et un son de notification discret.
 - **Temps forts** : 00:34.0 feuille · 00:35.0 +1 billet · 00:35.5 moyens de paiement · **00:37.0 Wave** · **00:38.0 Payer** · 00:38.3 → 00:40.0 attente (points sur les temps) · **00:40.0 paiement reçu** · 00:40.5 notification.
 
@@ -282,7 +282,7 @@ Le verbe change sur le premier temps de chaque plan. Derrière le téléphone, d
 - **Visuel** : le téléphone sort par la droite en pivotant ; **le billet** en sort et vient se poser au centre-droit, en grand. C'est un billet papier crème à encoches : visuel Abissa à gauche, infos au centre, talon à droite avec le QR code et le code du billet.
 - **Animation** : le billet arrive en 3D (rotation Y de −38° à 0°, échelle 0,45 → 1). Le QR se construit module par module en diagonale (0,7 s), ses trois yeux orange apparaissent en ressort (encore la pastille). Le code se tape caractère par caractère. **Le Scan** : une ligne verte balaie le QR en 0,5 s. Le tampon « ACCÈS VALIDÉ » **claque sur le temps** (échelle 2,2 → 1, rotation −6°), accompagné d'un éclat vert.
 - **Texte à l'écran** : `04 / 04 · BILLET` — **Entre.** — *Un code unique. Un scan.* ; billet : `BILLET · TRADITION`, « Festival Abissa Experience », « Ven. 14 août 2026 · 18:00 », « Place Abissa, Grand-Bassam », « 2 billets · Awa Yao », « Payé via Wave · 30 000 F », `FC-DEMO-2026`, « Présente ce code à l'entrée », tampon `ACCÈS VALIDÉ`.
-- **Voix off** (00:42.3) : « Ton billet arrive avec son code unique. À l'entrée : un scan, et tu es dedans. »
+- **Voix off** (00:42.3) : « Ton billet arrive aussitôt. Le jour J, un scan à l'entrée, et c'est parti. »
 - **Musique / SD** : un froissé de papier à l'arrivée du billet, un grésillement numérique pendant la construction du QR, une frappe de clavier mécanique pour le code, le **bip de scanner** à 00:45.5, un **coup de tampon grave** à 00:46.0, puis la rumeur de la foule qui s'ouvre (on « entre » dans la fête).
 - **Temps forts** : 00:41.8 le téléphone sort · 00:42.0 « Entre. » · 00:42.8 QR · 00:43.8 code · 00:45.5 scan · **00:46.0 ACCÈS VALIDÉ** · 00:47.6 sortie.
 
@@ -293,7 +293,7 @@ Le verbe change sur le premier temps de chaque plan. Derrière le téléphone, d
 - **Visuel** : transition « Le Pagne » en bande de trame multicolore qui révèle la boutique. Trois produits en carrousel horizontal, sur des socles aux couleurs de la trame : **Casquette Kente Edition** (12 000 F), **Tote Bag Baoulé** (9 000 F), **Affiche Collector Abissa** (15 000 F, tirage numéroté). À gauche, légende : `BOUTIQUE OFFICIELLE` / **Garde la fête.**
 - **Animation** : les produits entrent un par temps (00:48.5, 00:49.0, 00:49.5) avec une rotation 3D légère. Trois taps « Ajouter » sur les temps (00:50.5, 00:51.5, 00:52.5) ; à chaque tap, une pastille orange vole du produit jusqu'à l'icône panier, dont le badge passe 1 → 2 → 3 avec un rebond. À 00:53.5, le carrousel file vers la gauche.
 - **Texte à l'écran** : `BOUTIQUE OFFICIELLE` — **Garde la fête.** — *Casquettes, tote bags, affiches.* — noms, catégories et prix des produits, boutons « Ajouter » qui deviennent « Ajouté », panier avec badge `3` et `36 000 F`.
-- **Voix off** (00:48.3) : « Et pour garder la fête avec toi, la boutique officielle : casquettes, tote bags, affiches collector. »
+- **Voix off** (00:48.3) : « Et pour garder un souvenir de la soirée, la boutique officielle est juste à côté. »
 - **Musique / SD** : variation mélodique (motif percussif boisé, type balafon ou marimba traité moderne, joué comme un riff). Un « plop » par produit ajouté, accordé sur la tonalité.
 - **Temps forts** : 00:48.0 Pagne · 00:48.5 / 00:49.0 / 00:49.5 produits · 00:50.5 / 00:51.5 / 00:52.5 ajouts au panier · 00:53.5 sortie.
 
@@ -306,7 +306,7 @@ Dispositif : on change de point de vue. Ce n'est plus un téléphone mais un **�
 - **Visuel** : carton de bascule sur le premier temps (fond sable, **Tu organises ?** en nuit), puis le tableau de bord « Collectif Nouchi Live » avec le formulaire « Nouvel événement ».
 - **Animation** : les champs se remplissent un par temps : titre « Maquis Electronic Night » (00:55.0), lieu « Sofitel Ivoire, Abidjan » (00:55.5), date « Dim. 21 juin 2026 · 20:00 » (00:56.0), prix « 25 000 F » (00:56.5), places « 900 » (00:57.0). Une affiche se génère en vignette. Tap « Soumettre » à 00:57.5.
 - **Texte à l'écran** : `ORGANISATEUR · 01 / 03` — **Crée.** — *Un événement en quelques minutes.* — champs ci-dessus, bouton « Soumettre pour validation » qui devient « Envoyé pour validation », statut de l'aperçu « Brouillon » → « En attente de validation » (sable).
-- **Voix off** (00:54.2) : « Tu organises ? Crée ton événement en quelques minutes. »
+- **Voix off** (00:54.2) : « Et si c'est toi qui organises ? »
 - **Musique / SD** : la pulsation devient régulière (kick en quatre temps, arpège synthétique discret). Une frappe de touche par champ.
 - **Temps forts** : **00:54.0 bascule** · 00:55.0 → 00:57.0 champs · 00:57.5 Soumettre.
 
@@ -315,7 +315,7 @@ Dispositif : on change de point de vue. Ce n'est plus un téléphone mais un **�
 - **Visuel** : tableau de bord des ventes de « Maquis Electronic Night » : grand compteur de billets, compteur de recettes, histogramme par jour, fil de ventes en direct.
 - **Animation** : le compteur roule de 0 à **621 / 900** billets et les recettes de 0 à **15 525 000 F** (621 × 25 000 F) en 2 s. L'histogramme pousse une barre par temps. Trois notifications de vente glissent dans le fil sur les temps (« +2 billets · Wave », « +1 billet · Orange Money », « +4 billets · Moov Money »).
 - **Texte à l'écran** : `ORGANISATEUR · 02 / 03` — **Vends.** — *Tes ventes, en direct.* — `621 / 900 billets` — `15 525 000 F` — jauge 69 %.
-- **Voix off** (00:58.2) : « Suis tes ventes en direct, billet par billet… »
+- **Voix off** (00:58.2, se prolonge sur F3) : « Tu crées ton événement, tu suis tes ventes en direct, et tu retires tes recettes sur mobile money. »
 - **Musique / SD** : tic de compteur, un « ding » doux par notification, qui suit le rythme.
 - **Temps forts** : 00:58.0 compteurs · 00:59.0 / 01:00.0 / 01:01.0 notifications · barres de l'histogramme sur chaque temps.
 
@@ -324,7 +324,7 @@ Dispositif : on change de point de vue. Ce n'est plus un téléphone mais un **�
 - **Visuel** : vue « Retraits » : recettes de la vente, compte mobile money de destination (Wave, numéro masqué, « Compte vérifié »), bouton « Retirer vers Wave ».
 - **Animation** : la vue monte sur le premier temps, tap sur « Retirer » à 01:03.5 ; le bouton se resserre en pastille (même geste qu'en D3, pour la cohérence), puis coche verte à 01:04.0 et « Retrait envoyé » à 01:04.5. La pastille part vers la droite du cadre (le « chemin de l'argent ») et sert de transition.
 - **Texte à l'écran** : `ORGANISATEUR · 03 / 03` — **Encaisse.** — *Tes recettes, sur mobile money.* — « Recettes de la vente · Maquis Electronic Night », `15 525 000 F`, « Retirer vers Wave », « Retrait envoyé », `15 525 000 F vers Wave`.
-- **Voix off** (01:02.2) : « … et retire tes recettes sur mobile money. »
+- **Voix off** : fin de la phrase de F2.
 - **Musique / SD** : carillon de succès en variation (même famille que D3, une tierce au-dessus).
 - **Temps forts** : 01:03.5 tap · **01:04.0 coche** · 01:04.5 confirmation.
 
@@ -337,7 +337,7 @@ Dispositif : on change de point de vue. Ce n'est plus un téléphone mais un **�
 - **Visuel** : file de modération de l'administration, en cartes empilées. En tête, « Nuit Mandingue Premium — Yamoussoukro — En attente » ; à côté, la fiche détaillée (Fondation FHB, Sam. 12 sept. 2026 · 19:30, Collectif Nouchi Live, 18 000 F · 700 places) avec sa liste de contrôle, et les boutons « Refuser » / « Valider ».
 - **Animation** : trois coches tombent sur les temps : « Organisateur vérifié » (01:06.5), « Lieu et date confirmés » (01:07.0), « Billetterie conforme » (01:07.5). **Le Scan** balaie la fiche, tap sur « Valider » à 01:07.9, puis le **tampon VALIDÉ** claque à **01:08.0** sur le visuel de la fiche, avec un éclat et une onde verts (premier temps de la mesure 35). Le statut passe de « En attente » (sable) à « Publié » (vert) à 01:08.5, et le badge de la file disparaît.
 - **Texte à l'écran** : `ADMINISTRATION` — **Vérifié.** — *Avant chaque publication.* — items ci-dessus, tampon `VALIDÉ`, URL `festiconnect.ci/admin`.
-- **Voix off** (01:06.2) : « Chaque événement est vérifié avant publication. Ton public achète en confiance. »
+- **Voix off** (01:06.2) : « Chaque événement est vérifié : ton public achète en confiance. »
 - **Musique / SD** : break : la batterie s'arrête, il ne reste qu'une nappe et une pulsation sourde. Trois tics pour les coches, puis **impact grave + tampon** à 01:08.0. La relance commence à 01:09.0.
 - **Temps forts** : 01:06.5 / 01:07.0 / 01:07.5 coches · **01:08.0 VALIDÉ** · 01:08.5 Publié.
 
@@ -347,7 +347,7 @@ Dispositif : on change de point de vue. Ce n'est plus un téléphone mais un **�
 
 - **Visuel** : triptyque en panneaux de trame, en écho à B1 : **Trouve.** (orange, cercles) / **Paie.** (nuit, grille) / **Entre.** (sable, tirets). Chaque mot est centré, en 340 px.
 - **Animation** : transition « Le Pagne » sur chaque temps fort. Sur le dernier temps (01:13.0), **iris orange depuis le point de « Entre. »**, qui couvre le cadre à 01:14.0.
-- **Voix off** (01:10.1) : « Trouve ta sortie. Paie en un geste. Entre en un scan. »
+- **Voix off** (01:10.1) : « Trouve, paie, entre. C'est aussi simple que ça. »
 - **Musique / SD** : relance à pleine énergie, une frappe par mot, roulement et aspiration sur la mesure 37.
 - **Temps forts** : **01:10.0 Trouve.** · **01:11.0 Paie.** · **01:12.0 Entre.** · 01:13.0 iris · **01:14.0 plein orange**.
 
@@ -356,7 +356,7 @@ Dispositif : on change de point de vue. Ce n'est plus un téléphone mais un **�
 - **Visuel** : carton final. Même geste que le premier logo : l'aplat orange se contracte sur le i de FestiConnect. Dessous, la signature ; en bas, l'adresse web. Anneaux et halo. Puis extinction.
 - **Animation** : contraction et atterrissage (01:14.6), ondes, lettres qui montent depuis le i. URL en fondu montant à 01:15.5, signature lettre par lettre à 01:17.0. À 01:18.8, tout passe au noir **sauf la pastille**, qui glisse au centre, grossit une dernière fois et **se referme** à 01:19.95 : le point final.
 - **Texte à l'écran** : **FestiConnect** — **On est ensemble.** — `festiconnect.ci`.
-- **Voix off** (01:14.4) : « FestiConnect. Rendez-vous sur festiconnect point c i. On est ensemble. »
+- **Voix off** (01:14.4) : « FestiConnect. Rendez-vous sur festiconnect point c i. On est ensemble ! »
 - **Musique / SD** : dernier impact à 01:14.0, sonal de marque sur l'atterrissage, puis la musique se resserre en un dernier accord tenu. La fermeture de la pastille est accompagnée d'un « pop » inversé, puis silence. Fondu audio sur 1,5 s.
 - **Temps forts** : **01:14.0 impact** · 01:14.6 atterrissage · 01:15.5 URL · 01:17.0 signature · 01:18.8 extinction · **01:19.95 point final**.
 
@@ -389,15 +389,15 @@ Même univers, mêmes modules. Grille 120 BPM, 15 mesures. Fichier : `video/time
 
 | Plan | Temps | Visuel | Voix off |
 |---|---|---|---|
-| A1–A2 | 00:00.0 → 00:04.0 | Pastille, « Abidjan. », recul sur la constellation, « Ce soir, tout le monde sort. » | (00:01.7) « Ce soir, tout le monde sort. » |
-| B1 | 00:04.0 → 00:06.0 | Quatre mots-chocs, un par temps (Concerts. Festivals. Maquis. Défilés.) | (00:04.0) « Concert, festival, maquis, défilé… » |
+| A1–A2 | 00:00.0 → 00:04.0 | Pastille, « Abidjan. », recul sur la constellation, « Ce soir, tout le monde sort. » | (00:01.7) « Vendredi soir, tout le monde sort. » |
+| B1 | 00:04.0 → 00:06.0 | Quatre mots-chocs, un par temps (Concerts. Festivals. Maquis. Défilés.) | (00:04.0, se prolonge sur B2) « Concerts, festivals, maquis… mais où trouver sa place ? » |
 | B2 | 00:06.0 → 00:08.0 | Trois affiches, « Où ? Quand ? Comment ? », iris orange | — |
 | C1–C2 | 00:08.0 → 00:12.0 | La pastille se pose sur le i, promesses, aspiration, plongée | (00:08.8) « Avec FestiConnect, » |
 | D1 | 00:12.0 → 00:14.5 | Recherche « Abissa », résultats | (00:12.3) « tu trouves ton événement, » |
 | D2 | 00:14.5 → 00:17.0 | Fiche, jauge, « Réserver » | (00:14.7) « tu choisis ta place, » |
 | D3 | 00:17.0 → 00:21.5 | Paiement Wave, pastille d'attente, coche verte | (00:17.2) « tu paies avec Wave, Orange Money ou Moov Money… » |
 | D4 | 00:21.5 → 00:25.0 | Billet, QR, scan, ACCÈS VALIDÉ (00:23.8) | (00:22.0) « et tu entres en un scan. » |
-| F2 | 00:25.0 → 00:27.0 | Tableau de bord en accéléré : 621 / 900, 15 525 000 F, « Retirer vers Wave » | (00:25.1) « Tu organises ? Crée, vends, encaisse. » |
+| F2 | 00:25.0 → 00:27.0 | Tableau de bord en accéléré : 621 / 900, 15 525 000 F, « Retirer vers Wave » | (00:25.1) « Tu organises ? Vends ici aussi. » |
 | H2 | 00:27.0 → 00:30.0 | La pastille tombe sur le i, signature, URL, point final | (00:27.15) « FestiConnect. On est ensemble. » |
 
 Pour les réseaux, prévoir des sous-titres incrustés (une grande partie des vidéos y est regardée sans le son) : les textes ci-dessus servent de fichier de sous-titres ; la zone basse des plans est libre à partir de y = 900 px, sauf en D4.
@@ -460,41 +460,38 @@ Options acceptées :
 - **Casting** : voix ivoirienne, 25–35 ans, chaleureuse et souriante, **accent ivoirien naturel, sans caricature**, diction nette. Masculine ou féminine (une voix féminine fait bien contraste avec la musique grave ; les deux fonctionnent).
 - **Direction** : on parle à un ami, pas à une foule. Débit vif mais posé (environ 2,6 mots par seconde), sourire dans la voix, pauses marquées aux points. Les phrases énumératives (« Concert, festival, soirée maquis, défilé ») sont dites **sur le rythme**. « On est ensemble » est dit simplement, sans emphase.
 - **Enregistrement** : pièce traitée ou cabine, micro statique à 15–20 cm, anti-pop. Enregistrer **chaque ligne 3 fois** (neutre, plus d'énergie, plus intime) en laissant 1 s de silence entre les lignes. Livrer aussi une version « au propre » montée sur la musique si possible.
-- **Texte exact — version longue (80 s)** :
+- **Texte exact — version longue (80 s)** (réécrit en récit continu : chaque réplique s'enchaîne à la précédente, sans phrases télégraphiques) :
 
-| Plan | Départ indicatif | Fenêtre max | Texte |
-|---|---|---|---|
-| A1 | 00:01.0 | 2,8 s | Abidjan. Vendredi, vingt et une heures. |
-| A2 | 00:04.3 | 3,6 s | Au Plateau, à Grand-Bassam, à Bouaké… ce soir, tout le monde sort. |
-| B1 | 00:08.1 | 3,6 s | Concert, festival, soirée maquis, défilé. |
-| B2 | 00:12.2 | 3,6 s | Et toujours la même question : où, quand… et comment avoir sa place ? |
-| C1 | 00:16.65 | 3,2 s | FestiConnect. Billetterie, boutique, paiement mobile : |
-| C2 | 00:20.0 | 1,8 s | tout au même endroit. |
-| D1 | 00:22.3 | 5,5 s | Tu cherches un artiste, une ville, une date ? L'événement est là, en quelques secondes. |
-| D2 | 00:28.3 | 5,5 s | Date, lieu, prix, places restantes : tout est clair avant même de payer. |
-| D3 | 00:34.3 | 7,0 s | Tu paies avec Wave, Orange Money ou Moov Money, depuis ton téléphone. Pas de file, pas de monnaie. |
-| D4 | 00:42.3 | 5,5 s | Ton billet arrive avec son code unique. À l'entrée : un scan, et tu es dedans. |
-| E1 | 00:48.3 | 5,5 s | Et pour garder la fête avec toi, la boutique officielle : casquettes, tote bags, affiches collector. |
-| F1 | 00:54.2 | 3,6 s | Tu organises ? Crée ton événement en quelques minutes. |
-| F2 | 00:58.2 | 3,6 s | Suis tes ventes en direct, billet par billet… |
-| F3 | 01:02.2 | 3,6 s | … et retire tes recettes sur mobile money. |
-| G1 | 01:06.2 | 3,7 s | Chaque événement est vérifié avant publication. Ton public achète en confiance. |
-| H1 | 01:10.1 | 3,8 s | Trouve ta sortie. Paie en un geste. Entre en un scan. |
-| H2 | 01:14.4 | 4,5 s | FestiConnect. Rendez-vous sur festiconnect point c i. On est ensemble. |
+| N° | Plan | Départ indicatif | Fenêtre max | Texte |
+|---|---|---|---|---|
+| 01 | A1–A2 | 00:01.0 | 6,9 s | Vendredi soir à Abidjan. Du Plateau à Grand-Bassam, jusqu'à Bouaké, tout le monde sort. |
+| 02 | B1 | 00:08.1 | 4,0 s | Concerts, festivals, soirées maquis, défilés : les idées ne manquent pas. |
+| 03 | B2 | 00:12.2 | 4,3 s | Mais où, quand, et comment avoir sa place ? |
+| 04 | C1–C2 | 00:16.65 | 5,5 s | Voici FestiConnect : billetterie, boutique et paiement mobile, réunis au même endroit. |
+| 05 | D1 | 00:22.3 | 5,9 s | Tout commence par une recherche : un artiste, une ville ou une date. |
+| 06 | D2 | 00:28.3 | 5,9 s | Sur la page de l'événement, tout est clair : le lieu, le prix, les places restantes. |
+| 07 | D3 | 00:34.3 | 7,9 s | Tu réserves, puis tu paies avec Wave, Orange Money ou Moov Money, directement depuis ton téléphone. |
+| 08 | D4 | 00:42.3 | 5,9 s | Ton billet arrive aussitôt. Le jour J, un scan à l'entrée, et c'est parti. |
+| 09 | E1 | 00:48.3 | 5,8 s | Et pour garder un souvenir de la soirée, la boutique officielle est juste à côté. |
+| 10 | F1 | 00:54.2 | 3,9 s | Et si c'est toi qui organises ? |
+| 11 | F2–F3 | 00:58.2 | 7,9 s | Tu crées ton événement, tu suis tes ventes en direct, et tu retires tes recettes sur mobile money. |
+| 12 | G1 | 01:06.2 | 3,8 s | Chaque événement est vérifié : ton public achète en confiance. |
+| 13 | H1 | 01:10.1 | 4,2 s | Trouve, paie, entre. C'est aussi simple que ça. |
+| 14 | H2 | 01:14.4 | 4,5 s | FestiConnect. Rendez-vous sur festiconnect point c i. On est ensemble ! |
 
 - **Texte exact — version courte (30 s)** :
 
-| Plan | Départ indicatif | Texte |
-|---|---|---|
-| A2 | 00:01.7 | Ce soir, tout le monde sort. |
-| B1 | 00:04.0 | Concert, festival, maquis, défilé… |
-| C1 | 00:08.8 | Avec FestiConnect, |
-| D1 | 00:12.3 | tu trouves ton événement, |
-| D2 | 00:14.7 | tu choisis ta place, |
-| D3 | 00:17.2 | tu paies avec Wave, Orange Money ou Moov Money… |
-| D4 | 00:22.0 | et tu entres en un scan. |
-| F2 | 00:25.1 | Tu organises ? Crée, vends, encaisse. |
-| H2 | 00:27.15 | FestiConnect. On est ensemble. |
+| N° | Plan | Départ indicatif | Texte |
+|---|---|---|---|
+| c01 | A2 | 00:01.7 | Vendredi soir, tout le monde sort. |
+| c02 | B1–B2 | 00:04.0 | Concerts, festivals, maquis… mais où trouver sa place ? |
+| c03 | C1 | 00:08.8 | Avec FestiConnect, |
+| c04 | D1 | 00:12.3 | tu trouves ton événement, |
+| c05 | D2 | 00:14.7 | tu choisis ta place, |
+| c06 | D3 | 00:17.2 | tu paies avec Wave, Orange Money ou Moov Money… |
+| c07 | D4 | 00:22.0 | et tu entres en un scan. |
+| c08 | F2 | 00:25.1 | Tu organises ? Vends ici aussi. |
+| c09 | H2 | 00:27.15 | FestiConnect. On est ensemble. |
 
 Les fenêtres indiquent la durée disponible avant la phrase suivante ; ce qui compte le plus est le **début** de chaque phrase (c'est lui qui déclenche le plan). Une fin de phrase peut déborder de quelques dixièmes sur le plan suivant.
 

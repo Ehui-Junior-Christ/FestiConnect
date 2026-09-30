@@ -28,33 +28,35 @@ Le texte est identique à celui de `SCRIPT.md` (section 7.1.4). Cette page sert 
 
 Pas besoin de viser le chrono à la seconde près : je cale chaque ligne sur son plan au montage. Respecte juste à peu près la durée max ; si une phrase est trop longue, dis-la un peu plus vite plutôt que de couper des mots.
 
-Si tu veux entendre le rythme attendu, écoute la voix de synthèse actuelle (`voix_80s.wav`) : chaque ligne y démarre au bon moment.
 
 ---
 
-## Version longue — 80 s (17 lignes)
+## Version longue — 80 s (14 lignes)
+
+Le texte se lit comme une petite histoire : une soirée qui commence, la recherche, l'achat, l'entrée, puis le côté organisateur. Chaque ligne s'enchaîne à la précédente ; garde le fil, comme si tu racontais d'une traite.
 
 | N° | Moment dans la vidéo | Durée max | Texte à lire |
 |---|---|---|---|
-| 01 | 0:01 | 2,8 s | Abidjan. Vendredi, vingt et une heures. |
-| 02 | 0:04 | 3,6 s | Au Plateau, à Grand-Bassam, à Bouaké… ce soir, tout le monde sort. |
-| 03 | 0:08 | 3,6 s | Concert, festival, soirée maquis, défilé. |
-| 04 | 0:12 | 3,6 s | Et toujours la même question : où, quand… et comment avoir sa place ? |
-| 05 | 0:16 | 3,2 s | FestiConnect. Billetterie, boutique, paiement mobile : |
-| 06 | 0:20 | 1,8 s | tout au même endroit. |
-| 07 | 0:22 | 5,5 s | Tu cherches un artiste, une ville, une date ? L'événement est là, en quelques secondes. |
-| 08 | 0:28 | 5,5 s | Date, lieu, prix, places restantes : tout est clair avant même de payer. |
-| 09 | 0:34 | 7,0 s | Tu paies avec Wave, Orange Money ou Moov Money, depuis ton téléphone. Pas de file, pas de monnaie. |
-| 10 | 0:42 | 5,5 s | Ton billet arrive avec son code unique. À l'entrée : un scan, et tu es dedans. |
-| 11 | 0:48 | 5,5 s | Et pour garder la fête avec toi, la boutique officielle : casquettes, tote bags, affiches collector. |
-| 12 | 0:54 | 3,6 s | Tu organises ? Crée ton événement en quelques minutes. |
-| 13 | 0:58 | 3,6 s | Suis tes ventes en direct, billet par billet… |
-| 14 | 1:02 | 3,6 s | … et retire tes recettes sur mobile money. |
-| 15 | 1:06 | 3,7 s | Chaque événement est vérifié avant publication. Ton public achète en confiance. |
-| 16 | 1:10 | 3,8 s | Trouve ta sortie. Paie en un geste. Entre en un scan. |
-| 17 | 1:14 | 4,5 s | FestiConnect. Rendez-vous sur festiconnect point c i. On est ensemble. |
+| 01 | 0:01 | 6,9 s | Vendredi soir à Abidjan. Du Plateau à Grand-Bassam, jusqu'à Bouaké, tout le monde sort. |
+| 02 | 0:08 | 4,0 s | Concerts, festivals, soirées maquis, défilés : les idées ne manquent pas. |
+| 03 | 0:12 | 4,3 s | Mais où, quand, et comment avoir sa place ? |
+| 04 | 0:16 | 5,5 s | Voici FestiConnect : billetterie, boutique et paiement mobile, réunis au même endroit. |
+| 05 | 0:22 | 5,9 s | Tout commence par une recherche : un artiste, une ville ou une date. |
+| 06 | 0:28 | 5,9 s | Sur la page de l'événement, tout est clair : le lieu, le prix, les places restantes. |
+| 07 | 0:34 | 7,9 s | Tu réserves, puis tu paies avec Wave, Orange Money ou Moov Money, directement depuis ton téléphone. |
+| 08 | 0:42 | 5,9 s | Ton billet arrive aussitôt. Le jour J, un scan à l'entrée, et c'est parti. |
+| 09 | 0:48 | 5,8 s | Et pour garder un souvenir de la soirée, la boutique officielle est juste à côté. |
+| 10 | 0:54 | 3,9 s | Et si c'est toi qui organises ? |
+| 11 | 0:58 | 7,9 s | Tu crées ton événement, tu suis tes ventes en direct, et tu retires tes recettes sur mobile money. |
+| 12 | 1:06 | 3,8 s | Chaque événement est vérifié : ton public achète en confiance. |
+| 13 | 1:10 | 4,2 s | Trouve, paie, entre. C'est aussi simple que ça. |
+| 14 | 1:14 | 4,5 s | FestiConnect. Rendez-vous sur festiconnect point c i. On est ensemble ! |
 
-Les lignes 05 et 06 forment une seule phrase coupée en deux : enchaîne-les naturellement, mais dans deux fichiers séparés. Même chose pour 13 et 14.
+Intentions :
+- **03** est une vraie question, un peu amusée : c'est le problème que tout le monde connaît.
+- **04** : petit sourire sur « Voici FestiConnect », c'est la réponse à la question.
+- **10** relance l'attention : change légèrement de ton, comme si tu te tournais vers quelqu'un d'autre.
+- **13** : trois mots bien détachés, puis la phrase détendue.
 
 ## Version courte — 30 s (9 lignes, pour les réseaux)
 
@@ -62,14 +64,14 @@ Fichiers à nommer `c01.wav`, `c02.wav`…
 
 | N° | Moment dans la vidéo | Texte à lire |
 |---|---|---|
-| c01 | 0:01 | Ce soir, tout le monde sort. |
-| c02 | 0:04 | Concert, festival, maquis, défilé… |
+| c01 | 0:01 | Vendredi soir, tout le monde sort. |
+| c02 | 0:04 | Concerts, festivals, maquis… mais où trouver sa place ? |
 | c03 | 0:08 | Avec FestiConnect, |
 | c04 | 0:12 | tu trouves ton événement, |
 | c05 | 0:14 | tu choisis ta place, |
 | c06 | 0:17 | tu paies avec Wave, Orange Money ou Moov Money… |
 | c07 | 0:22 | et tu entres en un scan. |
-| c08 | 0:25 | Tu organises ? Crée, vends, encaisse. |
+| c08 | 0:25 | Tu organises ? Vends ici aussi. |
 | c09 | 0:27 | FestiConnect. On est ensemble. |
 
 Les lignes c03 à c07 forment une seule phrase : garde la même énergie montante de l'une à l'autre.
