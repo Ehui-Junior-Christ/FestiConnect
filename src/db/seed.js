@@ -237,6 +237,18 @@ await db.execute({
   args: [client.id, ago(2)]
 });
 
+// Retraits Mobile Money de l'organisateur : un deja verse, un en attente.
+for (const [withdrawalId, amount, method, phone, status, createdDaysAgo] of [
+  ['wdr_demo_paid', 20000, 'Wave', '+225 05 00 00 00 02', 'approved', 9],
+  ['wdr_demo_pending', 15000, 'Orange Money', '+225 07 00 00 00 02', 'pending', 1]
+]) {
+  await insertOrUpdateById('withdrawals', {
+    id: withdrawalId, organizer_id: organizer.id, amount_xof: amount, status, method, phone,
+    admin_note: '', processed_at: status === 'approved' ? ago(createdDaysAgo - 1) : '', processed_by: status === 'approved' ? admin.id : '',
+    created_at: ago(createdDaysAgo)
+  });
+}
+
 // Notifications de demonstration (le rappel J-1 du client est calcule a la lecture).
 await insertOrUpdateById('notifications', {
   id: 'ntf_demo_abissa_ok',

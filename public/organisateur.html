@@ -220,12 +220,53 @@
         <section id="revenus" class="panel" aria-labelledby="revenue-title">
           <div class="panel-title">
             <div>
-              <h2 id="revenue-title">Revenus par événement</h2>
-              <p>Calculés à partir des billets payés.</p>
+              <h2 id="revenue-title">Revenus et retraits</h2>
+              <p>Calculés à partir des billets payés, billets annulés exclus.</p>
             </div>
           </div>
-          <ul id="revenue-list" class="bar-list"></ul>
-          <div class="alert alert-info mt-6"><span data-icon="info"></span><div><strong>Retraits Mobile Money</strong><span>Les demandes de retrait ne se font pas encore depuis cet espace. <a href="/contact.html">Contacte l'équipe partenaires</a> pour virer tes revenus.</span></div></div>
+          <div id="wallet-stats" class="stats" aria-busy="true"></div>
+
+          <h3 class="h4 mt-8">Revenus par événement</h3>
+          <ul id="revenue-list" class="bar-list mt-4"></ul>
+
+          <div class="withdraw-box mt-8">
+            <div>
+              <h3 class="h3">Demander un retrait</h3>
+              <p class="small muted mt-2">Le montant est envoyé sur ton numéro Mobile Money une fois la demande vérifiée par l'équipe FestiConnect. Tu reçois une notification à chaque étape.</p>
+            </div>
+            <form id="withdraw-form" class="form" novalidate>
+              <div class="field">
+                <label class="field-label" for="withdraw-amount">Montant (FCFA)</label>
+                <div class="promo-row">
+                  <input class="input" id="withdraw-amount" name="amount_xof" type="number" inputmode="numeric" required min="1000" step="1" placeholder="Ex. 50000" aria-describedby="withdraw-amount-hint" data-msg-required="Indique le montant à retirer." data-msg-min="1 000 FCFA minimum par retrait.">
+                  <button class="btn" type="button" id="withdraw-all">Tout le solde</button>
+                </div>
+                <p class="field-hint" id="withdraw-amount-hint">1 000 FCFA minimum.</p>
+              </div>
+              <fieldset class="choices choices-3">
+                <legend class="field-label">Moyen de retrait</legend>
+                <label class="choice"><input type="radio" name="method" value="Wave" checked><span class="pay-dot pay-wave" aria-hidden="true"></span>Wave</label>
+                <label class="choice"><input type="radio" name="method" value="Orange Money"><span class="pay-dot pay-orange" aria-hidden="true"></span>Orange Money</label>
+                <label class="choice"><input type="radio" name="method" value="Moov Money"><span class="pay-dot pay-moov" aria-hidden="true"></span>Moov Money</label>
+              </fieldset>
+              <div class="field">
+                <label class="field-label" for="withdraw-phone">Numéro Mobile Money</label>
+                <input class="input" id="withdraw-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" required pattern="\s*(\+225|00225)?[\s.\-]*0[157]([\s.\-]*\d){8}\s*" placeholder="+225 07 00 00 00 00" data-msg-required="Indique le numéro qui recevra l'argent." data-msg-pattern="Format attendu : +225 suivi de 10 chiffres commençant par 01, 05 ou 07.">
+              </div>
+              <div class="cluster">
+                <button class="btn btn-primary" type="submit"><span data-icon="wallet"></span><span>Demander le retrait</span></button>
+              </div>
+            </form>
+          </div>
+
+          <h3 class="h4 mt-8">Historique des retraits</h3>
+          <div class="table-wrap mt-4">
+            <table class="table table-stack">
+              <caption class="sr-only">Historique des retraits</caption>
+              <thead><tr><th scope="col">Date</th><th scope="col" class="num">Montant</th><th scope="col">Moyen</th><th scope="col">Numéro</th><th scope="col">Statut</th></tr></thead>
+              <tbody id="withdraw-list"></tbody>
+            </table>
+          </div>
         </section>
       </div>
     </div>
@@ -238,5 +279,6 @@
   <script src="/assets/js/organizer.js"></script>
   <script src="/assets/js/organizer-form.js"></script>
   <script src="/assets/js/organizer-promos.js"></script>
+  <script src="/assets/js/organizer-wallet.js"></script>
 </body>
 </html>

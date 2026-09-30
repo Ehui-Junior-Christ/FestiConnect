@@ -13,6 +13,7 @@ import './src/features/checkin.js';
 import './src/features/favorites.js';
 import './src/features/calendar.js';
 import './src/features/waitlist.js';
+import './src/features/withdrawals.js';
 import { AppError, errorResponse, notFound } from './src/shared/errors.js';
 import { parseBody, sendJson, serveStatic } from './src/shared/http.js';
 import { dummyVerify, hashPassword, needsRehash, passwordPolicyError, verifyPassword } from './src/shared/passwords.js';
@@ -368,7 +369,8 @@ route('GET', '/api/admin/summary', async ({ req, res }) => {
   const events = await db.execute({ sql: 'select count(*) as count from events', args: [] });
   const pending = await db.execute({ sql: `select count(*) as count from events where status = 'pending'`, args: [] });
   const revenue = await db.execute({ sql: "select coalesce(sum(amount_xof), 0) as total from tickets where status = 'paid'", args: [] });
-  return sendJson(res, 200, { summary: { users: users.rows[0].count, events: events.rows[0].count, pending: pending.rows[0].count, volume: revenue.rows[0].total } });
+  const withdrawals = await db.execute({ sql: "select count(*) as count, coalesce(sum(amount_xof), 0) as amount from withdrawals where status = 'pending'", args: [] });
+  return sendJson(res, 200, { summary: { users: users.rows[0].count, events: events.rows[0].count, pending: pending.rows[0].count, volume: revenue.rows[0].total, withdrawals_pending: withdrawals.rows[0].count, withdrawals_amount: withdrawals.rows[0].amount } });
 });
 
 route('GET', '/api/admin/events', async ({ req, res, url }) => {

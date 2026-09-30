@@ -23,6 +23,7 @@
         <ul>
           <li><a href="#master" aria-current="true"><span data-icon="dashboard"></span>Vue d'ensemble</a></li>
           <li><a href="#validation"><span data-icon="shield"></span>Validation</a></li>
+          <li><a href="#retraits"><span data-icon="wallet"></span>Retraits</a></li>
           <li><a href="/organisateur.html"><span data-icon="plus-circle"></span>Publier un événement</a></li>
           <li class="nav-sep" role="presentation"></li>
           <li><button type="button" data-logout><span data-icon="logout"></span>Déconnexion</button></li>
@@ -53,6 +54,22 @@
               <caption class="sr-only">Événements à valider</caption>
               <thead><tr><th scope="col">Événement</th><th scope="col">Ville</th><th scope="col">Date</th><th scope="col">Statut</th><th scope="col" class="text-right">Actions</th></tr></thead>
               <tbody id="admin-events"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="retraits" class="panel" aria-labelledby="withdrawals-title">
+          <div class="panel-title">
+            <div>
+              <h2 id="withdrawals-title">Retraits des organisateurs</h2>
+              <p>Effectue le transfert Mobile Money, puis valide la demande : l'organisateur est notifié. En cas de refus, indique le motif.</p>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table class="table table-stack">
+              <caption class="sr-only">Demandes de retrait</caption>
+              <thead><tr><th scope="col">Organisateur</th><th scope="col" class="num">Montant</th><th scope="col">Moyen</th><th scope="col">Numéro</th><th scope="col">Statut</th><th scope="col" class="text-right">Actions</th></tr></thead>
+              <tbody id="admin-withdrawals"></tbody>
             </table>
           </div>
         </section>
