@@ -919,17 +919,43 @@ async function copyText(text) {
   }
 }
 
-async function shareLink({ title, url = location.href }) {
+// Partage : feuille de partage native (Web Share API) si le téléphone la propose,
+// sinon WhatsApp (lien wa.me) et copie du lien, plus l'ajout à l'agenda si fourni.
+async function shareLink({ title, text = '', url = location.href, icsUrl = '' }) {
   if (navigator.share) {
     try {
-      await navigator.share({ title, url });
+      await navigator.share({ title, text, url });
       return;
     } catch (error) {
       if (error?.name === 'AbortError') return;
     }
   }
-  const ok = await copyText(url);
-  toast(ok ? 'Lien copié. Tu peux le coller dans WhatsApp ou ailleurs.' : 'Copie impossible, sélectionne l\'adresse dans la barre du navigateur.', { type: ok ? 'success' : 'error' });
+  const message = [text || title, url].filter(Boolean).join('\n');
+  const dialog = document.createElement('dialog');
+  dialog.className = 'dialog share-dialog';
+  dialog.setAttribute('aria-labelledby', 'share-title');
+  dialog.innerHTML = `
+    <form method="dialog">
+      <h2 id="share-title" class="h3">Partager</h2>
+      <p class="muted small" data-share-name></p>
+      <div class="share-options">
+        <a class="share-option" data-share-whatsapp target="_blank" rel="noopener noreferrer">${icon('message')}<span><strong>WhatsApp</strong><small>Envoyer à un contact ou un groupe</small></span></a>
+        <button class="share-option" type="button" data-share-copy>${icon('copy')}<span><strong>Copier le lien</strong><small>Pour Instagram, Facebook, SMS…</small></span></button>
+        ${icsUrl ? `<a class="share-option" data-share-ics download>${icon('calendar')}<span><strong>Ajouter à mon agenda</strong><small>Fichier .ics avec rappel la veille</small></span></a>` : ''}
+      </div>
+      <div class="cluster"><button class="btn btn-ghost" value="close" type="submit">Fermer</button></div>
+    </form>`;
+  dialog.querySelector('[data-share-name]').textContent = title;
+  dialog.querySelector('[data-share-whatsapp]').href = `https://wa.me/?text=${encodeURIComponent(message)}`;
+  if (icsUrl) dialog.querySelector('[data-share-ics]').href = safeUrl(icsUrl, '/');
+  dialog.querySelector('[data-share-copy]').addEventListener('click', async () => {
+    const ok = await copyText(url);
+    dialog.close();
+    toast(ok ? 'Lien copié. Colle-le où tu veux.' : 'Copie impossible : sélectionne l\'adresse dans la barre du navigateur.', { type: ok ? 'success' : 'error' });
+  });
+  document.body.appendChild(dialog);
+  dialog.addEventListener('close', () => dialog.remove());
+  dialog.showModal();
 }
 
 // Menu des espaces connectés : met en évidence la section visible.

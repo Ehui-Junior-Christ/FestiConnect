@@ -156,6 +156,7 @@ function render(event) {
         <div class="cluster mt-6">
           ${event.status === 'approved' ? favButton(event, { withLabel: true }) : ''}
           <button class="btn btn-sm" type="button" data-share>${icon('share')}<span>Partager</span></button>
+          ${event.status === 'approved' && eventPhase(event) !== 'past' ? `<a class="btn btn-sm" href="/api/events/${encodeURIComponent(event.id)}/ics" download>${icon('calendar')}<span>Agenda</span></a>` : ''}
           <a class="btn btn-sm btn-ghost" href="/evenements.html?city=${encodeURIComponent(event.city || '')}">${icon('pin')}<span>Autres dates à ${escapeHtml(event.city)}</span></a>
         </div>
       </div>
@@ -181,7 +182,12 @@ function render(event) {
   detailRoot.querySelectorAll('[data-meter]').forEach((bar) => {
     bar.style.width = `${bar.dataset.meter}%`;
   });
-  detailRoot.querySelector('[data-share]')?.addEventListener('click', () => shareLink({ title: event.title }));
+  detailRoot.querySelector('[data-share]')?.addEventListener('click', () => shareLink({
+    title: event.title,
+    text: `${event.title} · ${formatDateShort(event.starts_at)} · ${event.city}`,
+    url: `${location.origin}${eventUrl(event)}`,
+    icsUrl: event.status === 'approved' ? `/api/events/${encodeURIComponent(event.id)}/ics` : ''
+  }));
 
   const form = detailRoot.querySelector('#ticket-form');
   if (form.querySelector('[data-submit]')) wireBooking(form, event, user);

@@ -11,6 +11,7 @@ import { PAYMENT_METHODS } from './src/features/events.js';
 import './src/features/promos.js';
 import './src/features/checkin.js';
 import './src/features/favorites.js';
+import './src/features/calendar.js';
 import { AppError, errorResponse, notFound } from './src/shared/errors.js';
 import { parseBody, sendJson, serveStatic } from './src/shared/http.js';
 import { dummyVerify, hashPassword, needsRehash, passwordPolicyError, verifyPassword } from './src/shared/passwords.js';
