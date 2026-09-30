@@ -3317,7 +3317,10 @@ dd {
     min-height: 560px;
     padding: var(--space-10);
     border-radius: var(--radius-xl);
-    background: var(--ink-900) url("../img/motif.svg") center top / 520px auto no-repeat;
+    background:
+      linear-gradient(to bottom, rgb(27 18 12 / 0) 0%, rgb(27 18 12 / 0) 34%, var(--ink-900) 58%),
+      url("../img/motif.svg") right -40px top -60px / 460px auto no-repeat,
+      var(--ink-900);
     color: #fbf4ea;
     overflow: hidden;
   }
