@@ -751,6 +751,17 @@ function statusBadge(status) {
   return `<span class="badge badge-${tone} badge-dot">${escapeHtml(label)}</span>`;
 }
 
+// Note sur 5 : étoiles pleines arrondies à l'unité, texte accessible.
+function formatRating(value) {
+  return Number(value).toLocaleString('fr-FR', { minimumFractionDigits: 1, maximumFractionDigits: 1 });
+}
+
+function stars(rating, { small = false } = {}) {
+  const full = Math.round(Number(rating) || 0);
+  return `<span class="stars${small ? ' stars-sm' : ''}" role="img" aria-label="Note : ${escapeHtml(formatRating(rating))} sur 5">${
+    [1, 2, 3, 4, 5].map((n) => `<span class="star${n <= full ? ' is-on' : ''}">${icon('star')}</span>`).join('')}</span>`;
+}
+
 /* Formulaires : validation inline, états d'envoi
    ------------------------------------------------------------------------ */
 function fieldMessage(field) {

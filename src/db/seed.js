@@ -249,6 +249,31 @@ for (const [withdrawalId, amount, method, phone, status, createdDaysAgo] of [
   });
 }
 
+// Participants de demonstration (mot de passe aleatoire jamais communique :
+// ces comptes ne servent qu'a peupler les avis et les ventes).
+const participants = [
+  ['usr_demo_awa', 'Awa Koné', 'awa.kone@demo.festiconnect.ci', 'Abidjan'],
+  ['usr_demo_yao', 'Yao Kouadio', 'yao.kouadio@demo.festiconnect.ci', 'Bouaké'],
+  ['usr_demo_fatou', 'Fatou Traoré', 'fatou.traore@demo.festiconnect.ci', 'Abidjan'],
+  ['usr_demo_serge', 'Serge Bamba', 'serge.bamba@demo.festiconnect.ci', 'Grand-Bassam']
+];
+for (const [userId, name, email, city] of participants) {
+  await upsertUser({ id: userId, name, email, password: `${crypto.randomBytes(18).toString('base64url')}9a`, role: 'client', phone: '', city });
+}
+
+// Avis sur l'evenement passe (le client de demonstration n'a pas encore donne le sien).
+const pastReviews = [
+  ['usr_demo_awa', 5, 'Son propre du début à la fin et entrée rapide avec le QR code. Le dernier groupe a fait chanter toute la salle jusqu\'à 2h.', 0],
+  ['usr_demo_yao', 4, 'Très bonne soirée. Il faisait chaud à l\'intérieur, il faudrait plus de ventilateurs près de la scène.', 0],
+  ['usr_demo_fatou', 4, 'Programmation au top. Les premiers passages ont commencé avec 40 minutes de retard.', 0],
+  ['usr_demo_serge', 1, 'Billets moins chers sur mon WhatsApp, écris-moi.', 1]
+];
+for (const [index, [userId, rating, comment, hidden]] of pastReviews.entries()) {
+  await seedTicket({ id: `tkt_seed_zouglou_${index}`, event_id: 'evt_zouglou_past', user_id: userId, code: `FC-SEED-ZOUGLOU-${index}`, quantity: 1, amount_xof: 5000, payment_method: 'Wave', created_at: ago(14 - index), checked_in_at: ago(10, -21), checked_in_by: organizer.id });
+  await insertOrUpdateById('reviews', { id: `rev_demo_${index}`, event_id: 'evt_zouglou_past', user_id: userId, rating, comment, hidden, created_at: ago(9 - index * 0.5), updated_at: ago(9 - index * 0.5) });
+}
+await db.execute({ sql: "update events set tickets_sold = (select coalesce(sum(quantity), 0) from tickets where event_id = 'evt_zouglou_past' and status = 'paid') where id = 'evt_zouglou_past'", args: [] });
+
 // Notifications de demonstration (le rappel J-1 du client est calcule a la lecture).
 await insertOrUpdateById('notifications', {
   id: 'ntf_demo_abissa_ok',

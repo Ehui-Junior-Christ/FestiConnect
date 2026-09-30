@@ -14,6 +14,7 @@ import './src/features/favorites.js';
 import './src/features/calendar.js';
 import './src/features/waitlist.js';
 import './src/features/withdrawals.js';
+import './src/features/reviews.js';
 import { AppError, errorResponse, notFound } from './src/shared/errors.js';
 import { parseBody, sendJson, serveStatic } from './src/shared/http.js';
 import { dummyVerify, hashPassword, needsRehash, passwordPolicyError, verifyPassword } from './src/shared/passwords.js';
@@ -311,7 +312,8 @@ route('GET', '/api/client/summary', async ({ req, res }) => {
 route('GET', '/api/client/tickets', async ({ req, res }) => {
   const user = await requireUser(req, ['client', 'admin']);
   const tickets = await db.execute({
-    sql: `select tickets.*, events.title, events.city, events.location, events.starts_at, events.ends_at
+    sql: `select tickets.*, events.title, events.city, events.location, events.starts_at, events.ends_at,
+                 exists(select 1 from reviews where reviews.event_id = tickets.event_id and reviews.user_id = tickets.user_id) as reviewed
           from tickets join events on events.id = tickets.event_id
           where tickets.user_id = ?
           order by datetime(coalesce(nullif(events.ends_at, ''), events.starts_at)) < datetime('now'), datetime(events.starts_at) asc`,

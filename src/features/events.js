@@ -108,7 +108,9 @@ export async function loadCategories(eventId) {
 
 export async function findEvent(eventId) {
   const result = await db.execute({
-    sql: `select events.*, users.name as organizer_name
+    sql: `select events.*, users.name as organizer_name,
+                 (select round(avg(rating), 1) from reviews where reviews.event_id = events.id and reviews.hidden = 0) as rating_avg,
+                 (select count(*) from reviews where reviews.event_id = events.id and reviews.hidden = 0) as rating_count
           from events join users on users.id = events.organizer_id
           where events.id = ?`,
     args: [eventId]

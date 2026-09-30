@@ -233,8 +233,55 @@ adminWithdrawals.addEventListener('click', async (event) => {
   }
 });
 
+/* Modération des avis */
+const adminReviews = document.querySelector('#admin-reviews');
+
+function adminReviewItem(item) {
+  return `
+    <li class="review${item.hidden ? ' is-hidden' : ''}">
+      <div class="review-head">
+        ${stars(item.rating, { small: true })}
+        <strong>${escapeHtml(item.author_name)}</strong>
+        <span class="small muted">sur <a href="${eventUrl({ id: item.event_id })}#avis">${escapeHtml(item.event_title)}</a> · ${escapeHtml(formatDateShort(item.created_at))}</span>
+        ${item.hidden ? '<span class="badge badge-danger badge-dot">Masqué</span>' : ''}
+      </div>
+      ${item.comment ? `<p>${escapeHtml(item.comment)}</p>` : '<p class="muted small">Note sans commentaire.</p>'}
+      <div class="cluster"><button class="btn btn-sm${item.hidden ? '' : ' btn-danger'}" type="button" data-review="${escapeHtml(item.id)}" data-hidden="${item.hidden}">${icon(item.hidden ? 'eye' : 'eye-off')}<span>${item.hidden ? 'Réafficher' : 'Masquer'}</span></button></div>
+    </li>`;
+}
+
+async function loadReviewsAdmin() {
+  setLoading(adminReviews, true);
+  try {
+    const { reviews } = await API.get('/api/admin/reviews');
+    adminReviews.innerHTML = reviews.length
+      ? reviews.map(adminReviewItem).join('')
+      : '<li class="muted">Aucun avis publié pour le moment.</li>';
+  } catch (error) {
+    adminReviews.innerHTML = `<li>${alertBox('error', error.message)}</li>`;
+  } finally {
+    setLoading(adminReviews, false);
+  }
+}
+
+adminReviews.addEventListener('click', async (event) => {
+  const button = event.target.closest('[data-review]');
+  if (!button) return;
+  const hide = button.dataset.hidden !== 'true';
+  setBusy(button, true);
+  try {
+    await API.patch(`/api/admin/reviews/${encodeURIComponent(button.dataset.review)}`, { hidden: hide });
+    toast(hide ? 'Avis masqué : il n\'apparaît plus sur la fiche.' : 'Avis de nouveau visible.', { type: 'success' });
+    loadReviewsAdmin();
+  } catch (error) {
+    setBusy(button, false);
+    toast(error.message, { type: 'error' });
+  }
+});
+
 if (adminUser) {
   fillUserIdentity(adminUser);
   loadAdmin();
   loadWithdrawals();
+  loadReviewsAdmin();
 }

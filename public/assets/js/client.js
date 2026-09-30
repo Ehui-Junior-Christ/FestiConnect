@@ -65,7 +65,9 @@ function ticketCard(ticket) {
           <span class="ticket-code">${escapeHtml(ticket.code)}</span>
           <div class="cluster">
             ${state.usable ? `<button class="btn btn-sm btn-dark" type="button" data-qr-open="${escapeHtml(ticket.id)}">${icon('qr')}<span>Plein écran</span></button>` : ''}
-            <button class="btn btn-sm" type="button" data-copy="${escapeHtml(ticket.code)}">${icon('copy')}<span>Copier</span></button>
+            ${state.label === 'Événement passé' || (ticket.checked_in_at && eventPhase({ starts_at: ticket.starts_at, ends_at: ticket.ends_at }) === 'past')
+              ? (Number(ticket.reviewed) || ticket.status !== 'paid' ? '' : `<a class="btn btn-sm btn-primary" href="${eventUrl({ id: ticket.event_id })}#avis">${icon('star')}<span>Donner mon avis</span></a>`)
+              : `<button class="btn btn-sm" type="button" data-copy="${escapeHtml(ticket.code)}">${icon('copy')}<span>Copier</span></button>`}
           </div>
         </div>
       </div>

@@ -169,6 +169,7 @@ function render(event) {
           <li><span class="fact-icon">${icon('calendar')}</span><div><strong>${escapeHtml(formatDay(event.starts_at))}</strong><span>${escapeHtml(formatTimeRange(event.starts_at, event.ends_at))}</span></div></li>
           <li><span class="fact-icon">${icon('pin')}</span><div><strong>${escapeHtml(place)}</strong><span>${escapeHtml(event.city)}</span></div></li>
           ${event.organizer_name ? `<li><span class="fact-icon">${icon('users')}</span><div><strong>${escapeHtml(event.organizer_name)}</strong><span>Organisateur</span></div></li>` : ''}
+          ${Number(event.rating_count) ? `<li><span class="fact-icon">${icon('star')}</span><div><strong>${escapeHtml(formatRating(event.rating_avg))} sur 5</strong><span><a href="#avis">${escapeHtml(plural(event.rating_count, 'avis de participant', 'avis de participants'))}</a></span></div></li>` : ''}
         </ul>
         <div class="cluster mt-6">
           ${event.status === 'approved' ? favButton(event, { withLabel: true }) : ''}
@@ -191,8 +192,12 @@ function render(event) {
           <div><dt>Horaires</dt><dd>${escapeHtml(formatTimeRange(event.starts_at, event.ends_at))}</dd></div>
           <div><dt>Lieu</dt><dd>${escapeHtml([event.location, event.city].filter(Boolean).join(', '))}</dd></div>
           ${event.capacity ? `<div><dt>Jauge</dt><dd>${escapeHtml(plural(event.capacity, 'personne', 'personnes'))}</dd></div>` : ''}
-          <div><dt>Billet</dt><dd>Rattaché à ton compte, un code d'entrée par réservation</dd></div>
+          <div><dt>Billet</dt><dd>Rattaché à ton compte, un QR code d'entrée par réservation</dd></div>
         </dl>
+        <section id="avis" class="reviews mt-8" aria-labelledby="reviews-title" aria-busy="true">
+          <h2 id="reviews-title">Avis des participants</h2>
+          <div class="mt-4" data-reviews></div>
+        </section>
       </section>
     </div>`;
 
@@ -207,9 +212,99 @@ function render(event) {
   }));
 
   wireWaitlist(event, user);
+  loadReviews(event);
   const form = detailRoot.querySelector('#ticket-form');
   if (form.querySelector('[data-submit]')) wireBooking(form, event, user);
   setupBuyBar(event, Boolean(form.querySelector('[data-submit]')));
+}
+
+/* Avis : réservés aux détenteurs d'un billet payé, après l'événement. */
+function reviewItem(item) {
+  return `
+    <li class="review">
+      <div class="review-head">${stars(item.rating, { small: true })}<strong>${escapeHtml(item.author)}${item.mine ? ' (toi)' : ''}</strong><time class="small muted" datetime="${escapeHtml(item.created_at)}">${escapeHtml(formatDateShort(item.created_at).split(' · ')[0])}</time></div>
+      ${item.comment ? `<p>${escapeHtml(item.comment)}</p>` : ''}
+    </li>`;
+}
+
+function reviewForm() {
+  return `
+    <form class="review-form" id="review-form" novalidate>
+      <h3 class="h4">Tu y étais ? Donne ton avis</h3>
+      <fieldset class="rating-input">
+        <legend class="field-label">Ta note</legend>
+        ${[1, 2, 3, 4, 5].map((n) => `<label><input type="radio" name="rating" value="${n}"><span class="sr-only">${n} sur 5</span>${icon('star')}</label>`).join('')}
+      </fieldset>
+      <div class="field">
+        <label class="field-label" for="review-comment">Ton commentaire <span class="optional">(facultatif)</span></label>
+        <textarea class="textarea" id="review-comment" name="comment" maxlength="1000" placeholder="Le son, l'accueil, l'organisation, l'ambiance…"></textarea>
+      </div>
+      <button class="btn btn-primary" type="submit"><span data-icon="send"></span><span>Publier mon avis</span></button>
+    </form>`;
+}
+
+function renderReviews(event, data) {
+  const box = detailRoot.querySelector('[data-reviews]');
+  const { summary } = data;
+  const phase = eventPhase(event);
+  const bars = [5, 4, 3, 2, 1].map((n) => {
+    const count = summary.distribution[n] || 0;
+    const percent = summary.count ? Math.round((count / summary.count) * 100) : 0;
+    return `<li><span>${n}</span>${icon('star')}<div class="meter"><span data-meter="${percent}"></span></div><span class="muted">${count}</span></li>`;
+  }).join('');
+  let invite = '';
+  if (data.can_review) invite = reviewForm();
+  else if (phase === 'past' && !API.user()) invite = `<p class="small muted"><a href="${escapeHtml(loginUrl(`${location.pathname}${location.search}#avis`))}">Connecte-toi</a> pour donner ton avis si tu avais un billet.</p>`;
+  else if (phase !== 'past' && !summary.count) invite = '<p class="small muted">Les participants pourront donner leur avis après l\'événement.</p>';
+  box.innerHTML = `
+    ${summary.count ? `
+      <div class="rating-summary">
+        <div class="rating-score"><strong>${escapeHtml(formatRating(summary.average))}</strong>${stars(summary.average)}<span class="small muted">${escapeHtml(plural(summary.count, 'avis', 'avis'))}</span></div>
+        <ul class="rating-bars" aria-label="Répartition des notes">${bars}</ul>
+      </div>
+      <ul class="review-list mt-6">${data.reviews.map(reviewItem).join('')}</ul>` : (phase === 'past' ? '<p class="muted">Aucun avis pour le moment.</p>' : '')}
+    ${invite ? `<div class="mt-6">${invite}</div>` : ''}`;
+  box.querySelectorAll('[data-meter]').forEach((bar) => { bar.style.width = `${bar.dataset.meter}%`; });
+  hydrateIcons(box);
+  const section = detailRoot.querySelector('#avis');
+  section.hidden = !summary.count && !invite;
+  const form = box.querySelector('#review-form');
+  if (form) wireReviewForm(form, event);
+}
+
+async function loadReviews(event) {
+  const section = detailRoot.querySelector('#avis');
+  try {
+    renderReviews(event, await API.get(`/api/events/${encodeURIComponent(event.id)}/reviews`));
+    if (location.hash === '#avis') section.scrollIntoView({ block: 'start' });
+  } catch {
+    section.hidden = true;
+  } finally {
+    section.setAttribute('aria-busy', 'false');
+  }
+}
+
+function wireReviewForm(form, event) {
+  const button = form.querySelector('button[type="submit"]');
+  form.addEventListener('submit', async (submitEvent) => {
+    submitEvent.preventDefault();
+    clearFormNotice(form);
+    const rating = form.querySelector('input[name="rating"]:checked')?.value;
+    if (!rating) {
+      formNotice(form, 'Choisis une note de 1 à 5 étoiles.');
+      form.querySelector('input[name="rating"]').focus();
+      return;
+    }
+    setBusy(button, true);
+    try {
+      await API.post(`/api/events/${encodeURIComponent(event.id)}/reviews`, { rating: Number(rating), comment: form.elements.comment.value });
+      toast('Merci, ton avis est publié.', { type: 'success' });
+      loadReviews(event);
+    } catch (error) {
+      setBusy(button, false);
+      formNotice(form, error.message);
+    }
+  });
 }
 
 function setWaitlistRow(row, joined, name) {

@@ -24,6 +24,7 @@
           <li><a href="#master" aria-current="true"><span data-icon="dashboard"></span>Vue d'ensemble</a></li>
           <li><a href="#validation"><span data-icon="shield"></span>Validation</a></li>
           <li><a href="#retraits"><span data-icon="wallet"></span>Retraits</a></li>
+          <li><a href="#avis"><span data-icon="star"></span>Avis</a></li>
           <li><a href="/organisateur.html"><span data-icon="plus-circle"></span>Publier un événement</a></li>
           <li class="nav-sep" role="presentation"></li>
           <li><button type="button" data-logout><span data-icon="logout"></span>Déconnexion</button></li>
@@ -72,6 +73,16 @@
               <tbody id="admin-withdrawals"></tbody>
             </table>
           </div>
+        </section>
+
+        <section id="avis" class="panel" aria-labelledby="reviews-title">
+          <div class="panel-title">
+            <div>
+              <h2 id="reviews-title">Modération des avis</h2>
+              <p>Masque les avis hors sujet, insultants ou publicitaires (numéros, revente de billets). Un avis masqué sort de la moyenne affichée.</p>
+            </div>
+          </div>
+          <ul id="admin-reviews" class="review-list review-list-admin"></ul>
         </section>
       </div>
     </div>

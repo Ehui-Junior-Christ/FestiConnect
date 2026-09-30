@@ -135,6 +135,17 @@ const tableStatements = [
     notified_at text not null default '',
     unique(event_id, category_id, user_id)
   )`,
+  `create table if not exists reviews (
+    id text primary key,
+    event_id text not null references events(id) on delete cascade,
+    user_id text not null references users(id) on delete cascade,
+    rating integer not null check(rating between 1 and 5),
+    comment text not null default '',
+    hidden integer not null default 0,
+    created_at text not null,
+    updated_at text not null,
+    unique(event_id, user_id)
+  )`,
 ];
 
 const indexStatements = [
@@ -150,7 +161,8 @@ const indexStatements = [
   `create index if not exists idx_tickets_code on tickets(code)`,
   `create index if not exists idx_favorites_user on favorites(user_id)`,
   `create index if not exists idx_waitlist_event on waitlist(event_id, category_id)`,
-  `create index if not exists idx_withdrawals_org on withdrawals(organizer_id, status)`
+  `create index if not exists idx_withdrawals_org on withdrawals(organizer_id, status)`,
+  `create index if not exists idx_reviews_event on reviews(event_id, hidden)`
 ];
 
 const COLUMN_DEFINITION = /^(text|integer) default (?:'[A-Za-z0-9_\/.-]*'|-?\d+)$/;
