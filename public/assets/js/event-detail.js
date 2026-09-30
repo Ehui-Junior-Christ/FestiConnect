@@ -63,6 +63,23 @@ function categoryChoices(event, selectedId) {
     </fieldset>`;
 }
 
+// Liste d'attente : une ligne par catégorie complète (ou pour l'événement entier).
+function waitlistRows(event) {
+  const targets = event.categories?.length
+    ? event.categories.filter((category) => categoryLeft(category) === 0).map((category) => ({ id: category.id, name: category.name }))
+    : (seatsLeft(event) === 0 ? [{ id: '', name: '' }] : []);
+  if (!targets.length) return '';
+  return `
+    <div class="waitlist" data-waitlist>
+      ${targets.map((target) => `
+        <div class="waitlist-row" data-waitlist-cat="${escapeHtml(target.id)}">
+          <span class="waitlist-icon">${icon('hourglass')}</span>
+          <p class="small" data-waitlist-text>${target.name ? `« ${escapeHtml(target.name)} » est complet.` : 'Plus aucune place.'} Inscris-toi : tu seras prévenu si une place se libère.</p>
+          <button class="btn btn-sm" type="button" data-waitlist-join>M'avertir</button>
+        </div>`).join('')}
+    </div>`;
+}
+
 function bookingBlock(event, user) {
   const hasCategories = Boolean(event.categories?.length);
   const firstOpen = hasCategories ? event.categories.find((category) => categoryLeft(category) > 0) : null;
@@ -76,7 +93,7 @@ function bookingBlock(event, user) {
   if (!approved) blocker = alertBox('warning', 'Cet événement n\'est pas encore ouvert à la réservation : il est en cours de validation.');
   else if (phase === 'live') blocker = alertBox('info', `L'événement a commencé à ${formatTime(event.starts_at)} : la réservation en ligne est fermée. Renseigne-toi sur place pour la vente au guichet.`, 'Billetterie fermée');
   else if (phase === 'past') blocker = alertBox('info', 'La billetterie est fermée. Merci à celles et ceux qui sont venus.', 'Événement terminé');
-  else if (soldOut) blocker = alertBox('warning', 'Tous les billets ont été vendus pour cet événement.', 'Complet');
+  else if (soldOut) blocker = `${alertBox('warning', 'Tous les billets ont été vendus pour cet événement.', 'Complet')}${waitlistRows(event)}`;
   else if (user && user.role === 'organisateur') blocker = alertBox('info', 'Les billets se réservent avec un compte client. Déconnecte-toi puis connecte-toi avec ton compte client.');
 
   const capacity = Number(event.capacity || 0);
@@ -94,7 +111,7 @@ function bookingBlock(event, user) {
       ${capacity && phase === 'upcoming' ? `<div><div class="meter" role="img" aria-label="${escapeHtml(`${formatNumber(event.tickets_sold)} billets vendus sur ${formatNumber(capacity)}`)}"><span data-meter="${Math.min(100, Math.round((Number(event.tickets_sold || 0) / capacity) * 100))}"></span></div>
         <p class="small muted mt-2">${escapeHtml(formatNumber(event.tickets_sold))} billets déjà vendus</p></div>` : ''}
       ${blocker || `
-        ${hasCategories ? categoryChoices(event, firstOpen?.id) : ''}
+        ${hasCategories ? `${categoryChoices(event, firstOpen?.id)}${waitlistRows(event)}` : ''}
         <div class="field">
           <label class="field-label" for="quantity">Nombre de billets</label>
           ${stepper({ name: 'quantity', value: 1, min: 1, max: maxQty, label: 'Nombre de billets', id: 'quantity' })}
@@ -189,9 +206,67 @@ function render(event) {
     icsUrl: event.status === 'approved' ? `/api/events/${encodeURIComponent(event.id)}/ics` : ''
   }));
 
+  wireWaitlist(event, user);
   const form = detailRoot.querySelector('#ticket-form');
   if (form.querySelector('[data-submit]')) wireBooking(form, event, user);
   setupBuyBar(event, Boolean(form.querySelector('[data-submit]')));
+}
+
+function setWaitlistRow(row, joined, name) {
+  row.classList.toggle('is-joined', joined);
+  row.querySelector('[data-waitlist-text]').textContent = joined
+    ? `Tu es sur la liste d'attente${name ? ` « ${name} »` : ''} : une notification t'avertira si une place se libère.`
+    : `${name ? `« ${name} » est complet.` : 'Plus aucune place.'} Inscris-toi : tu seras prévenu si une place se libère.`;
+  const button = row.querySelector('[data-waitlist-join]');
+  button.textContent = joined ? 'Ne plus attendre' : 'M\'avertir';
+  button.dataset.joined = String(joined);
+}
+
+async function wireWaitlist(event, user) {
+  const box = detailRoot.querySelector('[data-waitlist]');
+  if (!box) return;
+  const nameOf = (categoryId) => event.categories?.find((category) => category.id === categoryId)?.name || '';
+  if (user) {
+    try {
+      const { entries } = await API.get(`/api/events/${encodeURIComponent(event.id)}/waitlist`);
+      entries.filter((entry) => !entry.notified_at).forEach((entry) => {
+        const row = box.querySelector(`[data-waitlist-cat="${CSS.escape(entry.category_id)}"]`);
+        if (row) setWaitlistRow(row, true, nameOf(entry.category_id));
+      });
+    } catch {
+      /* état indicatif : le bouton reste utilisable */
+    }
+  }
+  box.addEventListener('click', async (clickEvent) => {
+    const button = clickEvent.target.closest('[data-waitlist-join]');
+    if (!button) return;
+    const row = button.closest('[data-waitlist-cat]');
+    const categoryId = row.dataset.waitlistCat;
+    if (!API.user()) {
+      location.href = loginUrl(`${location.pathname}${location.search}#reserver`);
+      return;
+    }
+    if (API.user().role === 'organisateur') {
+      toast('La liste d\'attente se rejoint avec un compte client.', { type: 'info' });
+      return;
+    }
+    setBusy(button, true);
+    try {
+      if (button.dataset.joined === 'true') {
+        await API.del(`/api/events/${encodeURIComponent(event.id)}/waitlist?category_id=${encodeURIComponent(categoryId)}`);
+        setWaitlistRow(row, false, nameOf(categoryId));
+        toast('Tu ne recevras plus d\'alerte pour ces places.', { type: 'info' });
+      } else {
+        const { position } = await API.post(`/api/events/${encodeURIComponent(event.id)}/waitlist`, { category_id: categoryId });
+        setWaitlistRow(row, true, nameOf(categoryId));
+        toast(`C'est noté : tu es n°${position} sur la liste d'attente.`, { type: 'success', action: { label: 'Mes alertes', href: '/client.html#attente' } });
+      }
+    } catch (error) {
+      toast(error.message, { type: 'error' });
+    } finally {
+      setBusy(button, false);
+    }
+  });
 }
 
 function selectedCategory(form) {

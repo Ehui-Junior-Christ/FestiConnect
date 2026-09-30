@@ -171,6 +171,46 @@ async function loadFavorites() {
   }
 }
 
+const waitlistList = document.querySelector('#waitlist-list');
+
+async function loadWaitlist() {
+  setLoading(waitlistList, true);
+  try {
+    const { entries } = await API.get('/api/waitlist');
+    waitlistList.innerHTML = entries.length
+      ? entries.map((entry) => `
+          <li class="waitlist-item">
+            <div>
+              <a class="cell-title" href="${eventUrl({ id: entry.event_id })}#reserver">${escapeHtml(entry.title)}</a>
+              <p class="small muted">${escapeHtml(formatDateShort(entry.starts_at))} · ${escapeHtml(entry.city)}${entry.category_name ? ` · ${escapeHtml(entry.category_name)}` : ''}</p>
+            </div>
+            ${entry.notified_at
+              ? `<span class="badge badge-success badge-dot">Place libérée le ${escapeHtml(formatDateShort(entry.notified_at))}</span>`
+              : '<span class="badge badge-warning badge-dot">En attente</span>'}
+            <button class="btn btn-sm btn-ghost" type="button" data-leave="${escapeHtml(entry.event_id)}" data-leave-cat="${escapeHtml(entry.category_id)}">Retirer</button>
+          </li>`).join('')
+      : '<li class="muted small">Aucune liste d\'attente. Sur un événement complet, touche « M\'avertir » pour être prévenu.</li>';
+  } catch (error) {
+    waitlistList.innerHTML = `<li>${alertBox('error', error.message)}</li>`;
+  } finally {
+    setLoading(waitlistList, false);
+  }
+}
+
+waitlistList.addEventListener('click', async (event) => {
+  const button = event.target.closest('[data-leave]');
+  if (!button) return;
+  setBusy(button, true);
+  try {
+    await API.del(`/api/events/${encodeURIComponent(button.dataset.leave)}/waitlist?category_id=${encodeURIComponent(button.dataset.leaveCat)}`);
+    toast('Retiré de la liste d\'attente.', { type: 'info' });
+    loadWaitlist();
+  } catch (error) {
+    setBusy(button, false);
+    toast(error.message, { type: 'error' });
+  }
+});
+
 document.addEventListener('favorites:change', () => {
   if (favoriteEvents.length) renderFavorites();
 });
@@ -214,4 +254,5 @@ if (clientUser) {
   renderProfile(clientUser);
   loadClient();
   loadFavorites();
+  loadWaitlist();
 }

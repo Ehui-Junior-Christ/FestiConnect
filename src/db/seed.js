@@ -230,6 +230,13 @@ for (const [favoriteId, eventId] of [['fav_demo_mode', 'evt_mode_sahel'], ['fav_
   });
 }
 
+// Liste d'attente : le client attend une place Early bird (complete) sur Abissa.
+await db.execute({
+  sql: `insert or ignore into waitlist (id, event_id, category_id, user_id, created_at, notified_at)
+        values ('wai_demo_abissa', 'evt_abissa_2026', 'cat_abissa_early', ?, ?, '')`,
+  args: [client.id, ago(2)]
+});
+
 // Notifications de demonstration (le rappel J-1 du client est calcule a la lecture).
 await insertOrUpdateById('notifications', {
   id: 'ntf_demo_abissa_ok',

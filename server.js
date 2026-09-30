@@ -12,6 +12,7 @@ import './src/features/promos.js';
 import './src/features/checkin.js';
 import './src/features/favorites.js';
 import './src/features/calendar.js';
+import './src/features/waitlist.js';
 import { AppError, errorResponse, notFound } from './src/shared/errors.js';
 import { parseBody, sendJson, serveStatic } from './src/shared/http.js';
 import { dummyVerify, hashPassword, needsRehash, passwordPolicyError, verifyPassword } from './src/shared/passwords.js';
@@ -301,7 +302,7 @@ route('POST', '/api/orders', async ({ req, res }) => {
 
 route('GET', '/api/client/summary', async ({ req, res }) => {
   const user = await requireUser(req, ['client', 'admin']);
-  const tickets = await db.execute({ sql: 'select count(*) as count, coalesce(sum(amount_xof), 0) as spent from tickets where user_id = ?', args: [user.id] });
+  const tickets = await db.execute({ sql: "select count(*) as count, coalesce(sum(amount_xof), 0) as spent from tickets where user_id = ? and status = 'paid'", args: [user.id] });
   const orders = await countOrdersForUser(user.id);
   return sendJson(res, 200, { summary: { tickets: tickets.rows[0].count, spent: tickets.rows[0].spent, orders, points: Number(tickets.rows[0].count) * 120 } });
 });
@@ -328,7 +329,7 @@ route('GET', '/api/organizer/summary', async ({ req, res, url }) => {
   }
   const events = await db.execute({ sql: 'select count(*) as count, coalesce(sum(tickets_sold), 0) as sold from events where organizer_id = ?', args: [orgId] });
   const revenue = await db.execute({
-    sql: `select coalesce(sum(tickets.amount_xof), 0) as revenue
+    sql: `select coalesce(sum(case when tickets.status = 'paid' then tickets.amount_xof else 0 end), 0) as revenue
           from tickets join events on events.id = tickets.event_id
           where events.organizer_id = ?`,
     args: [orgId]
@@ -339,7 +340,9 @@ route('GET', '/api/organizer/summary', async ({ req, res, url }) => {
 route('GET', '/api/organizer/events', async ({ req, res }) => {
   const user = await requireUser(req, ['organisateur', 'admin']);
   const result = await db.execute({
-    sql: 'select * from events where organizer_id = ? order by datetime(created_at) desc',
+    sql: `select events.*,
+                 (select count(*) from waitlist where waitlist.event_id = events.id and waitlist.notified_at = '') as waitlist_count
+          from events where organizer_id = ? order by datetime(created_at) desc`,
     args: [user.id]
   });
   return sendJson(res, 200, { events: result.rows });
@@ -364,7 +367,7 @@ route('GET', '/api/admin/summary', async ({ req, res }) => {
   const users = await db.execute({ sql: 'select count(*) as count from users', args: [] });
   const events = await db.execute({ sql: 'select count(*) as count from events', args: [] });
   const pending = await db.execute({ sql: `select count(*) as count from events where status = 'pending'`, args: [] });
-  const revenue = await db.execute({ sql: 'select coalesce(sum(amount_xof), 0) as total from tickets', args: [] });
+  const revenue = await db.execute({ sql: "select coalesce(sum(amount_xof), 0) as total from tickets where status = 'paid'", args: [] });
   return sendJson(res, 200, { summary: { users: users.rows[0].count, events: events.rows[0].count, pending: pending.rows[0].count, volume: revenue.rows[0].total } });
 });
 

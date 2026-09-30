@@ -126,6 +126,15 @@ const tableStatements = [
     created_at text not null,
     unique(user_id, event_id)
   )`,
+  `create table if not exists waitlist (
+    id text primary key,
+    event_id text not null references events(id) on delete cascade,
+    category_id text not null default '',
+    user_id text not null references users(id) on delete cascade,
+    created_at text not null,
+    notified_at text not null default '',
+    unique(event_id, category_id, user_id)
+  )`,
 ];
 
 const indexStatements = [
@@ -139,7 +148,8 @@ const indexStatements = [
   `create index if not exists idx_ticket_categories_event on ticket_categories(event_id)`,
   `create index if not exists idx_promo_codes_event on promo_codes(event_id)`,
   `create index if not exists idx_tickets_code on tickets(code)`,
-  `create index if not exists idx_favorites_user on favorites(user_id)`
+  `create index if not exists idx_favorites_user on favorites(user_id)`,
+  `create index if not exists idx_waitlist_event on waitlist(event_id, category_id)`
 ];
 
 const COLUMN_DEFINITION = /^(text|integer) default (?:'[A-Za-z0-9_\/.-]*'|-?\d+)$/;
@@ -198,6 +208,7 @@ await ensureColumn('tickets', 'promo_code', `text default ''`);
 await ensureColumn('tickets', 'discount_xof', `integer default 0`);
 await ensureColumn('tickets', 'checked_in_at', `text default ''`);
 await ensureColumn('tickets', 'checked_in_by', `text default ''`);
+await ensureColumn('tickets', 'cancelled_at', `text default ''`);
 
 await ensureColumn('products', 'name', `text default ''`);
 await ensureColumn('products', 'category', `text default 'Lifestyle'`);

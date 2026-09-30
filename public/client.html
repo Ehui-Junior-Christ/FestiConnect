@@ -24,6 +24,7 @@
           <li><a href="#dashboard" aria-current="true"><span data-icon="dashboard"></span>Aperçu</a></li>
           <li><a href="#tickets"><span data-icon="ticket"></span>Mes billets</a></li>
           <li><a href="#favoris"><span data-icon="heart"></span>Gardés</a></li>
+          <li><a href="#attente"><span data-icon="hourglass"></span>Listes d'attente</a></li>
           <li><a href="#profil"><span data-icon="user"></span>Profil</a></li>
           <li class="nav-sep" role="presentation"></li>
           <li><button type="button" data-logout><span data-icon="logout"></span>Déconnexion</button></li>
@@ -60,6 +61,16 @@
             </div>
           </div>
           <div id="favorites-list" class="grid-cards" aria-busy="true"></div>
+        </section>
+
+        <section id="attente" class="panel" aria-labelledby="waitlist-title">
+          <div class="panel-title">
+            <div>
+              <h2 id="waitlist-title">Listes d'attente</h2>
+              <p>Les événements complets pour lesquels tu attends une place. Une notification t'avertit dès qu'une place se libère.</p>
+            </div>
+          </div>
+          <ul id="waitlist-list" class="waitlist-list" aria-busy="true"></ul>
         </section>
 
         <section id="profil" class="panel" aria-labelledby="profile-title">

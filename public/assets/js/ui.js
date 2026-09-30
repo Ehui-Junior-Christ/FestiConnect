@@ -742,7 +742,8 @@ const STATUS = {
   approved: ['Validé', 'success'],
   pending: ['En attente', 'warning'],
   rejected: ['Refusé', 'danger'],
-  paid: ['Payé', 'success']
+  paid: ['Payé', 'success'],
+  cancelled: ['Annulé', 'danger']
 };
 
 function statusBadge(status) {

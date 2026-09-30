@@ -29,7 +29,7 @@ function eventRow(event) {
       <td data-label="Ville">${escapeHtml(event.city)}</td>
       <td data-label="Date">${escapeHtml(formatDateShort(event.starts_at))}</td>
       <td class="num" data-label="Prix">${escapeHtml(formatPrice(event.price_xof))}</td>
-      <td class="num" data-label="Ventes">${escapeHtml(formatNumber(sold))}${capacity ? ` / ${escapeHtml(formatNumber(capacity))}` : ''}</td>
+      <td class="num" data-label="Ventes">${escapeHtml(formatNumber(sold))}${capacity ? ` / ${escapeHtml(formatNumber(capacity))}` : ''}${Number(event.waitlist_count) ? `<div class="small waitlist-hint">${escapeHtml(plural(event.waitlist_count, 'personne en attente', 'personnes en attente'))}</div>` : ''}</td>
       <td data-label="Statut">${statusBadge(event.status)}</td>
       <td class="actions-cell">
         <div class="actions">
@@ -47,13 +47,18 @@ function ticketRow(ticket) {
       <td data-label="Code"><span class="mono">${escapeHtml(ticket.code)}</span></td>
       <td class="num" data-label="Quantité">${escapeHtml(formatNumber(ticket.quantity))}</td>
       <td class="num" data-label="Montant">${escapeHtml(formatPrice(ticket.amount_xof))}</td>
-      <td data-label="Statut">${statusBadge(ticket.status)}</td>
+      <td data-label="Statut">${ticket.checked_in_at && ticket.status === 'paid' ? '<span class="badge badge-info badge-dot">Entré</span>' : statusBadge(ticket.status)}</td>
+      <td class="actions-cell">
+        <div class="actions">
+          ${ticket.status === 'paid' && !ticket.checked_in_at ? `<button class="btn btn-sm btn-danger" type="button" data-cancel-ticket="${escapeHtml(ticket.id)}" data-client="${escapeHtml(ticket.client_name)}" data-title="${escapeHtml(ticket.title)}">Annuler</button>` : ''}
+        </div>
+      </td>
     </tr>`;
 }
 
 function renderRevenue(tickets) {
   const byEvent = new Map();
-  tickets.forEach((ticket) => {
+  tickets.filter((ticket) => ticket.status === 'paid').forEach((ticket) => {
     const entry = byEvent.get(ticket.title) || { amount: 0, count: 0 };
     entry.amount += Number(ticket.amount_xof || 0);
     entry.count += Number(ticket.quantity || 0);
@@ -76,7 +81,7 @@ function renderRevenue(tickets) {
 async function loadOrganizer() {
   organizerMetrics.innerHTML = skeletonStats(4);
   organizerEvents.innerHTML = skeletonRows(3, 7);
-  organizerTickets.innerHTML = skeletonRows(3, 6);
+  organizerTickets.innerHTML = skeletonRows(3, 7);
   [organizerMetrics, organizerEvents, organizerTickets].forEach((node) => setLoading(node, true));
   try {
     const [{ summary }, { events }, { tickets }] = await Promise.all([
@@ -96,7 +101,7 @@ async function loadOrganizer() {
       : emptyRow(7, 'Tu n\'as encore publié aucun événement.', '<a class="btn btn-primary btn-sm" href="#creation">Créer mon premier événement</a>');
     organizerTickets.innerHTML = tickets.length
       ? tickets.map(ticketRow).join('')
-      : emptyRow(6, 'Aucun billet vendu pour le moment.');
+      : emptyRow(7, 'Aucun billet vendu pour le moment.');
     renderRevenue(tickets);
   } catch (error) {
     if (error.status === 401) {
@@ -110,6 +115,28 @@ async function loadOrganizer() {
     [organizerMetrics, organizerEvents, organizerTickets].forEach((node) => setLoading(node, false));
   }
 }
+
+organizerTickets.addEventListener('click', async (event) => {
+  const button = event.target.closest('[data-cancel-ticket]');
+  if (!button) return;
+  const confirmed = await confirmDialog({
+    title: 'Annuler ce billet ?',
+    message: `La réservation de ${button.dataset.client} pour « ${button.dataset.title} » sera annulée : le QR code ne passera plus à l'entrée et les places seront remises en vente (la liste d'attente est prévenue). Le remboursement Mobile Money reste à ta charge.`,
+    confirmLabel: 'Annuler le billet',
+    cancelLabel: 'Garder',
+    danger: true
+  });
+  if (!confirmed) return;
+  setBusy(button, true);
+  try {
+    await API.post(`/api/organizer/tickets/${encodeURIComponent(button.dataset.cancelTicket)}/cancel`, {});
+    toast('Billet annulé, places remises en vente.', { type: 'success' });
+    loadOrganizer();
+  } catch (error) {
+    setBusy(button, false);
+    toast(error.message, { type: 'error' });
+  }
+});
 
 organizerEvents.addEventListener('click', (event) => {
   const edit = event.target.closest('[data-edit-event]');

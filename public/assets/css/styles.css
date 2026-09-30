@@ -4153,6 +4153,100 @@ a.notif-body:hover {
   font-size: var(--text-xs);
 }
 
+/* 27. Liste d'attente
+   ----------------------------------------------------------------------- */
+.waitlist {
+  display: grid;
+  gap: var(--space-2);
+}
+
+.waitlist-row {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: var(--space-2) var(--space-3);
+  align-items: center;
+  padding: var(--space-3);
+  border: 1.5px dashed var(--border-strong);
+  border-radius: var(--radius-md);
+  background: var(--surface-alt);
+}
+
+.waitlist-row .btn {
+  grid-column: 1 / -1;
+  justify-self: start;
+}
+
+.waitlist-icon {
+  display: grid;
+  place-items: center;
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-pill);
+  background: var(--warning-soft);
+  color: var(--warning);
+}
+
+.waitlist-row.is-joined {
+  border-style: solid;
+  border-color: var(--success);
+  background: var(--success-soft);
+}
+
+.waitlist-row.is-joined .waitlist-icon {
+  background: var(--surface);
+  color: var(--success);
+}
+
+@media (min-width: 420px) {
+  .waitlist-row {
+    grid-template-columns: auto minmax(0, 1fr) auto;
+  }
+
+  .waitlist-row .btn {
+    grid-column: auto;
+  }
+}
+
+.waitlist-list {
+  display: grid;
+  gap: var(--space-3);
+  list-style: none;
+}
+
+.waitlist-item {
+  display: grid;
+  gap: var(--space-2);
+  align-items: center;
+  padding-bottom: var(--space-3);
+  border-bottom: 1px solid var(--border);
+}
+
+.waitlist-item:last-child {
+  padding-bottom: 0;
+  border-bottom: 0;
+}
+
+.waitlist-item .cell-title {
+  font-weight: 700;
+  color: var(--text);
+}
+
+.waitlist-item .btn {
+  justify-self: start;
+}
+
+@media (min-width: 720px) {
+  .waitlist-item {
+    grid-template-columns: minmax(0, 1fr) auto auto;
+  }
+}
+
+.waitlist-hint {
+  color: var(--warning);
+  font-weight: 600;
+  white-space: nowrap;
+}
+
 /* 20. Mouvement réduit
    ----------------------------------------------------------------------- */
 @media (prefers-reduced-motion: reduce) {
