@@ -1,4 +1,5 @@
 import { getDb } from './client.js';
+import { assertIdentifier, assertTable } from './schema.js';
 
 const db = getDb();
 
@@ -89,10 +90,17 @@ const indexStatements = [
   `create index if not exists idx_events_status on events(status)`,
   `create index if not exists idx_events_org on events(organizer_id)`,
   `create index if not exists idx_tickets_user on tickets(user_id)`,
-  `create index if not exists idx_tickets_event on tickets(event_id)`
+  `create index if not exists idx_tickets_event on tickets(event_id)`,
+  `create index if not exists idx_sessions_user on sessions(user_id)`,
+  `create index if not exists idx_sessions_expires on sessions(expires_at)`
 ];
 
+const COLUMN_DEFINITION = /^(text|integer) default (?:'[A-Za-z0-9_\/.-]*'|-?\d+)$/;
+
 async function ensureColumn(table, column, definition) {
+  assertTable(table);
+  assertIdentifier(column);
+  if (!COLUMN_DEFINITION.test(definition)) throw new Error(`Definition de colonne refusee: ${table}.${column}`);
   const info = await db.execute(`pragma table_info(${table})`);
   const exists = info.rows.some((row) => row.name === column);
   if (!exists) {

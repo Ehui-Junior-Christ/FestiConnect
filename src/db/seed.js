@@ -1,6 +1,31 @@
 import crypto from 'node:crypto';
+import { config } from '../config/env.js';
 import { getDb } from './client.js';
-import { hashPassword } from '../shared/passwords.js';
+import { assertIdentifier, assertTable } from './schema.js';
+import { hashPassword, passwordPolicyError } from '../shared/passwords.js';
+
+// En production, le seed de demonstration est refuse par defaut : il cree des
+// comptes (dont un admin) aux mots de passe publics. Pour l'autoriser il faut
+// SEED_ALLOW_PRODUCTION=true ET des mots de passe fournis par l'environnement.
+function demoPassword(envName, fallback) {
+  const provided = process.env[envName];
+  if (config.isProduction) {
+    if (process.env.SEED_ALLOW_PRODUCTION !== 'true') {
+      throw new Error('Seed de demonstration refuse en production (SEED_ALLOW_PRODUCTION=true requis).');
+    }
+    if (!provided) throw new Error(`${envName} est obligatoire pour seeder en production.`);
+  }
+  const password = provided || fallback;
+  const policyError = passwordPolicyError(password);
+  if (policyError) throw new Error(`${envName}: ${policyError}`);
+  return password;
+}
+
+const demoPasswords = {
+  admin: demoPassword('SEED_ADMIN_PASSWORD', 'Admin123!'),
+  organizer: demoPassword('SEED_ORGANIZER_PASSWORD', 'Orga123!'),
+  client: demoPassword('SEED_CLIENT_PASSWORD', 'Client123!')
+};
 
 const db = getDb();
 
@@ -9,13 +34,14 @@ function id(prefix) {
 }
 
 async function tableColumns(table) {
+  assertTable(table);
   const info = await db.execute(`pragma table_info(${table})`);
   return new Set(info.rows.map((row) => row.name));
 }
 
 async function insertOrUpdateById(table, record) {
   const columns = await tableColumns(table);
-  const entries = Object.entries(record).filter(([key]) => columns.has(key));
+  const entries = Object.entries(record).filter(([key]) => columns.has(key) && assertIdentifier(key));
   const updateColumns = entries
     .map(([key]) => key)
     .filter((key) => key !== 'id')
@@ -30,7 +56,7 @@ async function insertOrUpdateById(table, record) {
 }
 
 async function upsertUser(user) {
-  const password = hashPassword(user.password);
+  const password = await hashPassword(user.password);
   const columns = await tableColumns('users');
   const record = {
     id: user.id,
@@ -46,7 +72,7 @@ async function upsertUser(user) {
     created_at: new Date().toISOString()
   };
   if (columns.has('password')) record.password = password.hash;
-  const entries = Object.entries(record).filter(([key]) => columns.has(key));
+  const entries = Object.entries(record).filter(([key]) => columns.has(key) && assertIdentifier(key));
   const existing = await db.execute({ sql: 'select id from users where email = ?', args: [user.email] });
   if (existing.rows[0]) {
     const updateEntries = entries.filter(([key]) => key !== 'id' && key !== 'email');
@@ -62,9 +88,9 @@ async function upsertUser(user) {
   });
 }
 
-const admin = { id: 'usr_admin_demo', name: 'Aminata Kouassi', email: 'admin@festiconnect.ci', password: 'Admin123!', role: 'admin', phone: '+225 07 00 00 00 01', city: 'Abidjan' };
-const organizer = { id: 'usr_orga_demo', name: 'Collectif Nouchi Live', email: 'organisateur@festiconnect.ci', password: 'Orga123!', role: 'organisateur', phone: '+225 05 00 00 00 02', city: 'Abidjan' };
-const client = { id: 'usr_client_demo', name: 'Junior Ehui', email: 'client@festiconnect.ci', password: 'Client123!', role: 'client', phone: '+225 01 00 00 00 03', city: 'Yamoussoukro' };
+const admin = { id: 'usr_admin_demo', name: 'Aminata Kouassi', email: 'admin@festiconnect.ci', password: demoPasswords.admin, role: 'admin', phone: '+225 07 00 00 00 01', city: 'Abidjan' };
+const organizer = { id: 'usr_orga_demo', name: 'Collectif Nouchi Live', email: 'organisateur@festiconnect.ci', password: demoPasswords.organizer, role: 'organisateur', phone: '+225 05 00 00 00 02', city: 'Abidjan' };
+const client = { id: 'usr_client_demo', name: 'Junior Ehui', email: 'client@festiconnect.ci', password: demoPasswords.client, role: 'client', phone: '+225 01 00 00 00 03', city: 'Yamoussoukro' };
 
 await upsertUser(admin);
 await upsertUser(organizer);
