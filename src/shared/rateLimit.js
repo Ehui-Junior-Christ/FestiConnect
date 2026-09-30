@@ -66,7 +66,7 @@ export function tooManyRequests(retryAfterMs) {
   return new AppError(
     429,
     'RATE_LIMITED',
-    `Trop de tentatives. Reessaie dans ${minutes > 1 ? `${minutes} minutes` : 'une minute'}.`,
+    `Trop de tentatives. Réessaie dans ${minutes > 1 ? `${minutes} minutes` : 'une minute'}.`,
     { 'Retry-After': String(seconds) }
   );
 }

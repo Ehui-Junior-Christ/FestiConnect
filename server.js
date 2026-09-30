@@ -3,12 +3,13 @@ import http from 'node:http';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { config } from './src/config/env.js';
-import { getDb } from './src/db/client.js';
+import { NOT_STARTED_SQL, db, eventTimeMs, limiters, randomId, requireUser, safely } from './src/app/context.js';
+import { matchRoute, pathId, route, routes, searchParam } from './src/app/router.js';
 import { buildInsert, insertByExistingColumns, tableColumns } from './src/db/schema.js';
 import { AppError, errorResponse, notFound } from './src/shared/errors.js';
 import { parseBody, sendJson, serveStatic } from './src/shared/http.js';
 import { dummyVerify, hashPassword, needsRehash, passwordPolicyError, verifyPassword } from './src/shared/passwords.js';
-import { RateLimiter, enforce, tooManyRequests } from './src/shared/rateLimit.js';
+import { enforce, tooManyRequests } from './src/shared/rateLimit.js';
 import { applySecurityHeaders, assertSameOrigin, getClientIp, isSecureRequest } from './src/shared/security.js';
 import {
   clearSessionCookie,
@@ -26,7 +27,6 @@ import * as v from './src/shared/validation.js';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const publicDir = path.join(__dirname, 'public');
-const db = getDb();
 
 const PAYMENT_METHODS = ['Wave', 'Orange Money', 'Moov Money'];
 const EVENT_STATUSES = ['approved', 'pending', 'rejected'];
@@ -36,20 +36,6 @@ const MAX_ORDER_LINES = 50;
 const MAX_QUANTITY_PER_PRODUCT = 50;
 
 const MINUTE = 60 * 1000;
-const limiters = {
-  api: new RateLimiter({ windowMs: MINUTE, max: 300 }),
-  loginIp: new RateLimiter({ windowMs: 15 * MINUTE, max: 30 }),
-  loginAccountIp: new RateLimiter({ windowMs: 15 * MINUTE, max: 5 }),
-  loginAccount: new RateLimiter({ windowMs: 15 * MINUTE, max: 20 }),
-  registerIp: new RateLimiter({ windowMs: 60 * MINUTE, max: 10 }),
-  purchaseUser: new RateLimiter({ windowMs: 10 * MINUTE, max: 30 }),
-  eventCreateUser: new RateLimiter({ windowMs: 60 * MINUTE, max: 20 }),
-  logoutAllUser: new RateLimiter({ windowMs: 15 * MINUTE, max: 10 })
-};
-
-function randomId(prefix) {
-  return `${prefix}_${crypto.randomUUID().replaceAll('-', '').slice(0, 18)}`;
-}
 
 function isEmailConstraintError(error) {
   return String(error?.message || '').includes('UNIQUE constraint failed: users.email');
@@ -57,15 +43,6 @@ function isEmailConstraintError(error) {
 
 function publicUser(user) {
   return { id: user.id, name: user.name, email: user.email, role: user.role, city: user.city, phone: user.phone };
-}
-
-async function requireUser(req, roles = []) {
-  const user = await findSessionUser(db, req);
-  if (!user) throw new AppError(401, 'AUTH_REQUIRED', 'Connexion requise.');
-  if (roles.length && !roles.includes(user.role)) {
-    throw new AppError(403, 'FORBIDDEN', 'Acces refuse pour ce role.');
-  }
-  return user;
 }
 
 async function insertUserRecord(user) {
@@ -109,7 +86,8 @@ async function countOrdersForUser(userId) {
 }
 
 // Reservation atomique de places : l'UPDATE conditionnel ne passe que s'il
-// reste assez de capacite (capacite <= 0 = historique "illimite").
+// reste assez de capacite (capacite <= 0 = historique "illimite") et si
+// l'evenement n'a pas commence.
 async function reserveEventSeats(eventId, quantity) {
   const columns = await tableColumns(db, 'events');
   const sets = ['tickets_sold = tickets_sold + ?'];
@@ -121,7 +99,7 @@ async function reserveEventSeats(eventId, quantity) {
   args.push(eventId, quantity);
   const result = await db.execute({
     sql: `update events set ${sets.join(', ')}
-          where id = ? and status = 'approved'
+          where id = ? and status = 'approved' and ${NOT_STARTED_SQL}
             and (coalesce(capacity, 0) <= 0 or coalesce(tickets_sold, 0) + ? <= capacity)`,
     args
   });
@@ -152,46 +130,9 @@ async function releaseStock(productId, quantity) {
   await db.execute({ sql: 'update products set stock = stock + ? where id = ?', args: [quantity, productId] });
 }
 
-async function safely(label, action) {
-  try {
-    await action();
-  } catch (error) {
-    console.error(`[compensation] ${label}`, error);
-  }
-}
-
 // ---------------------------------------------------------------------------
 // Routes
 // ---------------------------------------------------------------------------
-
-const routes = [];
-
-function route(method, pattern, handler) {
-  routes.push({ method, pattern, handler });
-}
-
-function matchRoute(pattern, pathname) {
-  if (typeof pattern === 'string') return pattern === pathname ? [] : null;
-  const match = pattern.exec(pathname);
-  return match ? match.slice(1) : null;
-}
-
-function pathId(value) {
-  // Un identifiant mal forme equivaut a une ressource introuvable.
-  let decoded;
-  try {
-    decoded = decodeURIComponent(value);
-  } catch {
-    return null;
-  }
-  return v.isValidId(decoded) ? decoded : null;
-}
-
-function searchParam(url, name, max) {
-  const value = (url.searchParams.get(name) || '').trim();
-  if (value.length > max) throw new AppError(422, 'VALIDATION_ERROR', `Parametre ${name} trop long (max ${max}).`);
-  return value;
-}
 
 route('GET', '/api/health', ({ res }) => sendJson(res, 200, { status: 'ok', service: 'FestiConnect' }));
 
@@ -203,7 +144,7 @@ route('POST', '/api/auth/register', async ({ req, res, ip }) => {
   }
   const name = v.text(body.name, { label: 'Nom', min: 2, max: 80, required: true });
   const email = v.email(body.email);
-  const role = v.oneOf(body.role, SELF_SERVICE_ROLES, { label: 'Role', fallback: 'client' });
+  const role = v.oneOf(body.role, SELF_SERVICE_ROLES, { label: 'Rôle', fallback: 'client' });
   const phone = v.phone(body.phone);
   const city = v.text(body.city, { label: 'Ville', max: 60, fallback: 'Abidjan' });
   const policyError = passwordPolicyError(body.password, { email, name });
@@ -211,7 +152,7 @@ route('POST', '/api/auth/register', async ({ req, res, ip }) => {
 
   const existing = await db.execute({ sql: 'select id from users where email = ?', args: [email] });
   if (existing.rows[0]) {
-    throw new AppError(409, 'EMAIL_ALREADY_EXISTS', 'Un compte existe deja avec cet email.');
+    throw new AppError(409, 'EMAIL_ALREADY_EXISTS', 'Un compte existe déjà avec cet email.');
   }
   const password = await hashPassword(body.password);
   const id = randomId('usr');
@@ -219,7 +160,7 @@ route('POST', '/api/auth/register', async ({ req, res, ip }) => {
     await insertUserRecord({ id, name, email, password_hash: password.hash, password_salt: password.salt, role, phone, city });
   } catch (error) {
     if (isEmailConstraintError(error)) {
-      throw new AppError(409, 'EMAIL_ALREADY_EXISTS', 'Un compte existe deja avec cet email.');
+      throw new AppError(409, 'EMAIL_ALREADY_EXISTS', 'Un compte existe déjà avec cet email.');
     }
     throw error;
   }
@@ -291,11 +232,13 @@ route('GET', '/api/events', async ({ res, url }) => {
   const city = searchParam(url, 'city', 60);
   const like = `%${q.replace(/[\\%_]/g, (char) => `\\${char}`)}%`;
   // Le catalogue public n'expose que les evenements valides (le parametre
-  // `status` n'est plus pris en compte : voir /api/admin/events).
+  // `status` n'est plus pris en compte : voir /api/admin/events) et pas encore
+  // termines (une fiche passee reste accessible par son lien, pour les avis).
   const result = await db.execute({
     sql: `select events.*, users.name as organizer_name
           from events join users on users.id = events.organizer_id
           where events.status = 'approved'
+            and datetime(coalesce(nullif(events.ends_at, ''), events.starts_at)) > datetime('now')
             and (events.title like ? escape '\\' or events.description like ? escape '\\' or events.city like ? escape '\\')
             and (? = '' or events.category = ?)
             and (? = '' or events.city = ?)
@@ -330,19 +273,22 @@ route('POST', '/api/events', async ({ req, res }) => {
   enforce(limiters.eventCreateUser, user.id);
   const body = await parseBody(req);
   if (!body.title || !body.category || !body.city || !body.starts_at) {
-    throw new AppError(422, 'VALIDATION_ERROR', 'Titre, categorie, ville et date sont obligatoires.');
+    throw new AppError(422, 'VALIDATION_ERROR', 'Titre, catégorie, ville et date sont obligatoires.');
   }
   const title = v.text(body.title, { label: 'Titre', min: 3, max: 120, required: true });
-  const category = v.text(body.category, { label: 'Categorie', min: 2, max: 40, required: true });
+  const category = v.text(body.category, { label: 'Catégorie', min: 2, max: 40, required: true });
   const city = v.text(body.city, { label: 'Ville', min: 2, max: 60, required: true });
   const location = v.text(body.location, { label: 'Lieu', max: 120, fallback: city });
-  const startsAt = v.dateTime(body.starts_at, { label: 'Date de debut', required: true });
+  const startsAt = v.dateTime(body.starts_at, { label: 'Date de début', required: true });
   const endsAt = v.dateTime(body.ends_at, { label: 'Date de fin' }) || startsAt;
   if (Date.parse(endsAt) < Date.parse(startsAt)) {
-    throw new AppError(422, 'VALIDATION_ERROR', 'La date de fin doit etre posterieure a la date de debut.');
+    throw new AppError(422, 'VALIDATION_ERROR', 'La date de fin doit être postérieure à la date de début.');
+  }
+  if (eventTimeMs(startsAt) <= Date.now()) {
+    throw new AppError(422, 'VALIDATION_ERROR', 'La date de début doit être dans le futur.');
   }
   const price = v.integer(body.price_xof, { label: 'Prix', min: 0, max: 10_000_000, fallback: 0 });
-  const capacity = v.integer(body.capacity, { label: 'Capacite', min: 1, max: 200_000, fallback: 100 });
+  const capacity = v.integer(body.capacity, { label: 'Capacité', min: 1, max: 200_000, fallback: 100 });
   const cover = v.imageUrl(body.cover_url, { label: 'Image', fallback: '/assets/img/event-default.svg' });
   const description = v.text(body.description, { label: 'Description', max: 5000, multiline: true });
 
@@ -388,20 +334,27 @@ route('POST', '/api/tickets', async ({ req, res }) => {
   const user = await requireUser(req, ['client', 'admin']);
   enforce(limiters.purchaseUser, user.id);
   const body = await parseBody(req);
-  const eventId = v.id(body.event_id, { label: 'Evenement' });
-  const quantity = v.integer(body.quantity, { label: 'Quantite', min: 1, max: MAX_TICKETS_PER_PURCHASE, fallback: 1 });
+  const eventId = v.id(body.event_id, { label: 'Événement' });
+  const quantity = v.integer(body.quantity, { label: 'Quantité', min: 1, max: MAX_TICKETS_PER_PURCHASE, fallback: 1 });
   const paymentMethod = v.oneOf(body.payment_method, PAYMENT_METHODS, { label: 'Moyen de paiement', fallback: 'Wave' });
 
   const event = await db.execute({ sql: 'select * from events where id = ? and status = ?', args: [eventId, 'approved'] });
   const row = event.rows[0];
-  if (!row) throw new AppError(404, 'EVENT_NOT_FOUND', 'Evenement introuvable.');
+  if (!row) throw new AppError(404, 'EVENT_NOT_FOUND', 'Événement introuvable.');
+  if (!(eventTimeMs(row.starts_at) > Date.now())) {
+    throw new AppError(409, 'EVENT_STARTED', 'Cet événement a déjà commencé : la billetterie est fermée.');
+  }
   // Prix toujours calcule cote serveur a partir de la base.
   const unitPrice = Number(row.price_xof ?? row.price ?? 0);
   if (!Number.isSafeInteger(unitPrice) || unitPrice < 0) throw new Error(`Prix invalide pour l'evenement ${row.id}`);
   const amount = quantity * unitPrice;
 
   if (!(await reserveEventSeats(row.id, quantity))) {
-    throw new AppError(409, 'SOLD_OUT', 'Plus assez de places disponibles pour cet evenement.');
+    const fresh = await db.execute({ sql: `select ${NOT_STARTED_SQL} as open from events where id = ?`, args: [row.id] });
+    if (!Number(fresh.rows[0]?.open)) {
+      throw new AppError(409, 'EVENT_STARTED', 'Cet événement a déjà commencé : la billetterie est fermée.');
+    }
+    throw new AppError(409, 'SOLD_OUT', 'Plus assez de places disponibles pour cet événement.');
   }
   const id = randomId('tkt');
   const code = `FC-${crypto.randomBytes(8).toString('hex').toUpperCase()}`;
@@ -463,7 +416,7 @@ route('POST', '/api/orders', async ({ req, res }) => {
   for (const item of body.items) {
     if (!item || typeof item !== 'object') throw new AppError(422, 'VALIDATION_ERROR', 'Article invalide.');
     const productId = v.id(item.product_id, { label: 'Produit' });
-    const quantity = v.integer(item.quantity, { label: 'Quantite', min: 1, max: MAX_QUANTITY_PER_PRODUCT, fallback: 1 });
+    const quantity = v.integer(item.quantity, { label: 'Quantité', min: 1, max: MAX_QUANTITY_PER_PRODUCT, fallback: 1 });
     wanted.set(productId, (wanted.get(productId) || 0) + quantity);
   }
   const paymentMethod = v.oneOf(body.payment_method, PAYMENT_METHODS, { label: 'Moyen de paiement', fallback: 'Orange Money' });
@@ -474,7 +427,7 @@ route('POST', '/api/orders', async ({ req, res }) => {
   const items = [];
   for (const [productId, quantity] of wanted) {
     if (quantity > MAX_QUANTITY_PER_PRODUCT) {
-      throw new AppError(422, 'VALIDATION_ERROR', `Quantite maximale par produit : ${MAX_QUANTITY_PER_PRODUCT}.`);
+      throw new AppError(422, 'VALIDATION_ERROR', `Quantité maximale par produit : ${MAX_QUANTITY_PER_PRODUCT}.`);
     }
     const product = await db.execute({ sql: 'select * from products where id = ?', args: [productId] });
     const row = product.rows[0];
@@ -631,14 +584,14 @@ async function routeApi(req, res, url) {
     allowed.add(entry.method);
   }
   if (allowed.size) {
-    throw new AppError(405, 'METHOD_NOT_ALLOWED', 'Methode HTTP non autorisee.', { Allow: [...allowed].join(', ') });
+    throw new AppError(405, 'METHOD_NOT_ALLOWED', 'Méthode HTTP non autorisée.', { Allow: [...allowed].join(', ') });
   }
   return notFound(res);
 }
 
 async function routeStatic(req, res, url) {
   if (req.method !== 'GET' && req.method !== 'HEAD') {
-    throw new AppError(405, 'METHOD_NOT_ALLOWED', 'Methode HTTP non autorisee.', { Allow: 'GET, HEAD' });
+    throw new AppError(405, 'METHOD_NOT_ALLOWED', 'Méthode HTTP non autorisée.', { Allow: 'GET, HEAD' });
   }
   return serveStatic(req, res, publicDir, url.pathname);
 }

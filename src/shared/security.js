@@ -92,7 +92,7 @@ const MUTATING = new Set(['POST', 'PUT', 'PATCH', 'DELETE']);
 // forgeable cross-site sans CORS, et aucun CORS n'est accorde).
 export function assertSameOrigin(req, { hasCookieSession = false, hasBearer = false } = {}) {
   if (!MUTATING.has(req.method)) return;
-  const forbidden = () => new AppError(403, 'CSRF_REJECTED', 'Origine de la requete non autorisee.');
+  const forbidden = () => new AppError(403, 'CSRF_REJECTED', 'Origine de la requête non autorisée.');
   const origin = req.headers.origin;
   if (origin) {
     if (origin === 'null' || !isAllowedOrigin(origin, req)) throw forbidden();

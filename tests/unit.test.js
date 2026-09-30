@@ -55,7 +55,7 @@ describe('passwords', () => {
     assert.match(passwordPolicyError('abcdefgh'), /lettre et un chiffre/);
     assert.match(passwordPolicyError('12345678'), /lettre et un chiffre/);
     assert.match(passwordPolicyError('password123'), /trop courant/);
-    assert.match(passwordPolicyError(`A1${'x'.repeat(200)}`), /depasser 128/);
+    assert.match(passwordPolicyError(`A1${'x'.repeat(200)}`), /dépasser 128/);
     assert.match(passwordPolicyError('awa.kone2026', { email: 'awa.kone@example.ci' }), /adresse email/);
     assert.match(passwordPolicyError(undefined), /obligatoire/);
   });
@@ -93,10 +93,10 @@ describe('validation', () => {
   it('texte : longueur, caracteres de controle, balises', () => {
     assert.equal(v.text('  Abissa  ', { label: 'Titre', max: 10 }), 'Abissa');
     assert.throws(() => v.text('<script>alert(1)</script>', { label: 'Titre' }), /< ou >/);
-    assert.throws(() => v.text('a\u0000b', { label: 'Titre' }), /non autorises/);
-    assert.throws(() => v.text('ligne\nligne', { label: 'Titre' }), /non autorises/);
+    assert.throws(() => v.text('a\u0000b', { label: 'Titre' }), /non autorisés/);
+    assert.throws(() => v.text('ligne\nligne', { label: 'Titre' }), /non autorisés/);
     assert.equal(v.text('ligne\nligne', { label: 'Description', multiline: true }), 'ligne\nligne');
-    assert.throws(() => v.text('x'.repeat(11), { label: 'Titre', max: 10 }), /depasser 10/);
+    assert.throws(() => v.text('x'.repeat(11), { label: 'Titre', max: 10 }), /dépasser 10/);
     assert.throws(() => v.text({ a: 1 }, { label: 'Titre' }), /invalide/);
     assert.throws(() => v.text('', { label: 'Titre', required: true }), /obligatoire/);
     assert.equal(v.text(undefined, { label: 'Ville', fallback: 'Abidjan' }), 'Abidjan');

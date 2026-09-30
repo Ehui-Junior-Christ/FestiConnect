@@ -113,6 +113,43 @@ export async function startServer({ env: extraEnv = {}, seed = true } = {}) {
   return { base, api, login, stop, child, logs: () => output, dir };
 }
 
+let uniqueCounter = 0;
+export function uniqueEmail(prefix = 'user') {
+  uniqueCounter += 1;
+  return `${prefix}.${Date.now()}.${uniqueCounter}.${crypto.randomBytes(2).toString('hex')}@test.festiconnect.ci`;
+}
+
+// Cree un compte (client ou organisateur) et renvoie sa session.
+export async function registerAndLogin(srv, role = 'client') {
+  const email = uniqueEmail(role);
+  const password = 'Festival2026!';
+  const created = await srv.api('/api/auth/register', { method: 'POST', body: { name: `Test ${role}`, email, password, role } });
+  if (created.status !== 201) throw new Error(`inscription: ${created.status} ${created.text}`);
+  const session = await srv.login(email, password);
+  if (session.status !== 200) throw new Error(`login: ${session.status} ${session.text}`);
+  return { ...session, id: created.json.id, email, password };
+}
+
+// Date AAAA-MM-JJTHH:MM (heure d'Abidjan = UTC) decalee de `days` jours.
+export function isoIn(days, time = '20:00') {
+  return `${new Date(Date.now() + days * 86400000).toISOString().slice(0, 10)}T${time}`;
+}
+
+// Cree puis valide un evenement ; `session` = organisateur (demo par defaut).
+export async function createApprovedEvent(srv, { session, admin, body = {} } = {}) {
+  const organizer = session || await srv.login(DEMO.organizer.email, DEMO.organizer.password);
+  const created = await srv.api('/api/events', {
+    method: 'POST',
+    token: organizer.token,
+    body: { title: `Concert test ${crypto.randomBytes(3).toString('hex')}`, category: 'Concert', city: 'Abidjan', starts_at: isoIn(30), price_xof: 1000, capacity: 5, ...body }
+  });
+  if (created.status !== 201) throw new Error(`creation: ${created.status} ${created.text}`);
+  const adminSession = admin || await srv.login(DEMO.admin.email, DEMO.admin.password);
+  const approved = await srv.api(`/api/events/${created.json.id}/status`, { method: 'PATCH', token: adminSession.token, body: { status: 'approved' } });
+  if (approved.status !== 200) throw new Error(`validation: ${approved.status} ${approved.text}`);
+  return created.json.id;
+}
+
 export const DEMO = {
   admin: { email: 'admin@festiconnect.ci', password: 'Admin123!' },
   organizer: { email: 'organisateur@festiconnect.ci', password: 'Orga123!' },

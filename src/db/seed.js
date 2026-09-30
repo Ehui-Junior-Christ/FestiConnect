@@ -11,7 +11,7 @@ function demoPassword(envName, fallback) {
   const provided = process.env[envName];
   if (config.isProduction) {
     if (process.env.SEED_ALLOW_PRODUCTION !== 'true') {
-      throw new Error('Seed de demonstration refuse en production (SEED_ALLOW_PRODUCTION=true requis).');
+      throw new Error('Seed de démonstration refusé en production (SEED_ALLOW_PRODUCTION=true requis).');
     }
     if (!provided) throw new Error(`${envName} est obligatoire pour seeder en production.`);
   }
@@ -96,11 +96,22 @@ await upsertUser(admin);
 await upsertUser(organizer);
 await upsertUser(client);
 
+// Dates relatives au jour du seed, en heure d'Abidjan (UTC) : les evenements de
+// demonstration restent toujours a venir (sauf un evenement passe, pour les avis).
+const DAY_MS = 24 * 60 * 60 * 1000;
+function at(days, time) {
+  return `${new Date(Date.now() + days * DAY_MS).toISOString().slice(0, 10)}T${time}`;
+}
+function ago(days, hours = 0) {
+  return new Date(Date.now() - days * DAY_MS - hours * 60 * 60 * 1000).toISOString();
+}
+
 const events = [
-  ['evt_abissa_2026', 'Festival Abissa Experience', 'Tradition', 'Grand-Bassam', 'Place Abissa', '2026-08-14T18:00', '2026-08-15T02:00', 15000, 1200, 384, 'approved', '/assets/img/event-abissa.svg', 'Une celebration immersive du patrimoine Nzima avec concerts, defiles et gastronomie locale.'],
-  ['evt_maquis_night', 'Maquis Electronic Night', 'Concert', 'Abidjan', 'Sofitel Ivoire', '2026-06-21T20:00', '2026-06-22T03:00', 25000, 900, 621, 'approved', '/assets/img/event-maquis.svg', 'La rencontre des DJs afro-electro, des createurs visuels et des marques culturelles urbaines.'],
-  ['evt_mode_sahel', 'Salon Mode Sahel', 'Mode', 'Bouake', 'Palais de la Culture', '2026-07-05T10:00', '2026-07-05T20:00', 8000, 600, 147, 'approved', '/assets/img/event-mode.svg', 'Defiles, pop-up stores et panels autour des textiles africains contemporains.'],
-  ['evt_pending_yakro', 'Nuit Mandingue Premium', 'Concert', 'Yamoussoukro', 'Fondation FHB', '2026-09-12T19:30', '2026-09-13T01:00', 18000, 700, 0, 'pending', '/assets/img/event-default.svg', 'Projet soumis a validation administrative.']
+  ['evt_maquis_night', 'Maquis Electronic Night', 'Concert', 'Abidjan', 'Sofitel Hôtel Ivoire, Cocody', at(1, '21:00'), at(2, '03:00'), 25000, 900, 621, 'approved', '/assets/img/event-maquis.svg', 'La rencontre des DJ afro-électro, des créateurs visuels et des marques culturelles urbaines. Ouverture des portes à 20h30, dress code chic décontracté.'],
+  ['evt_mode_sahel', 'Salon Mode Sahel', 'Mode', 'Bouaké', 'Palais de la Culture', at(16, '10:00'), at(16, '20:00'), 8000, 600, 147, 'approved', '/assets/img/event-mode.svg', 'Défilés, pop-up stores et tables rondes autour des textiles africains contemporains : pagne tissé baoulé, bogolan, indigo.'],
+  ['evt_abissa_2026', 'Festival Abissa Experience', 'Tradition', 'Grand-Bassam', 'Place Abissa, quartier France', at(24, '18:00'), at(25, '02:00'), 15000, 1200, 384, 'approved', '/assets/img/event-abissa.svg', 'Une célébration du patrimoine N\'zima avec concerts, défilés en tenue traditionnelle et gastronomie locale au bord de la lagune.'],
+  ['evt_pending_yakro', 'Nuit Mandingue Premium', 'Concert', 'Yamoussoukro', 'Fondation Félix Houphouët-Boigny', at(40, '19:30'), at(41, '01:00'), 18000, 700, 0, 'pending', '/assets/img/event-default.svg', 'Kora, balafon et griots invités pour une soirée mandingue. Projet soumis à validation.'],
+  ['evt_zouglou_past', 'Nuit du Zouglou', 'Concert', 'Abidjan', 'Palais de la Culture, Treichville', at(-10, '20:00'), at(-9, '02:00'), 5000, 800, 2, 'approved', '/assets/img/event-default.svg', 'Les groupes de la nouvelle scène zouglou sur une même scène, avec animation ambiance facile entre les passages.']
 ];
 
 for (const event of events) {
@@ -126,14 +137,14 @@ for (const event of events) {
     cover_url: cover,
     image: cover,
     description,
-    created_at: new Date().toISOString()
+    created_at: ago(30)
   });
 }
 
 const products = [
-  ['prd_kente_cap', 'Casquette Kente Edition', 'Accessoire', 12000, 80, '/assets/img/product-cap.svg', 'Casquette brodee en serie limitee, inspiree des motifs Akan.'],
-  ['prd_baule_tote', 'Tote Bag Baoule', 'Lifestyle', 9000, 120, '/assets/img/product-tote.svg', 'Sac epais imprime localement, ideal pour festivals et marches creatifs.'],
-  ['prd_affiche_abissa', 'Affiche Collector Abissa', 'Art', 15000, 40, '/assets/img/product-poster.svg', 'Tirage numerote sur papier mat premium.']
+  ['prd_kente_cap', 'Casquette Kente Édition', 'Accessoire', 12000, 80, '/assets/img/product-cap.svg', 'Casquette brodée en série limitée, inspirée des motifs akan.'],
+  ['prd_baule_tote', 'Tote bag Baoulé', 'Lifestyle', 9000, 120, '/assets/img/product-tote.svg', 'Sac épais imprimé à Abidjan, idéal pour les festivals et les marchés créatifs.'],
+  ['prd_affiche_abissa', 'Affiche collector Abissa', 'Art', 15000, 40, '/assets/img/product-poster.svg', 'Tirage numéroté sur papier mat 250 g.']
 ];
 
 for (const product of products) {
@@ -153,25 +164,27 @@ for (const product of products) {
   });
 }
 
-await insertOrUpdateById('tickets', {
-  id: 'tkt_demo_client',
-  event_id: 'evt_abissa_2026',
-  eventId: 'evt_abissa_2026',
-  eventTitle: 'Festival Abissa Experience',
-  eventDate: '2026-08-14T18:00',
-  eventLocation: 'Place Abissa',
-  eventImage: '/assets/img/event-abissa.svg',
-  user_id: client.id,
-  userId: client.id,
-  code: 'FC-DEMO-2026',
-  qrcode: 'FC-DEMO-2026',
-  quantity: 2,
-  amount_xof: 30000,
-  price: 30000,
-  status: 'paid',
-  payment_method: 'Wave',
-  created_at: new Date().toISOString(),
-  createdAt: new Date().toISOString()
-});
+async function seedTicket(ticket) {
+  const event = events.find(([eventId]) => eventId === ticket.event_id);
+  await insertOrUpdateById('tickets', {
+    ...ticket,
+    eventId: ticket.event_id,
+    eventTitle: event[1],
+    eventDate: event[5],
+    eventLocation: event[4],
+    eventImage: event[11],
+    userId: ticket.user_id,
+    qrcode: ticket.code,
+    price: ticket.amount_xof,
+    status: ticket.status || 'paid',
+    createdAt: ticket.created_at
+  });
+}
 
-console.log('Donnees de demonstration inserees.');
+// Billets du client de demonstration : un evenement a venir, un evenement
+// demain (rappel J-1) et un evenement passe (avis).
+await seedTicket({ id: 'tkt_demo_client', event_id: 'evt_abissa_2026', user_id: client.id, code: 'FC-DEMO-2026', quantity: 2, amount_xof: 30000, payment_method: 'Wave', created_at: ago(6) });
+await seedTicket({ id: 'tkt_demo_maquis', event_id: 'evt_maquis_night', user_id: client.id, code: 'FC-DEMO-MAQUIS', quantity: 1, amount_xof: 25000, payment_method: 'Orange Money', created_at: ago(3) });
+await seedTicket({ id: 'tkt_demo_zouglou', event_id: 'evt_zouglou_past', user_id: client.id, code: 'FC-DEMO-ZOUGLOU', quantity: 2, amount_xof: 10000, payment_method: 'Moov Money', created_at: ago(15) });
+
+console.log('Données de démonstration insérées.');

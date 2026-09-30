@@ -37,8 +37,11 @@ function bookingBlock(event, user) {
   const soldOut = left === 0;
   const approved = event.status === 'approved';
   const maxQty = left === null ? MAX_TICKETS : Math.max(1, Math.min(MAX_TICKETS, left));
+  const phase = eventPhase(event);
   let blocker = '';
   if (!approved) blocker = alertBox('warning', 'Cet événement n\'est pas encore ouvert à la réservation : il est en cours de validation.');
+  else if (phase === 'live') blocker = alertBox('info', `L'événement a commencé à ${formatTime(event.starts_at)} : la réservation en ligne est fermée. Renseigne-toi sur place pour la vente au guichet.`, 'Billetterie fermée');
+  else if (phase === 'past') blocker = alertBox('info', 'Cet événement est terminé : la billetterie est fermée.', 'Événement terminé');
   else if (soldOut) blocker = alertBox('warning', 'Tous les billets ont été vendus pour cet événement.', 'Complet');
   else if (user && user.role === 'organisateur') blocker = alertBox('info', 'Les billets se réservent avec un compte client. Déconnecte-toi puis connecte-toi avec ton compte client.');
 
@@ -50,7 +53,7 @@ function bookingBlock(event, user) {
           <h2 id="buy-title" class="small muted">Prix par billet</h2>
           <span class="price${Number(event.price_xof) === 0 ? ' price-free' : ''}">${escapeHtml(formatPrice(event.price_xof))}</span>
         </div>
-        ${left !== null && !soldOut ? `<span class="badge ${left <= capacity * 0.15 ? 'badge-warning' : 'badge-success'} badge-dot">${escapeHtml(plural(left, 'place restante', 'places restantes'))}</span>` : ''}
+        ${left !== null && !soldOut && phase === 'upcoming' ? `<span class="badge ${left <= capacity * 0.15 ? 'badge-warning' : 'badge-success'} badge-dot">${escapeHtml(plural(left, 'place restante', 'places restantes'))}</span>` : ''}
       </div>
       ${capacity ? `<div><div class="meter" role="img" aria-label="${escapeHtml(`${formatNumber(event.tickets_sold)} billets vendus sur ${formatNumber(capacity)}`)}"><span data-meter="${Math.min(100, Math.round((Number(event.tickets_sold || 0) / capacity) * 100))}"></span></div>
         <p class="small muted mt-2">${escapeHtml(formatNumber(event.tickets_sold))} billets déjà vendus</p></div>` : ''}

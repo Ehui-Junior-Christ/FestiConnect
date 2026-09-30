@@ -21,12 +21,12 @@ export function text(value, { label, min = 0, max = 200, required = false, multi
   }
   if (typeof value !== 'string' && typeof value !== 'number') throw invalid(`${label} invalide.`);
   const result = String(value).normalize('NFC').trim();
-  if (result.length < min) throw invalid(`${label} doit contenir au moins ${min} caracteres.`);
-  if (result.length > max) throw invalid(`${label} ne doit pas depasser ${max} caracteres.`);
+  if (result.length < min) throw invalid(`${label} doit contenir au moins ${min} caractères.`);
+  if (result.length > max) throw invalid(`${label} ne doit pas dépasser ${max} caractères.`);
   if ((multiline ? CONTROL_MULTILINE : CONTROL_STRICT).test(result)) {
-    throw invalid(`${label} contient des caracteres non autorises.`);
+    throw invalid(`${label} contient des caractères non autorisés.`);
   }
-  if (MARKUP.test(result)) throw invalid(`${label} ne doit pas contenir les caracteres < ou >.`);
+  if (MARKUP.test(result)) throw invalid(`${label} ne doit pas contenir les caractères < ou >.`);
   return result;
 }
 
@@ -39,7 +39,7 @@ export function integer(value, { label, min, max, fallback }) {
   if (typeof value === 'number') number = value;
   else if (typeof value === 'string' && /^\s*-?\d{1,16}\s*$/.test(value)) number = Number(value);
   if (!Number.isSafeInteger(number) || number < min || number > max) {
-    throw invalid(`${label} doit etre un nombre entier entre ${min} et ${max}.`);
+    throw invalid(`${label} doit être un nombre entier entre ${min} et ${max}.`);
   }
   return number;
 }
@@ -68,7 +68,7 @@ export function email(value, { label = 'Email' } = {}) {
 
 const PHONE = /^\+?[0-9][0-9 .()-]{5,24}$/;
 
-export function phone(value, { label = 'Telephone' } = {}) {
+export function phone(value, { label = 'Téléphone' } = {}) {
   if (isEmpty(value)) return '';
   if (typeof value !== 'string') throw invalid(`${label} invalide.`);
   const result = value.trim();

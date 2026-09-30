@@ -180,6 +180,23 @@ function dateParts(value) {
   };
 }
 
+// Les horaires des événements sont saisis en heure d'Abidjan (UTC, sans heure d'été) :
+// pour savoir si un événement a commencé, on les lit donc en UTC.
+function eventTimeMs(value) {
+  const text = String(value ?? '').trim();
+  if (!text) return Number.NaN;
+  if (/(?:Z|[+-]\d{2}:\d{2})$/.test(text)) return Date.parse(text);
+  return Date.parse(`${text}${text.length === 16 ? ':00' : ''}Z`);
+}
+
+// 'upcoming' (billetterie ouverte), 'live' (commencé) ou 'past' (terminé).
+function eventPhase(event, now = Date.now()) {
+  const start = eventTimeMs(event.starts_at);
+  const end = eventTimeMs(event.ends_at);
+  if (Number.isNaN(start) || now < start) return 'upcoming';
+  return now < (Number.isNaN(end) ? start : end) ? 'live' : 'past';
+}
+
 function plural(count, singular, pluralForm) {
   return `${formatNumber(count)} ${Number(count) > 1 ? pluralForm : singular}`;
 }

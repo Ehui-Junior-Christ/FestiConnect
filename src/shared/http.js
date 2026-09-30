@@ -47,7 +47,7 @@ function isJsonContentType(req) {
 export async function parseBody(req, { limit = MAX_BODY_BYTES } = {}) {
   const declared = Number(req.headers['content-length']);
   if (Number.isFinite(declared) && declared > limit) {
-    throw new AppError(413, 'PAYLOAD_TOO_LARGE', 'Requete trop volumineuse.', { Connection: 'close' });
+    throw new AppError(413, 'PAYLOAD_TOO_LARGE', 'Requête trop volumineuse.', { Connection: 'close' });
   }
 
   const raw = await new Promise((resolve, reject) => {
@@ -68,13 +68,13 @@ export async function parseBody(req, { limit = MAX_BODY_BYTES } = {}) {
       if (size > limit) {
         // On arrete d'accumuler ; la connexion sera fermee apres la reponse 413.
         req.resume();
-        finish(new AppError(413, 'PAYLOAD_TOO_LARGE', 'Requete trop volumineuse.', { Connection: 'close' }));
+        finish(new AppError(413, 'PAYLOAD_TOO_LARGE', 'Requête trop volumineuse.', { Connection: 'close' }));
         return;
       }
       chunks.push(chunk);
     };
     const onEnd = () => finish(null, Buffer.concat(chunks).toString('utf8'));
-    const onError = () => finish(new AppError(400, 'BAD_REQUEST', 'Requete interrompue.'));
+    const onError = () => finish(new AppError(400, 'BAD_REQUEST', 'Requête interrompue.'));
     req.on('data', onData);
     req.on('end', onEnd);
     req.on('error', onError);
@@ -82,7 +82,7 @@ export async function parseBody(req, { limit = MAX_BODY_BYTES } = {}) {
 
   if (!raw.trim()) return {};
   if (!isJsonContentType(req)) {
-    throw new AppError(415, 'UNSUPPORTED_MEDIA_TYPE', 'Le corps de la requete doit etre en JSON (Content-Type: application/json).');
+    throw new AppError(415, 'UNSUPPORTED_MEDIA_TYPE', 'Le corps de la requête doit être en JSON (Content-Type: application/json).');
   }
   let data;
   try {
@@ -91,7 +91,7 @@ export async function parseBody(req, { limit = MAX_BODY_BYTES } = {}) {
     throw new AppError(400, 'INVALID_JSON', 'Corps JSON invalide.');
   }
   if (!data || typeof data !== 'object' || Array.isArray(data)) {
-    throw new AppError(400, 'INVALID_JSON', 'Le corps de la requete doit etre un objet JSON.');
+    throw new AppError(400, 'INVALID_JSON', 'Le corps de la requête doit être un objet JSON.');
   }
   return data;
 }
