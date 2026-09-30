@@ -2,80 +2,142 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>FestiConnect - Culture, billets et expériences</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>FestiConnect · Concerts, festivals et défilés en Côte d'Ivoire</title>
+  <meta name="description" content="Réserve tes billets pour les concerts, festivals et défilés d'Abidjan, Grand-Bassam, Bouaké et Yamoussoukro. Paiement Wave, Orange Money ou Moov Money.">
+  <meta name="theme-color" content="#fcf8f2">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&amp;display=swap">
   <link rel="stylesheet" href="/assets/css/styles.css">
 </head>
-<body>
-  <nav class="nav" data-nav></nav>
-  <main>
-    <section class="hero">
+<body data-nav="home">
+  <a class="skip-link" href="#main">Aller au contenu</a>
+  <header class="site-header" data-header></header>
+
+  <main id="main" tabindex="-1">
+    <section class="hero" aria-labelledby="hero-title">
       <div class="container hero-grid">
         <div>
-          <span class="eyebrow">Plateforme culturelle - Côte d'Ivoire</span>
-          <h1>FestiConnect</h1>
-          <p class="lead">La plateforme qui connecte festivals, concerts, mode, gastronomie, billetterie mobile et commerce culturel dans une expérience pensée pour l'Afrique.</p>
-          <form id="home-search" class="glass form-grid mt-8 p-4 rounded-[28px]">
-            <input class="input" name="q" placeholder="Artiste, festival, ville">
-            <select class="select" name="category">
-              <option value="">Toutes catégories</option>
-              <option>Concert</option>
-              <option>Tradition</option>
-              <option>Mode</option>
-            </select>
-            <select class="select" name="city">
+          <span class="kicker">Billetterie · Côte d'Ivoire</span>
+          <h1 id="hero-title" class="mt-4">Ce <span class="nowrap">week-end</span>, <em>on sort.</em></h1>
+          <p class="lead">Concerts, festivals et défilés à Abidjan, Grand-Bassam, Bouaké et Yamoussoukro. Réserve en quelques étapes, paie avec Wave, Orange Money ou Moov Money, et retrouve ton billet dans ton espace.</p>
+
+          <form id="home-search" class="search-bar" action="/evenements.html" method="get" role="search" aria-label="Rechercher un événement">
+            <div class="input-icon">
+              <span data-icon="search"></span>
+              <label class="sr-only" for="home-q">Artiste, événement ou lieu</label>
+              <input class="input" id="home-q" name="q" type="search" placeholder="Artiste, festival, lieu…" autocomplete="off" enterkeyhint="search">
+            </div>
+            <label class="sr-only" for="home-city">Ville</label>
+            <select class="select" id="home-city" name="city">
               <option value="">Toutes les villes</option>
-              <option>Abidjan</option>
-              <option>Grand-Bassam</option>
-              <option>Bouake</option>
-              <option>Yamoussoukro</option>
+              <option value="Abidjan">Abidjan</option>
+              <option value="Grand-Bassam">Grand-Bassam</option>
+              <option value="Bouake">Bouaké</option>
+              <option value="Yamoussoukro">Yamoussoukro</option>
             </select>
-            <button class="btn btn-primary" type="submit"><i data-lucide="search"></i>Explorer</button>
+            <button class="btn btn-primary" type="submit"><span data-icon="search"></span><span>Rechercher</span></button>
           </form>
-          <div class="hero-actions">
-            <a class="btn btn-primary" href="/evenements.html"><i data-lucide="ticket"></i>Voir les événements</a>
-            <a class="btn btn-secondary" href="/boutique.html"><i data-lucide="shopping-bag"></i>Boutique culturelle</a>
+
+          <div class="quick-cities cluster">
+            <span class="label">Catégories :</span>
+            <div class="chips">
+              <a class="chip" href="/evenements.html?category=Concert"><span data-icon="music"></span>Concerts</a>
+              <a class="chip" href="/evenements.html?category=Tradition"><span data-icon="star"></span>Traditions</a>
+              <a class="chip" href="/evenements.html?category=Mode"><span data-icon="bag"></span>Mode</a>
+            </div>
           </div>
         </div>
-        <div class="hero-visual glass">
-          <div class="floating-ticket glass">
-            <span class="tag">Billet intelligent</span>
-            <h3 class="mt-4">Abissa Experience</h3>
-            <p class="muted mt-2">QR code, paiement Wave, suivi en temps réel et accès terrain.</p>
-          </div>
+
+        <div class="hero-visual">
+          <img src="/assets/img/hero-festival.svg" alt="" width="1000" height="1000">
+          <div class="next-up" id="next-up" hidden></div>
         </div>
       </div>
     </section>
 
-    <section class="section">
+    <section class="section" aria-labelledby="featured-title">
       <div class="container">
         <div class="section-head">
           <div>
-            <span class="eyebrow">Découverte</span>
-            <h2 class="mt-4">Événements en avant</h2>
+            <span class="kicker">À l'affiche</span>
+            <h2 id="featured-title" class="mt-2">Les prochaines dates</h2>
           </div>
-          <a class="btn btn-secondary" href="/evenements.html">Tout voir</a>
+          <a class="link-arrow" href="/evenements.html">Tout l'agenda<span data-icon="arrow-right"></span></a>
         </div>
-        <div id="featured-events" class="grid grid-3"></div>
+        <div id="featured-events" class="grid-cards" aria-busy="true"></div>
       </div>
     </section>
 
-    <section class="section">
+    <section class="section section-alt" aria-labelledby="how-title">
       <div class="container">
         <div class="section-head">
           <div>
-            <span class="eyebrow">Commerce culturel</span>
-            <h2 class="mt-4">Boutique officielle</h2>
+            <span class="kicker">Comment ça marche</span>
+            <h2 id="how-title" class="mt-2">Du repérage à l'entrée, en trois temps</h2>
           </div>
-          <a class="btn btn-secondary" href="/boutique.html">Visiter la boutique</a>
         </div>
-        <div id="featured-products" class="grid grid-3"></div>
+        <ol class="steps">
+          <li>
+            <span class="step-num" aria-hidden="true">1</span>
+            <div>
+              <h3>Choisis ta sortie</h3>
+              <p>Filtre par ville ou par catégorie, ou cherche directement un artiste ou un lieu.</p>
+            </div>
+          </li>
+          <li>
+            <span class="step-num" aria-hidden="true">2</span>
+            <div>
+              <h3>Paie en Mobile Money</h3>
+              <p>Wave, Orange Money ou Moov Money. Pas besoin de carte bancaire.</p>
+            </div>
+          </li>
+          <li>
+            <span class="step-num" aria-hidden="true">3</span>
+            <div>
+              <h3>Présente ton code</h3>
+              <p>Ton billet et son code d'entrée t'attendent dans ton espace client.</p>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="shop-title">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <span class="kicker">Boutique</span>
+            <h2 id="shop-title" class="mt-2">Merch officiel et créations locales</h2>
+            <p>Casquettes, sacs et affiches des événements, livrés à l'adresse de ton choix.</p>
+          </div>
+          <a class="link-arrow" href="/boutique.html">Voir la boutique<span data-icon="arrow-right"></span></a>
+        </div>
+        <div id="featured-products" class="grid-cards grid-products" aria-busy="true"></div>
+      </div>
+    </section>
+
+    <section class="section" aria-labelledby="orga-title">
+      <div class="container">
+        <div class="cta-band">
+          <div class="stack">
+            <span class="kicker">Organisateurs</span>
+            <h2 id="orga-title">Tu organises un concert, un festival ou un défilé ?</h2>
+            <p>Publie ton événement, vends tes billets en Mobile Money et suis tes ventes depuis ton espace. Chaque événement est relu par notre équipe avant sa mise en ligne.</p>
+          </div>
+          <div class="cluster">
+            <a class="btn btn-primary btn-lg" href="/inscription.html?role=organisateur">Vendre mes billets</a>
+            <a class="btn btn-lg" href="/organisateur.html">Espace organisateur</a>
+          </div>
+        </div>
       </div>
     </section>
   </main>
-  <footer class="footer" data-footer></footer>
-  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <footer class="site-footer" data-footer></footer>
+  <nav class="tabbar" data-tabbar></nav>
   <script src="/assets/js/api.js"></script>
   <script src="/assets/js/ui.js"></script>
   <script src="/assets/js/home.js"></script>

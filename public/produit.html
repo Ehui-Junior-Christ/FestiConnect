@@ -2,18 +2,38 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Détail produit - FestiConnect</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Produit · FestiConnect</title>
+  <meta name="description" content="Détail d'un article de la boutique FestiConnect.">
+  <meta name="theme-color" content="#fcf8f2">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&amp;display=swap">
   <link rel="stylesheet" href="/assets/css/styles.css">
 </head>
-<body>
-  <nav class="nav" data-nav></nav>
-  <main class="section">
-    <div id="product-detail" class="container"></div>
+<body data-nav="shop">
+  <a class="skip-link" href="#main">Aller au contenu</a>
+  <header class="site-header" data-header></header>
+
+  <main id="main" tabindex="-1">
+    <div id="product-detail" class="container" aria-busy="true">
+      <div class="breadcrumb"><div class="skeleton sk-line sk-w40"></div></div>
+      <div class="product-layout mt-4" aria-hidden="true">
+        <div class="skeleton sk-media-square"></div>
+        <div>
+          <div class="skeleton sk-title"></div>
+          <div class="skeleton sk-line sk-w80 mt-4"></div>
+          <div class="skeleton sk-line sk-w60"></div>
+          <div class="skeleton sk-block mt-6"></div>
+        </div>
+      </div>
+      <p class="sr-only" role="status">Chargement du produit…</p>
+    </div>
   </main>
-  <footer class="footer" data-footer></footer>
-  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <footer class="site-footer" data-footer></footer>
+  <nav class="tabbar" data-tabbar></nav>
   <script src="/assets/js/api.js"></script>
   <script src="/assets/js/ui.js"></script>
   <script src="/assets/js/product-detail.js"></script>
