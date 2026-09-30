@@ -2,54 +2,127 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Aide - FestiConnect</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Centre d'aide · FestiConnect</title>
+  <meta name="description" content="Réponses aux questions fréquentes : réservation de billets, paiement Mobile Money, commandes boutique, compte et organisateurs.">
+  <meta name="theme-color" content="#fcf8f2">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&amp;display=swap">
   <link rel="stylesheet" href="/assets/css/styles.css">
 </head>
-<body>
-  <nav class="nav" data-nav></nav>
-  <main class="section">
+<body data-nav="support">
+  <a class="skip-link" href="#main">Aller au contenu</a>
+  <header class="site-header" data-header></header>
+
+  <main id="main" tabindex="-1">
     <div class="container">
-      <div class="page-header">
-        <div class="stack">
-          <span class="eyebrow">Assistance</span>
-          <h1>Centre d'aide</h1>
-          <p class="lead">Les réponses rapides aux questions les plus fréquentes sur les réservations, les commandes et les comptes.</p>
-        </div>
+      <div class="page-head">
+        <span class="kicker">Aide</span>
+        <h1 class="mt-2">Centre d'aide</h1>
+        <p class="lead">Les réponses aux questions qu'on nous pose le plus souvent. Tu ne trouves pas ? <a href="/contact.html">Écris-nous</a>.</p>
       </div>
-      <div class="page-grid page-grid-2">
-        <article class="panel glass">
-          <h3>Réservation de billets</h3>
-          <ul class="feature-list mt-4">
-            <li>Crée un compte ou connecte-toi avant de réserver.</li>
-            <li>Choisis la quantité, le moyen de paiement puis confirme.</li>
-            <li>La confirmation s’affiche dans ton espace client.</li>
-          </ul>
-        </article>
-        <article class="panel glass">
-          <h3>Commande boutique</h3>
-          <ul class="feature-list mt-4">
-            <li>Ajoute les produits au panier depuis la boutique.</li>
-            <li>Renseigne la ville et l’adresse de livraison.</li>
-            <li>Une page de confirmation récapitule la référence.</li>
-          </ul>
-        </article>
-        <article class="panel glass">
-          <h3>Espaces privés</h3>
-          <p class="muted mt-3">L’espace client suit tes billets et tes achats. L’espace organisateur permet de publier et suivre les événements. L’administration valide les contenus et les statuts.</p>
-        </article>
-        <article class="panel glass">
-          <h3>Problème de connexion</h3>
-          <p class="muted mt-3">Vérifie l’email, le mot de passe et assure-toi que le compte existe déjà. En cas de doute, utilise la page de contact.</p>
-        </article>
+
+      <div class="help-layout">
+        <nav class="toc" aria-label="Rubriques de l'aide">
+          <p>Rubriques</p>
+          <a href="#reservation">Réserver un billet</a>
+          <a href="#paiement">Paiement</a>
+          <a href="#boutique">Boutique et livraison</a>
+          <a href="#compte">Compte et connexion</a>
+          <a href="#organisateurs">Organisateurs</a>
+        </nav>
+
+        <div>
+          <section class="help-group" id="reservation" aria-labelledby="h-reservation">
+            <h2 id="h-reservation">Réserver un billet</h2>
+            <div class="faq">
+              <details open>
+                <summary>Comment réserver un billet ?<span data-icon="chevron-down"></span></summary>
+                <div class="answer">
+                  <ol>
+                    <li>Ouvre la page de l'événement depuis l'<a href="/evenements.html">agenda</a>.</li>
+                    <li>Choisis le nombre de billets et ton moyen de paiement.</li>
+                    <li>Connecte-toi ou crée ton compte si ce n'est pas déjà fait, puis confirme.</li>
+                  </ol>
+                  <p>La confirmation s'affiche aussitôt et ton billet apparaît dans ton espace client.</p>
+                </div>
+              </details>
+              <details>
+                <summary>Où retrouver mon billet ?<span data-icon="chevron-down"></span></summary>
+                <div class="answer"><p>Dans ton <a href="/client.html#tickets">espace client</a>, rubrique « Mes billets ». Chaque réservation a un code d'entrée (par exemple FC-3A9F…) à présenter à l'accueil de l'événement.</p></div>
+              </details>
+              <details>
+                <summary>Puis-je réserver pour plusieurs personnes ?<span data-icon="chevron-down"></span></summary>
+                <div class="answer"><p>Oui : augmente le nombre de billets avant de confirmer. Une seule réservation, un seul code, valable pour le nombre de places indiqué.</p></div>
+              </details>
+            </div>
+          </section>
+
+          <section class="help-group" id="paiement" aria-labelledby="h-paiement">
+            <h2 id="h-paiement">Paiement</h2>
+            <div class="faq">
+              <details>
+                <summary>Quels moyens de paiement sont acceptés ?<span data-icon="chevron-down"></span></summary>
+                <div class="answer"><p>Wave, Orange Money et Moov Money, pour les billets comme pour la boutique. Aucune carte bancaire n'est nécessaire.</p></div>
+              </details>
+              <details>
+                <summary>Je souhaite être remboursé, comment faire ?<span data-icon="chevron-down"></span></summary>
+                <div class="answer"><p>Écris à <a href="mailto:billetterie@festiconnect.ci">billetterie@festiconnect.ci</a> en indiquant le code de ton billet. Chaque demande est étudiée avec l'organisateur de l'événement.</p></div>
+              </details>
+            </div>
+          </section>
+
+          <section class="help-group" id="boutique" aria-labelledby="h-boutique">
+            <h2 id="h-boutique">Boutique et livraison</h2>
+            <div class="faq">
+              <details>
+                <summary>Comment passer commande ?<span data-icon="chevron-down"></span></summary>
+                <div class="answer"><p>Ajoute les articles au panier depuis la <a href="/boutique.html">boutique</a>, puis indique ta ville et ton adresse de livraison au moment du paiement. Une page de confirmation récapitule la référence de ta commande.</p></div>
+              </details>
+              <details>
+                <summary>Que dois-je mettre dans l'adresse ?<span data-icon="chevron-down"></span></summary>
+                <div class="answer"><p>Ta commune, ton quartier et un repère connu (pharmacie, école, carrefour). C'est ce qui permet au livreur de te trouver du premier coup.</p></div>
+              </details>
+            </div>
+          </section>
+
+          <section class="help-group" id="compte" aria-labelledby="h-compte">
+            <h2 id="h-compte">Compte et connexion</h2>
+            <div class="faq">
+              <details>
+                <summary>Je n'arrive pas à me connecter<span data-icon="chevron-down"></span></summary>
+                <div class="answer"><p>Vérifie l'adresse email et le mot de passe (attention aux majuscules). Si tu n'as pas encore de compte, <a href="/inscription.html">crée-le ici</a>. En cas de doute, <a href="/contact.html">contacte-nous</a>.</p></div>
+              </details>
+              <details>
+                <summary>À quoi servent les différents espaces ?<span data-icon="chevron-down"></span></summary>
+                <div class="answer"><p>L'espace client regroupe tes billets et tes achats. L'espace organisateur permet de publier et de suivre tes événements. L'administration valide les contenus et les statuts.</p></div>
+              </details>
+            </div>
+          </section>
+
+          <section class="help-group" id="organisateurs" aria-labelledby="h-orga">
+            <h2 id="h-orga">Organisateurs</h2>
+            <div class="faq">
+              <details>
+                <summary>Comment publier mon événement ?<span data-icon="chevron-down"></span></summary>
+                <div class="answer"><p><a href="/inscription.html?role=organisateur">Crée un compte organisateur</a>, puis remplis le formulaire « Créer un événement » dans ton espace. L'équipe relit chaque événement avant sa mise en ligne.</p></div>
+              </details>
+              <details>
+                <summary>Comment contrôler les billets à l'entrée ?<span data-icon="chevron-down"></span></summary>
+                <div class="answer"><p>Dans ton espace organisateur, rubrique « Contrôle d'entrée », saisis le code présenté par le client : tu vois tout de suite s'il correspond à un billet de tes événements.</p></div>
+              </details>
+            </div>
+          </section>
+        </div>
       </div>
     </div>
   </main>
-  <footer class="footer" data-footer></footer>
-  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <footer class="site-footer" data-footer></footer>
+  <nav class="tabbar" data-tabbar></nav>
   <script src="/assets/js/api.js"></script>
   <script src="/assets/js/ui.js"></script>
-  <script>mountLayout('support');</script>
 </body>
 </html>

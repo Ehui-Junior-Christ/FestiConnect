@@ -1,11 +1,11 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 560">
-  <rect width="900" height="560" fill="#131313"/>
-  <path d="M0 0h900v560H0z" fill="#ff5f1f" opacity=".15"/>
-  <g fill="none" stroke="#ff5f1f" stroke-width="18">
-    <circle cx="450" cy="280" r="190"/>
-    <circle cx="450" cy="280" r="105"/>
-    <circle cx="450" cy="280" r="30" fill="#ffd08a" stroke="none"/>
-  </g>
-  <path d="M95 95h240v52H95zm470 318h240v52H565z" fill="#f7f2ea" opacity=".92"/>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 600" role="img" aria-label="Affiche soirée électro : ondes sonores et platine">
+<rect width="960" height="600" fill="#1b120c"/>
+<g fill="none" stroke-width="14">
+<circle cx="300" cy="300" r="250" stroke="#c2410c"/><circle cx="300" cy="300" r="200" stroke="#f26a1b"/>
+<circle cx="300" cy="300" r="150" stroke="#f4b400"/><circle cx="300" cy="300" r="100" stroke="#0a7a4a"/>
+</g>
+<circle cx="300" cy="300" r="56" fill="#fbf4ea"/><circle cx="300" cy="300" r="12" fill="#1b120c"/>
+<path d="M430 120l150 90" stroke="#fbf4ea" stroke-width="14" stroke-linecap="round"/>
+<g fill="#f4b400"><rect x="600" y="280" width="12" height="40" rx="6"/><rect x="622" y="280" width="12" height="40" rx="6"/><rect x="644" y="280" width="12" height="40" rx="6"/><rect x="666" y="280" width="12" height="40" rx="6"/><rect x="688" y="280" width="12" height="40" rx="6"/><rect x="710" y="280" width="12" height="40" rx="6"/><rect x="732" y="280" width="12" height="40" rx="6"/><rect x="754" y="280" width="12" height="40" rx="6"/><rect x="776" y="280" width="12" height="40" rx="6"/><rect x="798" y="280" width="12" height="40" rx="6"/><rect x="820" y="280" width="12" height="40" rx="6"/><rect x="842" y="280" width="12" height="40" rx="6"/><rect x="864" y="280" width="12" height="40" rx="6"/><rect x="886" y="280" width="12" height="40" rx="6"/></g>
+<rect x="600" y="470" width="300" height="14" fill="#f26a1b"/>
 </svg>
-

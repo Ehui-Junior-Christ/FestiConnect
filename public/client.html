@@ -2,36 +2,75 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Espace client - FestiConnect</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Mon espace · FestiConnect</title>
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#fcf8f2">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&amp;display=swap">
   <link rel="stylesheet" href="/assets/css/styles.css">
 </head>
-<body>
-  <nav class="nav" data-nav></nav>
-  <main class="container dashboard">
-    <aside class="sidebar glass">
-      <a class="side-link active" href="#dashboard"><i data-lucide="layout-dashboard"></i>Dashboard</a>
-      <a class="side-link" href="#tickets"><i data-lucide="ticket"></i>Mes billets</a>
-      <a class="side-link" href="#profil"><i data-lucide="settings"></i>Profil</a>
-    </aside>
-    <section class="grid">
-      <div class="section-head">
-        <div><span class="eyebrow">Espace client</span><h1>Bonjour <span id="client-name"></span></h1></div>
-        <a class="btn btn-primary" href="/evenements.html"><i data-lucide="search"></i>Réserver</a>
+<body data-nav="account">
+  <a class="skip-link" href="#main">Aller au contenu</a>
+  <header class="site-header" data-header></header>
+
+  <main id="main" tabindex="-1">
+    <div class="container dash">
+      <nav class="dash-nav" aria-label="Espace client">
+        <div class="dash-user"><span class="avatar avatar-lg" data-user-initials></span><div><strong data-user-name></strong><span>Espace client</span></div></div>
+        <ul>
+          <li><a href="#dashboard" aria-current="true"><span data-icon="dashboard"></span>Aperçu</a></li>
+          <li><a href="#tickets"><span data-icon="ticket"></span>Mes billets</a></li>
+          <li><a href="#profil"><span data-icon="user"></span>Profil</a></li>
+          <li class="nav-sep" role="presentation"></li>
+          <li><button type="button" data-logout><span data-icon="logout"></span>Déconnexion</button></li>
+        </ul>
+      </nav>
+
+      <div class="dash-main">
+        <section id="dashboard" class="stack" aria-labelledby="client-title">
+          <div class="dash-head">
+            <div>
+              <h1 id="client-title">Bonjour <span id="client-name" data-user-first></span></h1>
+              <p>Tes billets, tes achats et tes points fidélité.</p>
+            </div>
+            <a class="btn btn-primary" href="/evenements.html"><span data-icon="search"></span><span>Trouver un événement</span></a>
+          </div>
+          <div id="client-metrics" class="stats" aria-busy="true"></div>
+        </section>
+
+        <section id="tickets" class="panel" aria-labelledby="tickets-title">
+          <div class="panel-title">
+            <div>
+              <h2 id="tickets-title">Mes billets</h2>
+              <p>Présente le code du billet à l'entrée de l'événement.</p>
+            </div>
+          </div>
+          <div id="tickets-list" class="stack" aria-busy="true"></div>
+        </section>
+
+        <section id="profil" class="panel" aria-labelledby="profile-title">
+          <div class="panel-title">
+            <div>
+              <h2 id="profile-title">Profil</h2>
+              <p>Pour modifier ces informations, écris au <a href="/contact.html">support</a>.</p>
+            </div>
+          </div>
+          <dl class="profile-list" id="profile-list"></dl>
+          <p class="small muted mt-4">Les paiements sont confirmés par Wave, Orange Money ou Moov Money. FestiConnect ne stocke aucun code secret Mobile Money.</p>
+          <div class="cluster mt-6">
+            <button class="btn btn-danger btn-sm" type="button" id="logout-all"><span data-icon="logout"></span><span>Me déconnecter de tous les appareils</span></button>
+            <span class="small muted">Utile si tu t'es connecté sur un téléphone qui n'est pas le tien.</span>
+          </div>
+        </section>
       </div>
-      <div id="client-metrics" class="metric-strip"></div>
-      <section id="tickets" class="panel glass">
-        <h2>Mes billets</h2>
-        <div id="tickets-list" class="grid mt-6"></div>
-      </section>
-      <section id="profil" class="panel glass">
-        <h2>Profil & paramètres</h2>
-        <p class="lead text-base">Les informations de profil sont synchronisées avec ton compte. Les paiements restent confirmés par Wave, Orange Money ou Moov Money.</p>
-      </section>
-    </section>
+    </div>
   </main>
-  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <footer class="site-footer" data-footer></footer>
+  <nav class="tabbar" data-tabbar></nav>
   <script src="/assets/js/api.js"></script>
   <script src="/assets/js/ui.js"></script>
   <script src="/assets/js/client.js"></script>
