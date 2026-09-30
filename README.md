@@ -10,7 +10,13 @@ npm install
 copy .env.example .env
 ```
 
-Renseigne ensuite `TURSO_AUTH_TOKEN` dans `.env`.
+Renseigne ensuite `TURSO_AUTH_TOKEN` et `APP_SECRET` dans `.env`.
+
+Pour developper sans Turso, une base SQLite locale suffit (refusee en production) :
+
+```bash
+TURSO_DATABASE_URL=file:./festiconnect-dev.db
+```
 
 ## Base de donnees
 
@@ -27,7 +33,23 @@ npm run dev
 
 Ouvre `http://localhost:3000`.
 
-## Comptes de demonstration
+## Tests
+
+```bash
+npm test
+```
+
+Les tests demarrent le serveur reel sur une base SQLite temporaire (aucun acces a Turso).
+
+## Production
+
+- `NODE_ENV=production`, `APP_SECRET` (>= 32 caracteres aleatoires), `TURSO_DATABASE_URL`, `TURSO_AUTH_TOKEN`.
+- Derriere Render/Koyeb : `TRUST_PROXY=1`.
+- Ne pas lancer `npm run db:seed` en production (refuse par defaut) et changer/supprimer les comptes de demonstration.
+
+Voir [SECURITY.md](SECURITY.md) pour les protections en place et le signalement des failles.
+
+## Comptes de demonstration (developpement uniquement)
 
 - Admin: `admin@festiconnect.ci` / `Admin123!`
 - Organisateur: `organisateur@festiconnect.ci` / `Orga123!`
