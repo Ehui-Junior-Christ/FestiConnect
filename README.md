@@ -27,6 +27,29 @@ npm run dev
 
 Ouvre `http://localhost:3000`.
 
+## Tests
+
+```bash
+npm test
+```
+
+Les tests utilisent une base SQLite locale temporaire (`file:`) : aucun token Turso n'est necessaire. Ils tournent aussi automatiquement sur GitHub Actions a chaque push et a chaque pull request (`.github/workflows/ci.yml`).
+
+## Deploiement
+
+FestiConnect se deploie gratuitement et sans carte bancaire sur **Render** (plan Free, region Frankfurt), avec la base **Turso** (plan Free). **Zeabur** sert d'alternative grace au `Dockerfile`.
+
+👉 Guide complet pas a pas : **[DEPLOIEMENT.md](DEPLOIEMENT.md)**
+
+Fichiers utiles :
+
+- `render.yaml` : Blueprint Render (build + migrations, health check `/api/health`, variables d'environnement) ;
+- `Dockerfile` : image de production pour Zeabur ou tout hebergeur Docker ;
+- `npm run start:prod` : applique les migrations (idempotentes) puis demarre le serveur ;
+- `npm run db:setup` : migrations puis donnees de demonstration.
+
+Variables d'environnement en production : `TURSO_DATABASE_URL`, `TURSO_AUTH_TOKEN`, `APP_SECRET`, `NODE_ENV=production` (`PORT` est fourni par l'hebergeur).
+
 ## Comptes de demonstration
 
 - Admin: `admin@festiconnect.ci` / `Admin123!`
