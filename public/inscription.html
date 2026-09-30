@@ -2,33 +2,89 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Inscription - FestiConnect</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Créer un compte · FestiConnect</title>
+  <meta name="description" content="Crée ton compte FestiConnect pour réserver des billets ou vendre ceux de tes événements.">
+  <meta name="theme-color" content="#fcf8f2">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&amp;display=swap">
   <link rel="stylesheet" href="/assets/css/styles.css">
 </head>
-<body>
-  <nav class="nav" data-nav></nav>
-  <main class="section">
-    <div class="container grid grid-2">
-      <div>
-        <span class="eyebrow">Créer un compte</span>
-        <h1>Rejoindre FestiConnect</h1>
-        <p class="lead">Choisis ton rôle: client pour réserver, organisateur pour vendre et piloter tes événements.</p>
-      </div>
-      <form id="register-form" class="panel glass grid">
-        <label class="label">Nom complet<input class="input" name="name" required></label>
-        <label class="label">Email<input class="input" type="email" name="email" required></label>
-        <label class="label">Téléphone<input class="input" name="phone"></label>
-        <label class="label">Ville<input class="input" name="city" placeholder="Abidjan"></label>
-        <label class="label">Rôle<select class="select" name="role"><option value="client">Client</option><option value="organisateur">Organisateur</option></select></label>
-        <label class="label">Mot de passe<input class="input" type="password" name="password" required></label>
-        <button class="btn btn-primary" type="submit"><i data-lucide="user-plus"></i>Créer mon compte</button>
-      </form>
+<body data-nav="account">
+  <a class="skip-link" href="#main">Aller au contenu</a>
+  <header class="site-header" data-header></header>
+
+  <main id="main" tabindex="-1">
+    <div class="container auth">
+      <aside class="auth-aside" aria-hidden="true">
+        <span class="kicker">Un compte, deux usages</span>
+        <h2>Réserve tes sorties ou vends tes billets.</h2>
+        <ul class="reassure">
+          <li><span data-icon="ticket"></span><span>Client : billets, commandes boutique et points fidélité</span></li>
+          <li><span data-icon="chart"></span><span>Organisateur : publication d'événements, ventes et contrôle des entrées</span></li>
+          <li><span data-icon="mobile"></span><span>Paiements Wave, Orange Money et Moov Money</span></li>
+        </ul>
+      </aside>
+
+      <section class="auth-card" aria-labelledby="register-title">
+        <h1 id="register-title">Créer un compte</h1>
+        <p class="lead">Moins d'une minute. Tu pourras réserver juste après.</p>
+
+        <form id="register-form" class="form mt-6" novalidate>
+          <fieldset class="choices choices-2">
+            <legend class="field-label">Tu veux…</legend>
+            <label class="choice choice-lg"><input type="radio" name="role" value="client" checked>Réserver des sorties<small>Billets et boutique</small></label>
+            <label class="choice choice-lg"><input type="radio" name="role" value="organisateur">Vendre mes billets<small>Je suis organisateur</small></label>
+          </fieldset>
+
+          <div class="field">
+            <label class="field-label" for="reg-name">Nom complet <span class="optional" data-org-hint hidden>(ou nom de ta structure)</span></label>
+            <input class="input" id="reg-name" name="name" autocomplete="name" required data-msg-required="Indique ton nom : il apparaîtra sur tes billets.">
+          </div>
+          <div class="field">
+            <label class="field-label" for="reg-email">Adresse email</label>
+            <input class="input" id="reg-email" type="email" name="email" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" required>
+          </div>
+          <div class="form-row">
+            <div class="field">
+              <label class="field-label" for="reg-phone">Téléphone <span class="optional">(facultatif)</span></label>
+              <input class="input" id="reg-phone" type="tel" name="phone" autocomplete="tel" inputmode="tel" placeholder="07 00 00 00 00" pattern="[+0-9 ().-]{8,20}" data-msg-pattern="Numéro invalide : chiffres, espaces et + uniquement.">
+            </div>
+            <div class="field">
+              <label class="field-label" for="reg-city">Ville <span class="optional">(facultatif)</span></label>
+              <input class="input" id="reg-city" name="city" list="reg-city-list" autocomplete="address-level2" placeholder="Abidjan">
+              <datalist id="reg-city-list">
+                <option value="Abidjan"></option>
+                <option value="Grand-Bassam"></option>
+                <option value="Bouaké"></option>
+                <option value="Yamoussoukro"></option>
+                <option value="San-Pédro"></option>
+                <option value="Korhogo"></option>
+              </datalist>
+            </div>
+          </div>
+          <div class="field">
+            <label class="field-label" for="reg-password">Mot de passe</label>
+            <div class="input-group">
+              <input class="input" id="reg-password" type="password" name="password" autocomplete="new-password" minlength="8" maxlength="128" pattern="(?=.*\p{L})(?=.*\p{N}).*" required aria-describedby="reg-password-hint" data-msg-required="Choisis un mot de passe." data-msg-pattern="Ajoute au moins une lettre et un chiffre.">
+              <button class="input-action" type="button" data-toggle-password aria-controls="reg-password" aria-pressed="false" aria-label="Afficher le mot de passe"><span data-icon="eye"></span></button>
+            </div>
+            <p class="field-hint" id="reg-password-hint">8 à 128 caractères, avec au moins une lettre et un chiffre. Les mots de passe trop courants (du type « motdepasse1 ») sont refusés.</p>
+          </div>
+
+          <button class="btn btn-primary btn-lg btn-block" type="submit"><span>Créer mon compte</span></button>
+          <p class="small muted">En créant un compte, tu acceptes les <a href="/conditions.html">conditions d'utilisation</a> et la <a href="/confidentialite.html">politique de confidentialité</a>.</p>
+        </form>
+
+        <p class="auth-switch">Déjà inscrit ? <a href="/connexion.html" id="login-link">Se connecter</a></p>
+      </section>
     </div>
   </main>
-  <footer class="footer" data-footer></footer>
-  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <footer class="site-footer" data-footer></footer>
+  <nav class="tabbar" data-tabbar></nav>
   <script src="/assets/js/api.js"></script>
   <script src="/assets/js/ui.js"></script>
   <script src="/assets/js/auth.js"></script>

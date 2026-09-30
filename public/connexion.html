@@ -2,30 +2,59 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Connexion - FestiConnect</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Connexion · FestiConnect</title>
+  <meta name="description" content="Connecte-toi pour retrouver tes billets, tes ventes ou l'administration.">
+  <meta name="theme-color" content="#fcf8f2">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&amp;display=swap">
   <link rel="stylesheet" href="/assets/css/styles.css">
 </head>
-<body>
-  <nav class="nav" data-nav></nav>
-  <main class="section">
-    <div class="container grid grid-2">
-      <div>
-        <span class="eyebrow">Accès sécurisé</span>
-        <h1>Connexion</h1>
-        <p class="lead">Accède à tes billets, ventes, validations ou paramètres selon ton rôle.</p>
-      </div>
-      <form id="login-form" class="panel glass grid">
-        <label class="label">Email<input class="input" type="email" name="email" required></label>
-        <label class="label">Mot de passe<input class="input" type="password" name="password" required></label>
-        <button class="btn btn-primary" type="submit"><i data-lucide="log-in"></i>Se connecter</button>
-        <p class="muted">Pas encore de compte ? <a class="text-white" href="/inscription.html">Inscription</a></p>
-      </form>
+<body data-nav="account">
+  <a class="skip-link" href="#main">Aller au contenu</a>
+  <header class="site-header" data-header></header>
+
+  <main id="main" tabindex="-1">
+    <div class="container auth">
+      <aside class="auth-aside" aria-hidden="true">
+        <span class="kicker">Content de te revoir</span>
+        <h2>Tes billets t'attendent.</h2>
+        <ul class="reassure">
+          <li><span data-icon="ticket"></span><span>Tous tes billets et leurs codes d'entrée au même endroit</span></li>
+          <li><span data-icon="chart"></span><span>Le suivi de tes ventes si tu organises</span></li>
+          <li><span data-icon="lock"></span><span>Connexion sécurisée, session valable 14 jours</span></li>
+        </ul>
+      </aside>
+
+      <section class="auth-card" aria-labelledby="login-title">
+        <h1 id="login-title">Connexion</h1>
+        <p class="lead">Accède à tes billets, à tes ventes ou à l'administration selon ton compte.</p>
+        <div id="session-info" class="mt-4" hidden></div>
+
+        <form id="login-form" class="form mt-6" novalidate>
+          <div class="field">
+            <label class="field-label" for="login-email">Adresse email</label>
+            <input class="input" id="login-email" type="email" name="email" autocomplete="email" inputmode="email" autocapitalize="none" spellcheck="false" required data-msg-required="Saisis l'adresse email de ton compte.">
+          </div>
+          <div class="field">
+            <label class="field-label" for="login-password">Mot de passe</label>
+            <div class="input-group">
+              <input class="input" id="login-password" type="password" name="password" autocomplete="current-password" required data-msg-required="Saisis ton mot de passe.">
+              <button class="input-action" type="button" data-toggle-password aria-controls="login-password" aria-pressed="false" aria-label="Afficher le mot de passe"><span data-icon="eye"></span></button>
+            </div>
+          </div>
+          <button class="btn btn-primary btn-lg btn-block" type="submit"><span>Se connecter</span></button>
+        </form>
+
+        <p class="auth-switch">Pas encore de compte ? <a href="/inscription.html" id="register-link">Créer un compte</a></p>
+      </section>
     </div>
   </main>
-  <footer class="footer" data-footer></footer>
-  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <footer class="site-footer" data-footer></footer>
+  <nav class="tabbar" data-tabbar></nav>
   <script src="/assets/js/api.js"></script>
   <script src="/assets/js/ui.js"></script>
   <script src="/assets/js/auth.js"></script>

@@ -2,60 +2,176 @@
 <html lang="fr">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Espace organisateur - FestiConnect</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Espace organisateur · FestiConnect</title>
+  <meta name="robots" content="noindex">
+  <meta name="theme-color" content="#fcf8f2">
+  <link rel="icon" href="/assets/img/favicon.svg" type="image/svg+xml">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400..800&amp;display=swap">
   <link rel="stylesheet" href="/assets/css/styles.css">
 </head>
-<body>
-  <nav class="nav" data-nav></nav>
-  <main class="container dashboard">
-    <aside class="sidebar glass">
-      <a class="side-link active" href="#analytics"><i data-lucide="chart-no-axes-combined"></i>Analytics</a>
-      <a class="side-link" href="#creation"><i data-lucide="plus-circle"></i>Créer</a>
-      <a class="side-link" href="#billets"><i data-lucide="tickets"></i>Billets</a>
-      <a class="side-link" href="#scanner"><i data-lucide="scan-line"></i>Scanner QR</a>
-      <a class="side-link" href="#revenus"><i data-lucide="wallet"></i>Revenus</a>
-    </aside>
-    <section class="grid">
-      <div class="section-head">
-        <div><span class="eyebrow">Espace organisateur</span><h1>Studio de <span id="organizer-name"></span></h1></div>
+<body data-nav="account">
+  <a class="skip-link" href="#main">Aller au contenu</a>
+  <header class="site-header" data-header></header>
+
+  <main id="main" tabindex="-1">
+    <div class="container dash">
+      <nav class="dash-nav" aria-label="Espace organisateur">
+        <div class="dash-user"><span class="avatar avatar-lg" data-user-initials></span><div><strong data-user-name></strong><span>Organisateur</span></div></div>
+        <ul>
+          <li><a href="#apercu" aria-current="true"><span data-icon="dashboard"></span>Aperçu</a></li>
+          <li><a href="#analytics"><span data-icon="calendar"></span>Mes événements</a></li>
+          <li><a href="#creation"><span data-icon="plus-circle"></span>Créer</a></li>
+          <li><a href="#billets"><span data-icon="ticket"></span>Billets vendus</a></li>
+          <li><a href="#scanner"><span data-icon="scan"></span>Contrôle d'entrée</a></li>
+          <li><a href="#revenus"><span data-icon="wallet"></span>Revenus</a></li>
+          <li class="nav-sep" role="presentation"></li>
+          <li><button type="button" data-logout><span data-icon="logout"></span>Déconnexion</button></li>
+        </ul>
+      </nav>
+
+      <div class="dash-main">
+        <section id="apercu" class="stack" aria-labelledby="orga-title">
+          <div class="dash-head">
+            <div>
+              <h1 id="orga-title">Espace organisateur</h1>
+              <p id="organizer-name" data-user-name></p>
+            </div>
+            <a class="btn btn-primary" href="#creation"><span data-icon="plus"></span><span>Nouvel événement</span></a>
+          </div>
+          <div id="organizer-metrics" class="stats" aria-busy="true"></div>
+        </section>
+
+        <section id="analytics" class="panel" aria-labelledby="events-title">
+          <div class="panel-title">
+            <div>
+              <h2 id="events-title">Mes événements</h2>
+              <p>Un événement est visible du public une fois validé par l'équipe FestiConnect.</p>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table class="table table-stack">
+              <caption class="sr-only">Liste de mes événements</caption>
+              <thead><tr><th scope="col">Événement</th><th scope="col">Ville</th><th scope="col">Date</th><th scope="col" class="num">Prix</th><th scope="col" class="num">Ventes</th><th scope="col">Statut</th></tr></thead>
+              <tbody id="organizer-events"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="creation" class="panel" aria-labelledby="create-title">
+          <div class="panel-title">
+            <div>
+              <h2 id="create-title">Créer un événement</h2>
+              <p>Ton événement sera relu par l'équipe FestiConnect avant d'apparaître dans le catalogue.</p>
+            </div>
+          </div>
+          <form id="event-create-form" class="form" novalidate>
+            <div class="field">
+              <label class="field-label" for="ev-title">Titre</label>
+              <input class="input" id="ev-title" name="title" required maxlength="120" placeholder="Ex. Nuit du Zouglou" data-msg-required="Donne un titre à ton événement.">
+            </div>
+            <div class="form-row">
+              <div class="field">
+                <label class="field-label" for="ev-category">Catégorie</label>
+                <input class="input" id="ev-category" name="category" list="ev-categories" required placeholder="Concert" data-msg-required="Choisis ou saisis une catégorie.">
+                <datalist id="ev-categories"><option value="Concert"></option><option value="Tradition"></option><option value="Mode"></option></datalist>
+              </div>
+              <div class="field">
+                <label class="field-label" for="ev-city">Ville</label>
+                <input class="input" id="ev-city" name="city" list="ev-cities" required placeholder="Abidjan" data-msg-required="Indique la ville.">
+                <datalist id="ev-cities"><option value="Abidjan"></option><option value="Grand-Bassam"></option><option value="Bouake"></option><option value="Yamoussoukro"></option></datalist>
+              </div>
+            </div>
+            <div class="field">
+              <label class="field-label" for="ev-location">Lieu <span class="optional">(facultatif)</span></label>
+              <input class="input" id="ev-location" name="location" placeholder="Ex. Palais de la Culture, Treichville">
+            </div>
+            <div class="form-row">
+              <div class="field">
+                <label class="field-label" for="ev-start">Début</label>
+                <input class="input" id="ev-start" type="datetime-local" name="starts_at" required data-msg-required="Indique la date et l'heure de début.">
+              </div>
+              <div class="field">
+                <label class="field-label" for="ev-end">Fin <span class="optional">(facultatif)</span></label>
+                <input class="input" id="ev-end" type="datetime-local" name="ends_at">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="field">
+                <label class="field-label" for="ev-price">Prix du billet (FCFA)</label>
+                <input class="input" id="ev-price" type="number" name="price_xof" min="0" step="1" inputmode="numeric" placeholder="5000" aria-describedby="ev-price-hint">
+                <p class="field-hint" id="ev-price-hint">Laisse vide ou mets 0 pour un événement gratuit.</p>
+              </div>
+              <div class="field">
+                <label class="field-label" for="ev-capacity">Nombre de places</label>
+                <input class="input" id="ev-capacity" type="number" name="capacity" min="1" step="1" inputmode="numeric" placeholder="100" aria-describedby="ev-capacity-hint">
+                <p class="field-hint" id="ev-capacity-hint">100 par défaut.</p>
+              </div>
+            </div>
+            <div class="field">
+              <label class="field-label" for="ev-description">Description <span class="optional">(facultatif)</span></label>
+              <textarea class="textarea" id="ev-description" name="description" maxlength="2000" placeholder="Programme, artistes, dress code, accès…"></textarea>
+            </div>
+            <div class="cluster">
+              <button class="btn btn-primary" type="submit"><span data-icon="send"></span><span>Soumettre à validation</span></button>
+            </div>
+          </form>
+        </section>
+
+        <section id="billets" class="panel" aria-labelledby="tickets-title">
+          <div class="panel-title">
+            <div>
+              <h2 id="tickets-title">Billets vendus</h2>
+              <p>Toutes les réservations sur tes événements, les plus récentes en premier.</p>
+            </div>
+          </div>
+          <div class="table-wrap">
+            <table class="table table-stack">
+              <caption class="sr-only">Billets vendus</caption>
+              <thead><tr><th scope="col">Client</th><th scope="col">Événement</th><th scope="col">Code</th><th scope="col" class="num">Qté</th><th scope="col" class="num">Montant</th><th scope="col">Statut</th></tr></thead>
+              <tbody id="organizer-tickets"></tbody>
+            </table>
+          </div>
+        </section>
+
+        <section id="scanner" class="panel" aria-labelledby="scan-title">
+          <div class="panel-title">
+            <div>
+              <h2 id="scan-title">Contrôle d'entrée</h2>
+              <p>Saisis le code présenté par le client pour vérifier qu'il correspond à un billet de tes événements.</p>
+            </div>
+          </div>
+          <form id="scan-form" class="form" novalidate>
+            <div class="field">
+              <label class="field-label" for="scan-code">Code du billet</label>
+              <div class="cluster">
+                <input class="input mono" id="scan-code" name="code" required autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="FC-XXXXXXXXXX" data-msg-required="Saisis le code affiché sur le billet.">
+                <button class="btn btn-dark" type="submit"><span data-icon="scan"></span><span>Vérifier</span></button>
+              </div>
+            </div>
+          </form>
+          <div id="scan-result" class="check-result" aria-live="polite"></div>
+          <p class="small muted mt-4">Cette vérification ne marque pas encore le billet comme utilisé : garde un œil sur les codes déjà présentés.</p>
+        </section>
+
+        <section id="revenus" class="panel" aria-labelledby="revenue-title">
+          <div class="panel-title">
+            <div>
+              <h2 id="revenue-title">Revenus par événement</h2>
+              <p>Calculés à partir des billets payés.</p>
+            </div>
+          </div>
+          <ul id="revenue-list" class="bar-list"></ul>
+          <div class="alert alert-info mt-6"><span data-icon="info"></span><div><strong>Retraits Mobile Money</strong><span>Les demandes de retrait ne se font pas encore depuis cet espace. <a href="/contact.html">Contacte l'équipe partenaires</a> pour virer tes revenus.</span></div></div>
+        </section>
       </div>
-      <div id="organizer-metrics" class="metric-strip"></div>
-      <section id="creation" class="panel glass">
-        <h2>Création d'événement</h2>
-        <form id="event-create-form" class="grid grid-2 mt-6">
-          <label class="label">Titre<input class="input" name="title" required></label>
-          <label class="label">Catégorie<input class="input" name="category" placeholder="Concert" required></label>
-          <label class="label">Ville<input class="input" name="city" required></label>
-          <label class="label">Lieu<input class="input" name="location"></label>
-          <label class="label">Date de début<input class="input" type="datetime-local" name="starts_at" required></label>
-          <label class="label">Date de fin<input class="input" type="datetime-local" name="ends_at"></label>
-          <label class="label">Prix XOF<input class="input" type="number" name="price_xof" min="0"></label>
-          <label class="label">Capacité<input class="input" type="number" name="capacity" min="1"></label>
-          <label class="label md:col-span-2">Description<textarea class="textarea" name="description"></textarea></label>
-          <button class="btn btn-primary" type="submit"><i data-lucide="send"></i>Soumettre à validation</button>
-        </form>
-      </section>
-      <section id="analytics" class="panel glass">
-        <h2>Dashboard analytics</h2>
-        <div class="table-wrap mt-5"><table class="table"><thead><tr><th>Événement</th><th>Ville</th><th>Date</th><th>Prix</th><th>Statut</th></tr></thead><tbody id="organizer-events"></tbody></table></div>
-      </section>
-      <section id="billets" class="panel glass">
-        <h2>Gestion billets</h2>
-        <div class="table-wrap mt-5"><table class="table"><thead><tr><th>Client</th><th>Événement</th><th>Code</th><th>Montant</th><th>Statut</th></tr></thead><tbody id="organizer-tickets"></tbody></table></div>
-      </section>
-      <section id="scanner" class="panel glass grid grid-2">
-        <div><h2>Scanner QR Code</h2><p class="lead text-base">Outil terrain de validation. Dans cette version web, le scan est simulé par vérification visuelle du code billet.</p></div>
-        <div class="qr justify-self-end">SCAN</div>
-      </section>
-      <section id="revenus" class="panel glass">
-        <h2>Revenus & retraits</h2>
-        <p class="lead text-base">Les revenus de billets sont consolidés dans l'analytics. Les retraits peuvent être raccordés à un workflow Mobile Money.</p>
-      </section>
-    </section>
+    </div>
   </main>
-  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <footer class="site-footer" data-footer></footer>
+  <nav class="tabbar" data-tabbar></nav>
   <script src="/assets/js/api.js"></script>
   <script src="/assets/js/ui.js"></script>
   <script src="/assets/js/organizer.js"></script>
