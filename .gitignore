@@ -5,3 +5,10 @@ node_modules/
 *.db-wal
 npm-debug.log*
 *.log
+
+# Video pipeline (video/)
+video/node_modules
+video/frames
+video/out
+video/audio/*
+!video/audio/.gitkeep
