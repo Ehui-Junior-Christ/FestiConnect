@@ -104,6 +104,21 @@ const tableStatements = [
     position integer not null default 0,
     created_at text not null
   )`,
+  `create table if not exists promo_codes (
+    id text primary key,
+    event_id text not null references events(id) on delete cascade,
+    organizer_id text not null references users(id),
+    code text not null,
+    kind text not null check(kind in ('percent', 'fixed')),
+    value integer not null check(value > 0),
+    max_uses integer not null default 0,
+    used integer not null default 0,
+    expires_at text not null default '',
+    active integer not null default 1,
+    created_at text not null,
+    unique(event_id, code),
+    check(used >= 0 and (max_uses = 0 or used <= max_uses))
+  )`,
 ];
 
 const indexStatements = [
@@ -114,7 +129,8 @@ const indexStatements = [
   `create index if not exists idx_sessions_user on sessions(user_id)`,
   `create index if not exists idx_sessions_expires on sessions(expires_at)`,
   `create index if not exists idx_notifications_user on notifications(user_id, created_at)`,
-  `create index if not exists idx_ticket_categories_event on ticket_categories(event_id)`
+  `create index if not exists idx_ticket_categories_event on ticket_categories(event_id)`,
+  `create index if not exists idx_promo_codes_event on promo_codes(event_id)`
 ];
 
 const COLUMN_DEFINITION = /^(text|integer) default (?:'[A-Za-z0-9_\/.-]*'|-?\d+)$/;
@@ -168,6 +184,9 @@ await ensureColumn('tickets', 'payment_method', `text default 'Wave'`);
 await ensureColumn('tickets', 'created_at', `text default ''`);
 await ensureColumn('tickets', 'category_id', `text default ''`);
 await ensureColumn('tickets', 'category_name', `text default ''`);
+await ensureColumn('tickets', 'promo_id', `text default ''`);
+await ensureColumn('tickets', 'promo_code', `text default ''`);
+await ensureColumn('tickets', 'discount_xof', `integer default 0`);
 
 await ensureColumn('products', 'name', `text default ''`);
 await ensureColumn('products', 'category', `text default 'Lifestyle'`);

@@ -101,7 +101,21 @@ function bookingBlock(event, user) {
           <p class="field-hint" data-qty-hint></p>
         </div>
         ${paymentChoices()}
-        <div class="total-row"><span>Total à payer</span><strong data-total>${escapeHtml(formatMoney(unitPrice))}</strong></div>
+        <div class="promo-box">
+          <button class="link-button" type="button" data-promo-toggle aria-expanded="false" aria-controls="promo-field">${icon('tag')}<span>J'ai un code promo</span></button>
+          <div class="field" id="promo-field" hidden>
+            <label class="field-label" for="promo-code">Code promo</label>
+            <div class="promo-row">
+              <input class="input mono" id="promo-code" name="promo_code" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="20" placeholder="Ex. BASSAM10">
+              <button class="btn" type="button" data-promo-apply>Appliquer</button>
+            </div>
+            <p class="field-hint" data-promo-status aria-live="polite"></p>
+          </div>
+        </div>
+        <div class="total-lines">
+          <div class="total-line" data-discount-row hidden><span data-discount-label>Remise</span><strong data-discount></strong></div>
+          <div class="total-row"><span>Total à payer</span><strong data-total>${escapeHtml(formatMoney(unitPrice))}</strong></div>
+        </div>
         <button class="btn btn-primary btn-lg btn-block" type="submit" data-submit><span data-submit-label>${user ? 'Confirmer et payer' : 'Continuer'}</span></button>
         ${user ? '' : '<p class="small muted">Tu te connecteras (ou créeras ton compte) à l\'étape suivante. Ta sélection est conservée.</p>'}
         <ul class="reassure">
@@ -203,12 +217,102 @@ function wireBooking(form, event, user) {
     return chosen ? Number(chosen.dataset.price) : Number(event.price_xof || 0);
   };
 
+  // Code promo : vérifié par le serveur, remise recalculée ici pour l'aperçu
+  // (le serveur la recalcule de toute façon au paiement).
+  const promoInput = form.elements.promo_code;
+  const promoStatus = form.querySelector('[data-promo-status]');
+  const promoField = form.querySelector('#promo-field');
+  const promoToggle = form.querySelector('[data-promo-toggle]');
+  const promoApply = form.querySelector('[data-promo-apply]');
+  const discountRow = form.querySelector('[data-discount-row]');
+  let appliedPromo = null;
+
+  const discountFor = (subtotal) => {
+    if (!appliedPromo) return 0;
+    return appliedPromo.kind === 'percent'
+      ? Math.min(subtotal, Math.floor((subtotal * appliedPromo.value) / 100))
+      : Math.min(subtotal, appliedPromo.value);
+  };
+
+  const setPromoStatus = (message, tone = '') => {
+    promoStatus.textContent = message;
+    promoStatus.className = `field-hint${tone ? ` hint-${tone}` : ''}`;
+  };
+
   const refresh = () => {
     const qty = Math.max(1, Number(quantityInput.value) || 1);
-    const total = qty * unitPrice();
+    const subtotal = qty * unitPrice();
+    const discount = discountFor(subtotal);
+    const total = subtotal - discount;
+    discountRow.hidden = !discount;
+    if (discount) {
+      form.querySelector('[data-discount-label]').textContent = `Code ${appliedPromo.code} (${appliedPromo.label})`;
+      form.querySelector('[data-discount]').textContent = `-${formatMoney(discount)}`;
+    }
     totalNode.textContent = formatMoney(total);
     if (user) label.textContent = total > 0 ? `Payer ${formatMoney(total)}` : 'Confirmer la réservation';
   };
+
+  const openPromo = () => {
+    promoField.hidden = false;
+    promoToggle.setAttribute('aria-expanded', 'true');
+  };
+
+  promoToggle.addEventListener('click', () => {
+    openPromo();
+    promoInput.focus();
+  });
+
+  promoInput.addEventListener('input', () => {
+    if (appliedPromo) {
+      appliedPromo = null;
+      setPromoStatus('');
+      refresh();
+    }
+  });
+
+  promoInput.addEventListener('keydown', (keyEvent) => {
+    if (keyEvent.key === 'Enter') {
+      keyEvent.preventDefault();
+      promoApply.click();
+    }
+  });
+
+  promoApply.addEventListener('click', async () => {
+    const code = promoInput.value.trim().toUpperCase();
+    promoInput.value = code;
+    if (!code) {
+      setPromoStatus('Saisis ton code avant de l\'appliquer.', 'error');
+      return;
+    }
+    if (!API.user()) {
+      setPromoStatus('Connecte-toi pour vérifier ce code : il sera appliqué au paiement.', 'info');
+      return;
+    }
+    setBusy(promoApply, true);
+    try {
+      const chosen = selectedCategory(form);
+      const result = await API.post('/api/promos/check', {
+        event_id: event.id,
+        code,
+        quantity: quantityInput.value,
+        category_id: chosen ? chosen.value : undefined
+      });
+      if (result.valid) {
+        appliedPromo = result.promo;
+        setPromoStatus(`Code ${result.promo.code} appliqué : ${result.promo.label}.`, 'success');
+      } else {
+        appliedPromo = null;
+        setPromoStatus(result.error.message, 'error');
+      }
+    } catch (error) {
+      appliedPromo = null;
+      setPromoStatus(error.message, 'error');
+    } finally {
+      setBusy(promoApply, false);
+      refresh();
+    }
+  });
   quantityInput.addEventListener('input', refresh);
   form.addEventListener('change', (changeEvent) => {
     if (changeEvent.target.name === 'category_id') {
@@ -230,6 +334,11 @@ function wireBooking(form, event, user) {
         if (radio) radio.checked = true;
         const category = [...form.querySelectorAll('input[name="category_id"]')].find((item) => item.value === pending.category_id && !item.disabled);
         if (category) category.checked = true;
+        if (pending.promo_code) {
+          promoInput.value = pending.promo_code;
+          openPromo();
+          promoApply.click();
+        }
         syncLimits();
         refresh();
       }
@@ -259,6 +368,7 @@ function wireBooking(form, event, user) {
         amount: ticket.amount_xof,
         event: event.title,
         category: ticket.category_name || '',
+        discount: ticket.discount_xof || 0,
         payment: data.payment_method || '',
         qty: data.quantity || '1'
       });

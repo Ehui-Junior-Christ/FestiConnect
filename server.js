@@ -8,6 +8,7 @@ import { matchRoute, pathId, route, routes, searchParam } from './src/app/router
 import { buildInsert, insertByExistingColumns, tableColumns } from './src/db/schema.js';
 import './src/features/notifications.js';
 import { PAYMENT_METHODS } from './src/features/events.js';
+import './src/features/promos.js';
 import { AppError, errorResponse, notFound } from './src/shared/errors.js';
 import { parseBody, sendJson, serveStatic } from './src/shared/http.js';
 import { dummyVerify, hashPassword, needsRehash, passwordPolicyError, verifyPassword } from './src/shared/passwords.js';

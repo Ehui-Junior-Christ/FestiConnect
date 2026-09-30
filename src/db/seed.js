@@ -164,6 +164,18 @@ for (const eventId of new Set(ticketCategories.map(([, eventId]) => eventId))) {
   });
 }
 
+// Codes promo : un actif en pourcentage, un en montant fixe, un expire.
+const promoCodes = [
+  ['prm_demo_bassam10', 'evt_abissa_2026', 'BASSAM10', 'percent', 10, 100, 12, at(20, '23:59')],
+  ['prm_demo_maquis2000', 'evt_maquis_night', 'MAQUIS2000', 'fixed', 2000, 50, 7, ''],
+  ['prm_demo_zouglou', 'evt_zouglou_past', 'ZOUGLOU500', 'fixed', 500, 0, 3, at(-12, '23:59')]
+];
+for (const [promoId, eventId, code, kind, value, maxUses, used, expiresAt] of promoCodes) {
+  await insertOrUpdateById('promo_codes', {
+    id: promoId, event_id: eventId, organizer_id: organizer.id, code, kind, value, max_uses: maxUses, used, expires_at: expiresAt, active: 1, created_at: ago(25)
+  });
+}
+
 const products = [
   ['prd_kente_cap', 'Casquette Kente Édition', 'Accessoire', 12000, 80, '/assets/img/product-cap.svg', 'Casquette brodée en série limitée, inspirée des motifs akan.'],
   ['prd_baule_tote', 'Tote bag Baoulé', 'Lifestyle', 9000, 120, '/assets/img/product-tote.svg', 'Sac épais imprimé à Abidjan, idéal pour les festivals et les marchés créatifs.'],

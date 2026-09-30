@@ -24,6 +24,7 @@
           <li><a href="#apercu" aria-current="true"><span data-icon="dashboard"></span>Aperçu</a></li>
           <li><a href="#analytics"><span data-icon="calendar"></span>Mes événements</a></li>
           <li><a href="#creation"><span data-icon="plus-circle"></span>Créer</a></li>
+          <li><a href="#promos"><span data-icon="tag"></span>Codes promo</a></li>
           <li><a href="#billets"><span data-icon="ticket"></span>Billets vendus</a></li>
           <li><a href="#scanner"><span data-icon="scan"></span>Contrôle d'entrée</a></li>
           <li><a href="#revenus"><span data-icon="wallet"></span>Revenus</a></li>
@@ -136,6 +137,57 @@
           </form>
         </section>
 
+        <section id="promos" class="panel" aria-labelledby="promos-title">
+          <div class="panel-title">
+            <div>
+              <h2 id="promos-title">Codes promo</h2>
+              <p>Une remise en pourcentage ou en FCFA, limitée en nombre d'utilisations ou dans le temps. Le montant est recalculé par FestiConnect à chaque achat.</p>
+            </div>
+          </div>
+          <form id="promo-form" class="form" novalidate>
+            <div class="form-row">
+              <div class="field">
+                <label class="field-label" for="promo-event">Événement</label>
+                <select class="select" id="promo-event" name="event_id" required data-msg-required="Choisis l'événement concerné."></select>
+              </div>
+              <div class="field">
+                <label class="field-label" for="promo-code-new">Code</label>
+                <input class="input mono" id="promo-code-new" name="code" required minlength="3" maxlength="20" pattern="[A-Za-z0-9][A-Za-z0-9\-]{2,19}" autocomplete="off" autocapitalize="characters" spellcheck="false" placeholder="Ex. BASSAM10" data-msg-required="Choisis un code." data-msg-pattern="3 à 20 lettres, chiffres ou tirets, sans espace.">
+              </div>
+            </div>
+            <fieldset class="choices choices-2">
+              <legend class="field-label">Type de remise</legend>
+              <label class="choice"><input type="radio" name="kind" value="percent" checked>Pourcentage<small>Ex. 10 % sur le total</small></label>
+              <label class="choice"><input type="radio" name="kind" value="fixed">Montant fixe<small>Ex. 2 000 FCFA de moins par commande</small></label>
+            </fieldset>
+            <div class="form-row">
+              <div class="field">
+                <label class="field-label" for="promo-value" data-value-label>Remise (%)</label>
+                <input class="input" id="promo-value" name="value" type="number" inputmode="numeric" required min="1" max="100" step="1" placeholder="10" data-msg-required="Indique la remise.">
+              </div>
+              <div class="field">
+                <label class="field-label" for="promo-max">Utilisations maximum <span class="optional">(facultatif)</span></label>
+                <input class="input" id="promo-max" name="max_uses" type="number" inputmode="numeric" min="0" step="1" placeholder="Illimité" aria-describedby="promo-max-hint">
+                <p class="field-hint" id="promo-max-hint">Vide ou 0 : sans limite.</p>
+              </div>
+            </div>
+            <div class="field">
+              <label class="field-label" for="promo-expires">Valable jusqu'au <span class="optional">(facultatif)</span></label>
+              <input class="input" id="promo-expires" name="expires_at" type="datetime-local">
+            </div>
+            <div class="cluster">
+              <button class="btn btn-primary" type="submit"><span data-icon="tag"></span><span>Créer le code</span></button>
+            </div>
+          </form>
+          <div class="table-wrap mt-6">
+            <table class="table table-stack">
+              <caption class="sr-only">Mes codes promo</caption>
+              <thead><tr><th scope="col">Code</th><th scope="col">Événement</th><th scope="col">Remise</th><th scope="col">Utilisations</th><th scope="col">Validité</th><th scope="col" class="text-right">Actions</th></tr></thead>
+              <tbody id="promo-list"></tbody>
+            </table>
+          </div>
+        </section>
+
         <section id="billets" class="panel" aria-labelledby="tickets-title">
           <div class="panel-title">
             <div>
@@ -192,5 +244,6 @@
   <script src="/assets/js/ui.js"></script>
   <script src="/assets/js/organizer.js"></script>
   <script src="/assets/js/organizer-form.js"></script>
+  <script src="/assets/js/organizer-promos.js"></script>
 </body>
 </html>
