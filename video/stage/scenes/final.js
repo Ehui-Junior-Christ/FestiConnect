@@ -56,14 +56,23 @@ export default {
         </svg>
       </div>
       ${hasH1 ? TRIO.map((w, i) => `<div class="fn-panel" data-k="p${i}" style="background:${w.bg}">${pat(w)}
-        <div class="fn-word display" data-k="w${i}" style="color:${w.ink}"><span class="line">${splitChars(w.w).replace(/<\/span><\/span>$/, `<span class="ch" style="color:${w.dot}">.</span></span></span>`)}</span></div></div>`).join('') : ''}`);
+        <div class="fn-word display" data-k="w${i}" style="color:${w.ink}"><span class="line">${splitChars(w.w).replace(/<\/span><\/span>$/, `<span class="ch" style="color:${w.dot}">.</span></span></span>`)}</span></div></div>`).join('') : ''}
+      <svg class="fn-svg" width="1920" height="1080" viewBox="0 0 1920 1080"><circle data-k="iris" r="0" fill="${C.orange}"/></svg>`);
     const root = document.getElementById('root').getBoundingClientRect();
     const k = root.width / 1920;
     const b = r.stem.getBoundingClientRect();
     const fs = 210;
     const dot = { x: (b.left + b.width / 2 - root.left) / k, y: (b.top - root.top) / k + fs * 0.155, r: fs * 0.092 };
     ['glow', 'rings'].forEach((n) => r[n].setAttribute('transform', `translate(${dot.x} ${dot.y})`));
-    return { r, hasH1, dot };
+    // Origine de l'iris : le point de "Entre."
+    let iris = { x: 960, y: 540 };
+    if (hasH1) {
+      r.p2.style.display = 'block';
+      const q = [...r.w2.querySelectorAll('.ch')].pop().getBoundingClientRect();
+      iris = { x: (q.left + q.width / 2 - root.left) / k, y: (q.top + q.height * 0.78 - root.top) / k };
+      r.p2.style.display = 'none';
+    }
+    return { r, hasH1, dot, iris };
   },
 
   update(s, lt, ctx, tg) {
@@ -73,6 +82,12 @@ export default {
     // H1 : triptyque
     if (s.hasH1) {
       const h1 = ctx.p('H1');
+      // Iris orange depuis le point de "Entre." : couvre le cadre a la fin de H1
+      const tIris = ctx.c('H1.iris', 3.0);
+      const ir = E.sortie(prog(lt, tIris, h1.e - 0.02));
+      r.iris.setAttribute('cx', s.iris.x.toFixed(1)); r.iris.setAttribute('cy', s.iris.y.toFixed(1));
+      r.iris.setAttribute('r', (ir * 2300).toFixed(1));
+      show(r.iris, ir > 0 && lt < h1.e ? 1 : 0);
       TRIO.forEach((w, i) => {
         const t0 = ctx.c(`H1.w${i + 1}`, i * 1.0);
         const next = i < 2 ? ctx.c(`H1.w${i + 2}`, (i + 1) * 1.0) : h1.e;
@@ -95,23 +110,33 @@ export default {
     const tSign = ctx.c('H2.sign', 1.5);
     const tFade = ctx.c('H2.fade', h2.d - 1.2);
     r.end.style.display = lt >= h2.s - 0.3 ? 'block' : 'none';
-    // La pastille tombe du haut et rebondit sur le i
-    const fall = E.sortie(prog(lt, tLogo, tLogo + 0.4));
-    const bounce = lt > tLogo + 0.4 ? spring(lt, tLogo + 0.4, 2.8, 7) : 0;
-    let y = lt < tLogo + 0.4 ? lerp(-60, dot.y, fall) : dot.y - 26 * (1 - bounce) * Math.max(0, Math.sin(Math.PI * Math.min(1, (lt - tLogo - 0.4) / 0.35)));
-    let rad = dot.r * (lt < tLogo ? 0 : 1);
+    // Avec H1 : l'aplat orange se contracte sur le i (miroir de la revelation du logo).
+    // Sans H1 (version courte) : la pastille tombe du haut et rebondit sur le i.
+    const land = s.hasH1 ? tLogo + 0.62 : tLogo + 0.4;
+    let y, rad, x = dot.x;
+    if (s.hasH1) {
+      const u = E.glisse(prog(lt, tLogo, land));
+      x = lerp(s.iris.x, dot.x, u);
+      y = lerp(s.iris.y, dot.y, u);
+      rad = lt < land ? lerp(2300, dot.r * 0.7, u) : dot.r * (0.7 + 0.3 * spring(lt, land, 2.8, 8));
+    } else {
+      const fall = E.sortie(prog(lt, tLogo, land));
+      const bounce = lt > land ? spring(lt, land, 2.8, 7) : 0;
+      y = lt < land ? lerp(-60, dot.y, fall) : dot.y - 26 * (1 - bounce) * Math.max(0, Math.sin(Math.PI * Math.min(1, (lt - land) / 0.35)));
+      rad = dot.r * (lt < tLogo ? 0 : 1);
+    }
     // Point final : la pastille grossit un instant puis se referme
     const close = prog(lt, h2.e - 0.55, h2.e - 0.05);
     rad *= (1 + 0.5 * Math.sin(Math.PI * Math.min(1, close * 2)) * (close < 0.5 ? 1 : 0)) * (1 - E.sortie(prog(close, 0.4, 1)));
     // Pendant l'extinction, la pastille glisse au centre du cadre
     const mv = E.glisse(prog(lt, tFade, tFade + 0.7));
-    r.dot.setAttribute('cx', lerp(dot.x, 960, mv).toFixed(2)); r.dot.setAttribute('cy', lerp(y, 540, mv).toFixed(2)); r.dot.setAttribute('r', Math.max(0, rad).toFixed(2));
-    const age = lt - tLogo - 0.4;
+    r.dot.setAttribute('cx', lerp(x, 960, mv).toFixed(2)); r.dot.setAttribute('cy', lerp(y, 540, mv).toFixed(2)); r.dot.setAttribute('r', Math.max(0, rad).toFixed(2));
+    const age = lt - land;
     if (age > 0 && age < 1.2) { r.rip.style.visibility = 'visible'; r.rip.setAttribute('cx', dot.x); r.rip.setAttribute('cy', dot.y); r.rip.setAttribute('r', (dot.r + 380 * E.expo(age / 1.2)).toFixed(1)); r.rip.style.opacity = ((1 - age / 1.2) ** 2).toFixed(3); }
     else r.rip.style.visibility = 'hidden';
     WORD.forEach((_, i) => {
       const d = Math.abs(i - I_IDX);
-      const v = tw(lt, tLogo + 0.3 + d * 0.03, 0.6, 1.4, 0, E.festi);
+      const v = tw(lt, land - 0.1 + d * 0.03, 0.6, 1.4, 0, E.festi);
       (i === I_IDX ? r.stem : r[`l${i}`]).style.transform = `translateY(${v * 100}%)`;
     });
     revealChars(r.sign, lt, tSign, { stagger: 0.025, dur: 0.5 });

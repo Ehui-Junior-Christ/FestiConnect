@@ -55,7 +55,7 @@
           "vo": "Date, lieu, prix, places restantes : tout est clair avant même de payer.", "voAt": 0.3 },
         { "id": "D3", "start": 34, "end": 42,
           "cues": { "sheet": -0.3, "qty": 1.0, "methods": 1.5, "select": 3.0, "pay": 4.0, "wait": 4.3, "success": 6.0, "toast": 6.5 },
-          "vo": "Tu paies avec Wave, Orange Money ou Moov Money, directement depuis ton téléphone. Pas de file, pas de monnaie à chercher.", "voAt": 0.3 },
+          "vo": "Tu paies avec Wave, Orange Money ou Moov Money, depuis ton téléphone. Pas de file, pas de monnaie.", "voAt": 0.3 },
         { "id": "D4", "start": 42, "end": 48,
           "cues": { "ticket": -0.2, "qr": 0.8, "code": 1.8, "scan": 3.5, "valid": 4.0, "out": 5.6 },
           "vo": "Ton billet arrive avec son code unique. À l'entrée : un scan, et tu es dedans.", "voAt": 0.3 }
@@ -95,7 +95,7 @@
       "id": "H", "module": "final", "title": "Final",
       "plans": [
         { "id": "H1", "start": 70, "end": 74,
-          "cues": { "w1": 0.0, "w2": 1.0, "w3": 2.0 },
+          "cues": { "w1": 0.0, "w2": 1.0, "w3": 2.0, "iris": 3.0 },
           "screen": "Triptyque rythmique : Trouve. / Paie. / Entre. Un mot par temps fort, fonds de trame alternés.",
           "vo": "Trouve ta sortie. Paie en un geste. Entre en un scan.", "voAt": 0.1 },
         { "id": "H2", "start": 74, "end": 80,
